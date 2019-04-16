@@ -26,7 +26,6 @@ export default class HomeScreen extends React.Component {
         onMessage={this.onMessage}
         source={{uri:'https://2922931642.github.io/#personal'}}
         onLoadStart={() => {
-         
           this.webview.postMessage('Month7');
         }}
         style={{width:'100%',height:'100%'}}

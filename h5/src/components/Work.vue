@@ -9,11 +9,26 @@
                 当日工作
             </div>
             <div class="contenr-main">
-                <a>保养完成</a>
-                <a>待保养</a>
-                <a>保养中</a>
-                <a>超期</a>
-                <a>急修</a>
+                <router-link to="/finished" class="content-each">
+                    <img src="../../static/点赞.png" />
+                    <div class="content-txt">保养完成</div>
+                </router-link>
+                <router-link to="/" class="content-each">
+                    <img src="../../static/点赞.png" />
+                    <div class="content-txt">待保养</div>
+                </router-link>
+                <router-link to="/" class="content-each">
+                    <img src="../../static/点赞.png" />
+                    <div class="content-txt">保养中</div>
+                </router-link>
+               <router-link to="/" class="content-each">
+                    <img src="../../static/点赞.png" />
+                    <div class="content-txt">超期</div>
+                </router-link>
+                <router-link to="/" class="content-each">
+                    <img src="../../static/点赞.png" />
+                    <div class="content-txt">急修</div>
+                </router-link>
             </div>
         </div>
         <div class="content">
@@ -50,8 +65,8 @@ export default {
     margin: 0;
 }
 .header{
-    height: 3rem;
-    background: blue;
+    height: 8rem;
+    background: rgb(30,129,210);
     width: 100%;
 }
 .content-header{
@@ -63,5 +78,18 @@ export default {
 }
 .contenr-main{
     display: flex;
+    justify-content: space-between;
+}
+.content-each{
+    text-align: center;
+    color: black;
+    font-size: 0.3rem;
+    text-decoration: none;
+    padding: 0.2rem;
+    width: 20%;
+    margin-top:0.5rem;
+}
+.content-txt{
+    margin-top:0.5rem;
 }
 </style>

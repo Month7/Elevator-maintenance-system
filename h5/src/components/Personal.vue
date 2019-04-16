@@ -4,8 +4,12 @@
             <!--头像-->
             <div>
                 <img class="portrait" src="../../static/头像.jpg"/>
-                <div>{{username}}</div>
+                <div class="username">{{username}}</div>
             </div>
+        </div>
+        <div class="content">
+            <div>手机号</div>
+            <div class="right">18000351426</div>
         </div>
         <div class="exit-container">
             <button class="exit" @click="exit">退出登录</button>
@@ -32,7 +36,6 @@ export default {
         }
     },
     mounted(){
-        alert(localStorage.getItem('test'))
         if(localStorage.getItem('test') !== null) {
             this.username = localStorage.getItem('test')
         }
@@ -47,7 +50,6 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: 1rem;
     color: #fff;
 }
 .portrait{
@@ -70,6 +72,19 @@ export default {
     color: #fff;
     font-size: 0.9rem;
     border-radius: 0.5rem;
-    margin: auto;
+    margin: 2rem auto;
+}
+.content{
+    border-bottom: 1px solid rgb(232,232,232);
+    height: 1.8rem;
+    line-height: 1.8rem;
+    padding: 0.2rem;
+    display: flex;
+}
+.right{
+    margin-left: 1.4rem;
+}
+.username{
+    text-align: center;
 }
 </style>

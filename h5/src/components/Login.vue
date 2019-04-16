@@ -67,7 +67,7 @@ export default {
 .container{
     padding: 0;
     margin: 0;
-    background: rgb(70,240,188);
+    background: rgb(30,129,210);
     height: 100%;
     width: 100%;
     
@@ -119,7 +119,7 @@ export default {
     width: 85%;
     height: 2.7rem;
     line-height: 2.7rem;
-    color: rgb(70,240,188);
+    color: rgb(30,129,210);
     font-size: 1rem;
     border-radius: 2rem
 }
@@ -131,7 +131,7 @@ export default {
     width: 85%;
     height: 2.7rem;
     line-height: 2.7rem;
-    background: rgb(70,240,188);
+    background: rgb(30,129,210);
     color: #fff;;
     font-size: 1rem;
     border-radius: 2rem
