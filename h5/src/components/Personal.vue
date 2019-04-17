@@ -14,28 +14,34 @@
         <div class="exit-container">
             <button class="exit" @click="exit">退出登录</button>
         </div>
+        <Footer></Footer>
     </div>
 </template>
 <script>
-import { mapState} from 'vuex'
+// import { mapState} from 'vuex'
+import Footer from './Footer';
 export default {
     name: 'Personal',
     data:function(){
         return {
-           
+           username: 'default'
         }
     },
-    computed:{
-         ...mapState([ 
-            'username',
-        ]),
+    components:{
+        Footer
     },
+    // computed:{
+    //      ...mapState([ 
+    //         'username',
+    //     ]),
+    // },
     methods:{
         exit:function(){
-            this.$store.dispatch('addNote','haha')
+            // this.$store.dispatch('addNote','haha')
+            window.postMessage('exit');
         }
     },
-    mounted(){
+    created(){
         if(localStorage.getItem('test') !== null) {
             this.username = localStorage.getItem('test')
         }

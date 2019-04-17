@@ -27,7 +27,6 @@
             <label>
                 <input type="radio" v-model="picked" value="jianyan"/>检验人员
             </label>
-            
         </div>
         <!--button-->
         <div class="buttons">
@@ -38,9 +37,11 @@
         <div class="forget-container">
             <a class="forget" href="#">忘记密码？</a>
         </div>
+        
     </div>
 </template>
 <script>
+
 export default {
     name: 'Login',
     data(){

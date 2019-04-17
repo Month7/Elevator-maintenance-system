@@ -17,7 +17,4 @@ new Vue({
 })
 
 
-document.addEventListener('message', function(msg) {
-  app.$store.dispatch('addNote', msg)
-  alert(msg);
-});
+

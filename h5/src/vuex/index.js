@@ -7,12 +7,13 @@ import mutations from './mutations';
 Vue.use(Vuex)
 
 const state = {
-    username: 'Month'
+    username: 'Month',
+    msg: 'default',
+    msgs: []
 }
 
 export default new Vuex.Store({
     state,
     actions,
     mutations,
-   
 })
