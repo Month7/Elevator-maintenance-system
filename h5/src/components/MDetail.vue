@@ -13,19 +13,12 @@
                 <div v-else class="content-left">
                     {{item.content}}
                 </div>
-                <!-- <div v-if="item.youSend" class="content-right">
-                    {{item.content}}
-                </div>
-                <div v-else class="content-left">
-                    {{item.content}}
-                </div> -->
-                <!--清除浮动-->
                 <div style="clear:both"></div>
             </div>
         </div>    
         <!--底部交互-->
         <div class="footer">
-            <input type="text" v-model="sendTxt" />
+            <input type="text" v-model="sendTxt" class="txtInput"/>
             <button class="send" @click="send">发送</button>
         </div>
     </div>
@@ -36,7 +29,7 @@ import io from 'socket.io-client';
 export default {
     name: 'MDetail',
     created(){
-        this.socket = io('120.77.181.223:3004');
+        this.socket = io('http://localhost:3000');
         var socket = this.socket;
         var self = this;
         socket.on('recMsg',function(msg){
@@ -81,7 +74,7 @@ export default {
 .container{
     background: rgb(238,238,238);
     padding-top: 3rem;
-    padding-bottom: 3rem;
+    padding-bottom: 2rem;
 }
 .header{
     position: fixed;
@@ -100,7 +93,7 @@ export default {
 .footer{
     position: fixed;
     bottom: 0;
-    height: 3rem;
+    height: 2rem;
     background: #fff;
     width: 100%;
 }
@@ -123,5 +116,19 @@ export default {
     background: #fff;
     border-radius: 0.5rem;
     padding: 0.5rem;
+}
+.send{
+    position: absolute;
+    right: 0.5rem;
+    bottom: 0;
+    color: blueviolet;
+    border: none;
+    background: #fff;
+    height: 100%;
+}
+.txtInput{
+    height: 100%;
+    width: 85%;
+    border: none;
 }
 </style>

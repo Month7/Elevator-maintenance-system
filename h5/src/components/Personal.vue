@@ -11,6 +11,10 @@
             <div>手机号</div>
             <div class="right">18000351426</div>
         </div>
+        <div class="content">
+            <div>身份</div>
+            <div class="right">维保人员</div>
+        </div>
         <div class="exit-container">
             <button class="exit" @click="exit">退出登录</button>
         </div>

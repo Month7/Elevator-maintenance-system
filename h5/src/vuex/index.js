@@ -9,7 +9,8 @@ Vue.use(Vuex)
 const state = {
     username: 'Month',
     msg: 'default',
-    msgs: []
+    msgs: [],                //
+    signupState: 1        // 注册页状态
 }
 
 export default new Vuex.Store({

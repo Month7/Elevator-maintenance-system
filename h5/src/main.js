@@ -4,6 +4,12 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import store from './vuex'
+import axios from 'axios'
+import qs from 'qs';
+import Vconsole from 'vconsole'
+let vcosnole = new Vconsole()
+console.log(vcosnole)
+Vue.prototype.$qs = qs;
 
 Vue.config.productionTip = false
 

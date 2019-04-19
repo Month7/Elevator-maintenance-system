@@ -90,7 +90,6 @@ export default {
     height: 3rem;
     width: 100%;
     padding: 1rem 0.3rem;
-    /* border: 1px solid black; */
     align-items: center;
     text-decoration: none;
     color: black;

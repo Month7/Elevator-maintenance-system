@@ -8,6 +8,8 @@ import Address from '../components/Address'
 import Message from '../components/Message'
 import MDetail from '../components/MDetail'
 import Test from '../components/Test'
+import Signup from '../components/Signup'
+import Forget from '../components/Forget'
 
 Vue.use(Router)
 
@@ -45,6 +47,14 @@ export default new Router({
       path: '/test',
       name: 'Test',
       component: Test
+    },{
+      path: '/signup',
+      name: 'Signup',
+      component: Signup
+    },{
+      path: '/forget',
+      name: 'Forget',
+      component: Forget
     }
   ]
 })

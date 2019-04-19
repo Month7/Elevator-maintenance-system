@@ -22,40 +22,61 @@
         <!--radio-->
         <div class="radios">
             <label>
-                <input type="radio" v-model="picked" value="weibao"/>维保人员
+                <input type="radio" v-model="picked" value="0"/>维保人员
             </label>
             <label>
-                <input type="radio" v-model="picked" value="jianyan"/>检验人员
+                <input type="radio" v-model="picked" value="1"/>检验人员
             </label>
         </div>
         <!--button-->
         <div class="buttons">
             <button class="button" @click="login">登  录</button>
-            <button class="button-signin" @click="signin">注  册</button>
+            <router-link to="/signup" class="button-signin" @click="signin">注  册</router-link>
         </div>
         <!--forget-->
         <div class="forget-container">
-            <a class="forget" href="#">忘记密码？</a>
+            <router-link to="/forget" class="forget">忘记密码？</router-link>
         </div>
-        
     </div>
 </template>
 <script>
-
+import axios from 'axios'
 export default {
     name: 'Login',
     data(){
         return {
             username: "",
             password: "",
-            picked: 'weibao'
+            picked: '0'
         }
     },    
     methods:{
         // 登录
         login:function (){
-            console.log(this.username);
-            window.postMessage('test');
+            // window.postMessage('test');
+            if(!this.username || !this.password){
+                alert('手机号和密码不能为空!');
+                return false;
+            }
+            var phoneReg = /^[1][3,4,5,7,8][0-9]{9}$/;
+            if(!phoneReg.test(this.username)){
+                alert('请输入正确格式的手机号码!')
+                return false;
+            }
+            let postData = this.$qs.stringify({
+                username: this.username,
+                password: this.password
+            });
+            window.postMessage(postData);
+            // axios({
+            //     url: 'http://localhost:3000/user/login',
+            //     method: 'post',
+            //     data:postData
+            // }).then((res)=>{
+            //     console.log(res.data);
+            // }).catch(e=>{
+            //     console.log(e);
+            // })
         },
         // 注册
         signin:function () {
@@ -125,7 +146,8 @@ export default {
     border-radius: 2rem
 }
 .button-signin{
-    margin-top:1rem;
+    display: block!important;
+    margin-top:1rem!important;
     border: 1px solid #fff;
     outline: none;
     background: #fff;
@@ -135,7 +157,9 @@ export default {
     background: rgb(30,129,210);
     color: #fff;;
     font-size: 1rem;
-    border-radius: 2rem
+    border-radius: 2rem;
+    margin: auto;
+    text-decoration: none;
 }
 .radios{
     width: 85%;

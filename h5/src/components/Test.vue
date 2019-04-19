@@ -19,7 +19,7 @@
         </div>    
         <!--底部交互-->
         <div class="footer">
-            <input type="text" v-model="sendTxt" />
+            <input type="text" v-model="sendTxt" class="txtInput"/>
             <button class="send" @click="send">发送</button>
         </div>
     </div>
@@ -30,7 +30,7 @@ import io from 'socket.io-client';
 export default {
     name: 'Test',
     created(){
-        this.socket = io('120.77.181.223:3004');
+        this.socket = io('http://140.143.34.162:3000');
         var socket = this.socket;
         var self = this;
         socket.on('recMsg',function(msg){
@@ -117,5 +117,19 @@ export default {
     background: #fff;
     border-radius: 0.5rem;
     padding: 0.5rem;
+}
+.send{
+    position: absolute;
+    right: 0.5rem;
+    bottom: 0;
+    color: blueviolet;
+    border: none;
+    background: #fff;
+    height: 100%;
+}
+.txtInput{
+    height: 100%;
+    width: 85%;
+    border: none;
 }
 </style>
