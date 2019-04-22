@@ -44,12 +44,10 @@
 export default {
     name: 'Step3',
     methods:{
-        nextStep(){
-            this.$store.dispatch('nextStep');
-        },
         goBack(){
-            this.$router.back(-1);
+            this.$store.dispatch('resetRegisterInfo');
             this.$store.dispatch('initStep');
+            this.$router.back(-1);
         }
     }
 }

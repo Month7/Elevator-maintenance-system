@@ -1,7 +1,9 @@
 <template>
     <div class="container">
         <div class="header">
-            <div class="goBack" @click="goBack"> <返回 </div>
+            <div class="goBack" @click="goBack">
+                <img src="../../static/左箭头.png" />
+            </div>
             {{name}}
         </div>
         <!--聊天内容区-->

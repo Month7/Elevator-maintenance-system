@@ -22,11 +22,11 @@ export default {
         Step2,
         Step3
     },
-    // data(){
-    //     return {
-    //         state: this.$store.state.signupState
-    //     }
-    // },
+    data(){
+        return {
+            phone: ''
+        }
+    },
     computed:{
         state(){
             return this.$store.state.signupState

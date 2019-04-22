@@ -8,6 +8,8 @@ import {
 } from 'react-native';
 import { WebBrowser } from 'expo';
 import navigationUtil from '../utils/navigation'
+import Storage from 'react-native-storage';
+import {AsyncStorage} from 'react-native';
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
     header: null,
@@ -15,7 +17,22 @@ export default class HomeScreen extends React.Component {
   onMessage = (event) => {
     //webview中的html页面传过来的的数据在event.nativeEvent.data上
     // alert(event.nativeEvent.data);
-    navigationUtil.reset(this.props.navigation, 'Main');
+    // alert(event.nativeEvent.data);
+    var username = event.nativeEvent.data.split(',')[0];
+    var storage = new Storage({
+      size: 1000,
+      storageBackend: AsyncStorage,
+      defaultExpires: 1000 * 3600 * 24,
+      enableCache: true,
+    })
+    storage.save({
+      key: 'loginState',  // 注意:请不要在key中使用_下划线符号!
+      data: {
+          token: username
+      }
+  });
+    // alert(event.nativeEvent.data.username);
+    // navigationUtil.reset(this.props.navigation, 'Main');
   }
   render() {
     const { navigation } = this.props;

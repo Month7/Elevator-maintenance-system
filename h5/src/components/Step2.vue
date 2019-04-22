@@ -30,15 +30,27 @@
             </div>
             <!--content-->
             <div class="content">
-                <input type="password" class="phone input" placeholder="请设置密码"/>
+                <input type="password" class="phone input" v-model="password" placeholder="请设置密码"/>
                 <div class="phone-img">
                     <img src="../../static/密码.png"/>
                 </div>
                 <div class="code-container">
-                    <input type="password" class="code input" placeholder="请确认密码"/>
+                    <input type="password" class="code input" v-model="repeatPassword" placeholder="请确认密码"/>
                     <div class="code-img">
                         <img src="../../static/密码.png" />
                     </div>
+                </div>
+                <div class="type-container">
+                    <div class="">
+                        请选择你的身份
+                    </div>
+                    <label>
+                        <input type="radio" v-model="type" value="0" />维保人员
+                    </label>
+                    <label>
+                        <input type="radio" v-model="type" value="1" />检验人员
+                    </label>
+                    
                 </div>
             </div>
             <!--button-->
@@ -49,19 +61,68 @@
     </div>    
 </template>
 <script>
+import axios from 'axios'
 export default {
     name: 'Step2',
+    data:function(){
+        return {
+            password: '',
+            repeatPassword: '',
+            type: 0
+        }
+    },
     methods:{
+        showWarning(msg,time){
+            
+        },
         nextStep(){
-            this.$store.dispatch('nextStep');
+            if(this.password && this.repeatPassword){
+                if(this.password != this.repeatPassword) {
+                    alert('两次输入密码不一致!');
+                } else {
+                    
+                    this.$store.dispatch('registerPassword',this.password);
+                    let postData = this.$qs.stringify({
+                        phone: this.$store.state.signupData.phone,
+                        password: this.password,
+                        type:this.type
+                    });
+                    axios({
+                        url: 'http://localhost:3000/user/register',
+                        data: postData,
+                        method: 'post',
+                    }).then((res)=>{
+                        if(res.data.retData == 0) {
+                            this.$store.dispatch('nextStep');
+                            this.$store.dispatch('resetRegisterInfo')
+                        } else {
+                            console.log(res.data);
+                        }  
+                    })
+                }
+            } else {
+                alert('不能为空!');
+            }
+            
         },
         goBack(){
-            this.$router.back(-1);
+            this.$store.dispatch('resetRegisterInfo')
             this.$store.dispatch('initStep');
+            this.$router.back(-1);
+            
+            
+            
         }
     }
 }
 </script>
 <style scoped>
     @import url(./Signup.css);
+    .type-container{
+        display: flex;
+        background: #fff;
+        height: 2rem;
+        align-items: center;
+        padding: 0.2rem 0.5rem;
+    }
 </style>

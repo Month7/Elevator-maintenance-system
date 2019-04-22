@@ -10,6 +10,7 @@ import MDetail from '../components/MDetail'
 import Test from '../components/Test'
 import Signup from '../components/Signup'
 import Forget from '../components/Forget'
+import Warning from '../common/Warning'
 
 Vue.use(Router)
 
@@ -54,7 +55,7 @@ export default new Router({
     },{
       path: '/forget',
       name: 'Forget',
-      component: Forget
+      component: Warning
     }
   ]
 })

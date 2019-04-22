@@ -6,10 +6,10 @@
         </div>
         <!--content-->
         <div class="content">
-            <div v-for="(item,key) in list" :key="item.key" class="content-each">
+            <div v-for="(item,key) in list" :key="item.index" class="content-each">
                 <div class="title">{{key}}</div>
                 <div class="">
-                    <div class="name" v-for="innerItem of item" :key="innerItem.name">{{innerItem.name}}</div>
+                    <div class="name" v-for="innerItem of item" :key="innerItem.index">{{innerItem.name}}</div>
                 </div>
             </div>
         </div>
@@ -17,9 +17,18 @@
     </div>
 </template>
 <script>
+import axios from 'axios';
 import Footer from './Footer'
 export default {
     name: 'Address',
+    created(){
+        var token = 'ckd8wy5zok';
+        var username = '18000351426';
+        var url = `http://localhost:3000/address/info?token=${token}&username=${username}`
+        axios({
+            url: url
+        })
+    },
     components:{
         Footer
     },

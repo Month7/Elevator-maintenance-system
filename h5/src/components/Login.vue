@@ -37,37 +37,87 @@
         <div class="forget-container">
             <router-link to="/forget" class="forget">忘记密码？</router-link>
         </div>
+        <Warning :show="this.showWarning" :msg="this.msg"></Warning>
     </div>
 </template>
 <script>
 import axios from 'axios'
+import Warning from '../common/Warning'
 export default {
     name: 'Login',
     data(){
         return {
             username: "",
             password: "",
-            picked: '0'
+            picked: '0',
+            showWarning: false,
+            msg: ''
         }
     },    
+    components:{
+        Warning
+    },
     methods:{
+        $alert(msg,time){
+            this.showWarning = true;
+            this.msg = msg;
+            setTimeout(()=>{
+                this.showWarning = false;
+            },1500)
+        },
+        awaitPostMessage:function(){
+            var isReactNativePostMessageReady = !!window.originalPostMessage;
+            var queue = [];
+            var currentPostMessageFn = function store(message) {
+                if (queue.length > 100) queue.shift();
+                queue.push(message);
+            };
+            var self = this;
+            if (!isReactNativePostMessageReady) {
+                var originalPostMessage = window.postMessage;
+                Object.defineProperty(window, 'postMessage', {
+                configurable: true,
+                enumerable: true,
+                get: function () {
+                    return currentPostMessageFn;
+                },
+                set: function (fn) {
+                    currentPostMessageFn = fn;
+                    isReactNativePostMessageReady = true;
+                    setTimeout(self.sendQueue(queue), 0);
+                }
+                });
+            window.postMessage.toString = function () {
+            return String(originalPostMessage);
+            };
+        }
+        },
+        sendQueue:function (queue) {
+            while (queue.length > 0) window.postMessage(queue.shift());
+        },
         // 登录
         login:function (){
             // window.postMessage('test');
             if(!this.username || !this.password){
-                alert('手机号和密码不能为空!');
+                
+                this.$alert('手机号和密码不能为空!')
                 return false;
             }
             var phoneReg = /^[1][3,4,5,7,8][0-9]{9}$/;
             if(!phoneReg.test(this.username)){
-                alert('请输入正确格式的手机号码!')
+                this.$alert('请输入正确格式的手机号码!')
                 return false;
             }
+           
             let postData = this.$qs.stringify({
                 username: this.username,
-                password: this.password
+                password: this.password,
+                type:this.picked
             });
-            window.postMessage(postData);
+            var megData = `${this.username},${this.password},${this.picked}`
+            this.awaitPostMessage(); // Call this only once in your Web Code.
+            window.postMessage('megData');
+            console.log('web已经postMessage');
             // axios({
             //     url: 'http://localhost:3000/user/login',
             //     method: 'post',
@@ -77,6 +127,8 @@ export default {
             // }).catch(e=>{
             //     console.log(e);
             // })
+            sessionStorage.setItem('test','test');
+            window.location.href = '#/work'
         },
         // 注册
         signin:function () {

@@ -12,8 +12,8 @@ export default class HomeScreen extends React.Component {
   };
   onMessage = (event) => {
     //webview中的html页面传过来的的数据在event.nativeEvent.data上
-    alert(event.nativeEvent.data);
-    alert(event.nativeEvent.data.username);
+    // alert(event.nativeEvent.data);
+    // alert(event.nativeEvent.data.username);
     if(event.nativeEvent.data == 'exit'){
       navigationUtil.reset(this.props.navigation, 'Login');
     }

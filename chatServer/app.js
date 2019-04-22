@@ -5,7 +5,8 @@ var io = require('socket.io')(http);
 var bodyParser = require('body-parser');
 var path = require('path');
 var indexRouter = require('./routes/index');
-var userRouter = require('./routes/user')
+var userRouter = require('./routes/user');
+var addressRouter = require('./routes/address');
 app.use(bodyParser.urlencoded({
     extended:true
 }));
@@ -38,6 +39,7 @@ io.on('connection', function(socket){
 
 app.use('/test', indexRouter);
 app.use('/user',userRouter)
+app.use('/address',addressRouter)
 http.listen(3000, function(){
   console.log('listening on *:3000');
 });

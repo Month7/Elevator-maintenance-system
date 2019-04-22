@@ -2,7 +2,9 @@
     <div class="container">
         <!--header-->
         <div class="header">
-            <span class="header-goBack" @click="goBack"><</span>
+            <span class="header-goBack" @click="goBack">
+                <img src="../../static/左箭头.png" />
+            </span>
             保养记录
         </div>
         <div v-if="loading">

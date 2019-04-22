@@ -32,12 +32,12 @@
             </div>
             <!--content-->
             <div class="content">
-                <input type="text" class="phone input" placeholder="请输入手机号"/>
+                <input type="text" class="phone input" v-model="phone" placeholder="请输入手机号" />
                 <div class="phone-img">
                     <img src="../../static/手机.png"/>
                 </div>
                 <div class="code-container">
-                    <input type="text" class="code input" placeholder="请输入当前手机验证码"/>
+                    <input type="text" class="code input" v-model="code" placeholder="请输入当前手机验证码"/>
                     <div class="code-img">
                         <img src="../../static/验证码.png" />
                     </div>
@@ -54,13 +54,25 @@
 <script>
 export default {
     name: 'Step1',
+    data:function(){
+        return {
+            phone: '',
+            code: ''
+        }
+    },
     methods:{
         nextStep(){
-            this.$store.dispatch('nextStep');
+            if(this.code && this.phone){
+                this.$store.dispatch('registerPhone',this.phone);
+                this.$store.dispatch('nextStep');
+            } else {
+                alert('验证码不能为空!')
+            }
         },
         goBack(){
-            this.$router.back(-1);
+            this.$store.dispatch('resetRegisterInfo')
             this.$store.dispatch('initStep');
+            this.$router.back(-1);
         }
     }
 }
