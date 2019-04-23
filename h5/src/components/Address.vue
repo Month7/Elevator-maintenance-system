@@ -19,14 +19,18 @@
 <script>
 import axios from 'axios';
 import Footer from './Footer'
+import makePy from '../utils/pinyin.js'
 export default {
     name: 'Address',
     created(){
-        var token = 'ckd8wy5zok';
+        var token = sessionStorage.getItem('token');
         var username = '18000351426';
         var url = `http://localhost:3000/address/info?token=${token}&username=${username}`
         axios({
-            url: url
+            url: url,
+            method: 'get'
+        }).then((res)=>{
+            this.list = res.data
         })
     },
     components:{
@@ -34,28 +38,8 @@ export default {
     },
     data(){
         return {
-            list:{
-                "D":[{
-                    name: "东哥"
-                }],
-                "L":[{
-                    name: '雷军'
-                },{
-                    name: "李彦宏"
-                }],
-                "M":[{
-                    name:'马云',
-                    phone: 18000351426
-                },{
-                    name: '马化腾',
-                    phone: 18000351426
-                }],
-                "Z":[{
-                    name: "张朝阳"
-                }]
-                
-            }
-        }
+            list: {}
+        }    
     }
 }
 </script>

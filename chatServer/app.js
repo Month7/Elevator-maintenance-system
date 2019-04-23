@@ -7,6 +7,7 @@ var path = require('path');
 var indexRouter = require('./routes/index');
 var userRouter = require('./routes/user');
 var addressRouter = require('./routes/address');
+var elevatorRouter = require('./routes/elevator');
 app.use(bodyParser.urlencoded({
     extended:true
 }));
@@ -38,8 +39,10 @@ io.on('connection', function(socket){
 
 
 app.use('/test', indexRouter);
-app.use('/user',userRouter)
-app.use('/address',addressRouter)
+app.use('/user',userRouter);
+app.use('/address',addressRouter);
+app.use('/elevator',elevatorRouter)
+
 http.listen(3000, function(){
   console.log('listening on *:3000');
 });

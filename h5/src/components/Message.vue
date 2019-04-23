@@ -27,16 +27,16 @@ export default {
         Footer
     },
     created(){
-        var url = 'http://localhost:3000/message';
-        var self = this;
-        axios({
-            url: url,
-            method: 'get',
-        }).then((res)=>{
-            self.messages = res.data.messages;
-        }).catch((e)=>{
-            console.log(e);
-        })
+        // var url = 'http://localhost:3000/message';
+        // var self = this;
+        // axios({
+        //     url: url,
+        //     method: 'get',
+        // }).then((res)=>{
+        //     self.messages = res.data.messages;
+        // }).catch((e)=>{
+        //     console.log(e);
+        // })
     },
     data:function(){
         return {

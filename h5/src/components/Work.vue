@@ -10,26 +10,26 @@
                 当日工作
             </div>
             <div class="contenr-main">
-                <router-link to="/finished" class="content-each">
+                <div @click="goDetail(0)" class="content-each">
                     <img src="../../static/点赞.png" />
                     <div class="content-txt">保养完成</div>
-                </router-link>
-                <router-link to="/finished" class="content-each">
+                </div>
+                <div @click="goDetail(1)" class="content-each">
                     <img src="../../static/修理装修.png" />
                     <div class="content-txt">待保养</div>
-                </router-link>
-                <router-link to="/finished" class="content-each">
+                </div>
+                <div @click="goDetail(2)" class="content-each">
                     <img src="../../static/沙漏.png" />
                     <div class="content-txt">保养中</div>
-                </router-link>
-               <router-link to="finished/" class="content-each">
+                </div>
+               <div @click="goDetail(3)" class="content-each">
                     <img src="../../static/闹钟.png" />
                     <div class="content-txt">超期</div>
-                </router-link>
-                <router-link to="/finished" class="content-each">
+                </div>
+                <div @click="goDetail(4)" class="content-each">
                     <img src="../../static/报警.png" />
                     <div class="content-txt">急修</div>
-                </router-link>
+                </div>
             </div>
         </div>
         <div class="content">
@@ -37,7 +37,11 @@
                 必备工具
             </div>
             <div class="contenr-main">
-
+                <div class="content-each" @click="GoTask">
+                    <img src="../../static/任务下达.png" />
+                    <div class="content-txt">下达任务</div>
+                </div>
+                
             </div>
         </div>
         <div class="content">
@@ -48,19 +52,46 @@
 
             </div>
         </div>
+        <Warning :show="this.showWarning" :msg="this.msg"></Warning>
     </div>
 </template>
 <script>
 import Footer from './Footer'
+import Warning from '../common/Warning'
 export default {
     name: 'Login',
     data(){
         return {
-
+            showWarning: false,
+            msg: '',
         }
     },
     components:{
-        Footer
+        Footer,
+        Warning
+    },
+    methods:{
+        $alert(msg){
+            this.showWarning = true;
+            this.msg = msg;
+            setTimeout(()=>{
+                this.showWarning = false;
+            },1500)
+        },
+        goDetail(status){
+            if(sessionStorage.getItem('type') != 0){
+                this.$alert('您不是维保人员，无法查看此内容!')
+                return false;
+            }
+            this.$router.push({ name: 'Finished', params: { status: status }})
+        },
+        GoTask(){
+            // if(sessionStorage.getItem('type') != 1){
+            //     this.$alert('您不是检验人员，无法查看此内容!')
+            //     return false;
+            // }
+            this.$router.push({ name: 'Task'})
+        }
     }    
 }
 </script>

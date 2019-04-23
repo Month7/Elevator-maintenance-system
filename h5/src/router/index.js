@@ -10,7 +10,8 @@ import MDetail from '../components/MDetail'
 import Test from '../components/Test'
 import Signup from '../components/Signup'
 import Forget from '../components/Forget'
-import Warning from '../common/Warning'
+import Index from '../components/Index'
+import Task from '../components/Task'
 
 Vue.use(Router)
 
@@ -18,31 +19,53 @@ export default new Router({
   routes: [
     {
       path: '/',
+      name: 'Index',
+      component: Index
+    },{
+      path: '/login',
       name: 'Login',
       component: Login
     },{
       path: '/personal',
       name: 'Personal',
+      meta: {
+        requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
+      },
       component: Personal
     },{
       path: '/work',
       name: 'Work',
+      meta: {
+        requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
+      },
       component: Work
     },{
-      path: '/finished',
+      path: '/finished/:status',
       name: 'Finished',
+      meta: {
+        requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
+      },
       component: Finished
     },{
       path: '/address',
       name: 'Address',
+      meta: {
+        requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
+      },
       component: Address
     },{
       path: '/message',
       name: 'Message',
+      meta: {
+        requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
+      },
       component: Message
     },{
       path: '/detail',
       name: 'MDetail',
+      meta: {
+        requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
+      },
       component: MDetail
     },{
       path: '/test',
@@ -55,7 +78,11 @@ export default new Router({
     },{
       path: '/forget',
       name: 'Forget',
-      component: Warning
+      component: Forget
+    },{
+      path: '/task',
+      name: 'Task',
+      component: Task
     }
   ]
 })

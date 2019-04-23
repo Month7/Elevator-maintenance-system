@@ -11,6 +11,24 @@ var connection = mysql.createConnection({
   })
 connection.connect();
 
+var transfromData = (oldData) => {
+  var nameArr = oldData.name.split(',');
+  var phoneArr = oldData.phone.split(',');;
+  var letterArr = oldData.firstletter.split(',');
+  var res = {}
+  for(var i=0;i<letterArr.length;i++){
+      var obj = {};
+      obj['name'] = nameArr[i];
+      obj['phone'] = phoneArr[i];
+      var arr = [];
+      arr.push(obj);
+      if(!res[letterArr[i]]){
+          res[letterArr[i]] = arr
+      }
+  }
+  return JSON.stringify(res);
+}
+
 router.get('/info',function(req,res,next){
   var token = req.query.token;
   var username = req.query.username;
@@ -26,15 +44,7 @@ router.get('/info',function(req,res,next){
       if(err){
         console.log('查询出错')
       }
-      var data =  {
-        username: '18000351426',
-        name: '东哥,雷军',
-        phone: '1800031425,18000351426' }
-      var nameStr = result[0].name;
-      var nameArr = nameStr.split(',');
-      var phoneStr = result[0].phone;
-      var phoneArr = nameStr.split(',');
-      console.log(result[0]);
+      res.send(transfromData(result[0]))
     })
   })
   

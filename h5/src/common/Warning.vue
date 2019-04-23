@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="container2">
         <div class="warningContainer" v-if="show">
             <div class="warning">
                 {{msg}}
@@ -23,6 +23,10 @@ export default {
 }
 </script>
 <style scoped>
+.container2{
+    position: fixed;
+    bottom: 0;
+}
 .warningContainer{
     text-align: center;
     position: fixed;

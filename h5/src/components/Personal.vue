@@ -4,16 +4,16 @@
             <!--头像-->
             <div>
                 <img class="portrait" src="../../static/头像.jpg"/>
-                <div class="username">{{username}}</div>
+                <div class="username">{{nickname}}</div>
             </div>
         </div>
         <div class="content">
             <div>手机号</div>
-            <div class="right">18000351426</div>
+            <div class="right">{{username}}</div>
         </div>
         <div class="content">
             <div>身份</div>
-            <div class="right">维保人员</div>
+            <div class="right">{{type}}</div>
         </div>
         <div class="exit-container">
             <button class="exit" @click="exit">退出登录</button>
@@ -22,13 +22,29 @@
     </div>
 </template>
 <script>
+import axios from 'axios';
 // import { mapState} from 'vuex'
 import Footer from './Footer';
 export default {
     name: 'Personal',
+    created(){
+        var token = sessionStorage.getItem('token');
+        var username = sessionStorage.getItem('username');
+        axios({
+            url: `http://localhost:3000/user/search?token=${token}&username=${username}`,
+            method: 'get'
+        }).then((res)=>{
+            this.nickname = res.data.nickname;
+            this.username = res.data.username;
+            this.type = res.data.type == 0 ? '维保人员':'检验人员'
+        })
+        console.log('???')
+    },
     data:function(){
         return {
-           username: 'default'
+           username: '',
+           nickname: '',
+           type: ''
         }
     },
     components:{
@@ -42,14 +58,11 @@ export default {
     methods:{
         exit:function(){
             // this.$store.dispatch('addNote','haha')
-            window.postMessage('exit');
+            // window.postMessage('exit');
+            sessionStorage.clear();
+            window.location.href = '#/'
         }
     },
-    created(){
-        if(localStorage.getItem('test') !== null) {
-            this.username = localStorage.getItem('test')
-        }
-    }
 }
 </script>
 <style scoped>

@@ -5,11 +5,16 @@
 </template>
 
 <script>
-import Footer from './components/Footer'
+import Warning from './common/Warning'
 export default {
   name: 'App',
   components:{
-    Footer
+    Warning
+  },
+  data(){
+    return {
+      showFlag: false
+    }
   }
 }
 </script>

@@ -13,7 +13,7 @@
                 </div>
             </div>
             <div class="login-input-container" style="position:relative">
-                <input class="login-input" v-model="password" />
+                <input class="login-input" v-model="password" type="password"/>
                 <div class="input-img">
                     <img src="../../static/密码.png" />  密  码
                 </div>
@@ -31,7 +31,7 @@
         <!--button-->
         <div class="buttons">
             <button class="button" @click="login">登  录</button>
-            <router-link to="/signup" class="button-signin" @click="signin">注  册</router-link>
+            <router-link to="/signup" class="button-signin">注  册</router-link>
         </div>
         <!--forget-->
         <div class="forget-container">
@@ -97,9 +97,7 @@ export default {
         },
         // 登录
         login:function (){
-            // window.postMessage('test');
             if(!this.username || !this.password){
-                
                 this.$alert('手机号和密码不能为空!')
                 return false;
             }
@@ -107,33 +105,30 @@ export default {
             if(!phoneReg.test(this.username)){
                 this.$alert('请输入正确格式的手机号码!')
                 return false;
-            }
-           
+            }           
             let postData = this.$qs.stringify({
                 username: this.username,
                 password: this.password,
                 type:this.picked
             });
-            var megData = `${this.username},${this.password},${this.picked}`
-            this.awaitPostMessage(); // Call this only once in your Web Code.
-            window.postMessage('megData');
-            console.log('web已经postMessage');
-            // axios({
-            //     url: 'http://localhost:3000/user/login',
-            //     method: 'post',
-            //     data:postData
-            // }).then((res)=>{
-            //     console.log(res.data);
-            // }).catch(e=>{
-            //     console.log(e);
-            // })
-            sessionStorage.setItem('test','test');
-            window.location.href = '#/work'
+            axios({
+                url: 'http://localhost:3000/user/login',
+                method: 'post',
+                data:postData
+            }).then((res)=>{
+                if(res.data.code == 0){
+                    sessionStorage.setItem('token',res.data.token);
+                    sessionStorage.setItem('username',res.data.username);
+                    sessionStorage.setItem('type',res.data.type)
+                    this.$router.push(this.$route.query.redirect);
+                } else{  // 登录失败
+                    this.$alert(res.data.msg)
+                }
+                
+            }).catch(e=>{
+                console.log(e);
+            })
         },
-        // 注册
-        signin:function () {
-            console.log('注册!');
-        }
     }
 }
 </script>
@@ -164,7 +159,7 @@ export default {
     font-size: 1.2rem;
     outline: none;
     padding-left: 4rem;
-   
+    color: #fff;
 }
 .input-container{
     text-align: center;
