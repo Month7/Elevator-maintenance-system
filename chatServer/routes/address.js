@@ -24,6 +24,13 @@ var transfromData = (oldData) => {
       arr.push(obj);
       if(!res[letterArr[i]]){
           res[letterArr[i]] = arr
+      } else{
+        var obj2 = {};
+        obj2['name'] = nameArr[i];
+        obj2['phone'] = phoneArr[i];
+        var arr2 = res[letterArr[i]]
+        arr2.push(obj2);
+        res[letterArr[i]] = arr2;
       }
   }
   return JSON.stringify(res);

@@ -3,6 +3,9 @@
         <!--header-->
         <div class="header">
             通讯录
+            <div class="add">
+                <img src="../../static/添加联系人.png" />
+            </div>
         </div>
         <!--content-->
         <div class="content">
@@ -40,6 +43,12 @@ export default {
         return {
             list: {}
         }    
+    },
+    methods:{
+        // 添加联系人
+        add(){
+
+        }
     }
 }
 </script>
@@ -74,5 +83,12 @@ export default {
 }
 .name:last-child{
     border: none;
+}
+.add{
+    position: fixed;
+    right: 0.5rem;
+    top: 0;
+    height: 2.5rem;
+    line-height: 2.5rem;
 }
 </style>

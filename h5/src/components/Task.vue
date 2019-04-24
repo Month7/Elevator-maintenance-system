@@ -61,26 +61,49 @@
             </div>
             <!--button-->
             <div class="">
-                <button class="button">确认下达</button>
+                <button class="button" @click="xiada">确认下达</button>
             </div>
         </div>
     </div>    
 </template>
 <script>
+import axios from 'axios'
 export default {
     name: 'Task',
     data(){
         return {
-            statement:'',
-            emergency: '',
-            wanchengtime: '',
-            code: '',
-            location: ''
+            statement:'',        // 任务叙述
+            emergency: '',       // 任务类型 (紧急1/一般0)
+            wanchengtime: '',    // 计划完成时间
+            code: '',            // 电梯编号
+            location: ''         // 电梯位置
         }
     },
     methods: {
         goBack:function(){
             this.$router.back(-1);
+        },
+        xiada(){
+            let postData = this.$qs.stringify({
+                token: sessionStorage.getItem('token'),
+                username: sessionStorage.getItem('username'),
+                statement: this.statement,
+                emergency: this.emergency,                 
+                code: this.code,
+                location: this.location,
+                wanchengtime: Date.parse(this.wanchengtime),
+                xiafatime: Date.parse(new Date())
+            });
+
+            axios({
+                url: 'http://localhost:3000/elevator/assign',
+                method: 'post',
+                data: postData
+            }).then((res) => {
+                if(res.data.code == 0){
+                    alert('success');
+                }
+            })
         }
     }
 }

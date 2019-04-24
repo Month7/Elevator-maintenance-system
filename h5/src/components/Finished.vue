@@ -14,31 +14,36 @@
         <!---->
             <div class="content" v-for="item in list" :key="item.index">
                 <!--保养时间-->
-                <div class="content-each" >
+                <div class="content-each" v-if="item.baoyangtime">
                     <div class="description">保养时间:  </div>
                     <div class="text">{{item.baoyangtime|time}}</div>
                 </div>
                 <!--电梯位置-->
-                <div class="content-each">
+                <div class="content-each" v-if="item.location">
                     <div class="description">电梯位置:  </div>
                     <div class="text">{{item.location}}</div>
                 </div>
                 <!--故障描述-->
-                <div class="content-each">
+                <div class="content-each" v-if="item.statement">
                     <div class="description">任务说明:  </div>
                     <div class="text">{{item.statement}}</div>
                 </div>
                 <!--注册代码-->
-                <div class="content-each">
+                <div class="content-each" v-if="item.code">
                     <div class="description">注册代码:  </div>
                     <div class="text">{{item.code}}</div>
                 </div>
                 <!--维保负责人-->
-                <div class="content-each">
+                <div class="content-each" v-if="item.fuzeren">
                     <div class="description">维保负责人:  </div>
                     <div class="text">{{item.people}}</div>
                 </div>
-        
+                <!--管理员操作button-->
+                <div v-if="manageStatus == 0">
+                    <div class="">
+                        <button class="button toReceive" @click="deleteTask">撤销</button>
+                    </div>
+                </div>
                 <!--维保得到的评价-->
                 <div v-if="status == 0" class="content-each" style="justify-content:space-between;">
                     <!--服务态度-->
@@ -81,6 +86,8 @@ import Warning from '../common/Warning'
 export default {
     name: 'Finished',
     created(){
+        
+        if(this.$route.params.status) { this.status = this.$route.params.status }
         this.getData();
     },
     components:{
@@ -127,6 +134,10 @@ export default {
         // 返回上一页
         goBack:function(){
             this.$router.back(-1);
+        },
+        // 检验人员删除任务
+        deleteTask(){
+            
         }
     },
     filters:{
@@ -139,7 +150,8 @@ export default {
             showWarning: false,
             msg: '',
             loading: false,
-            status:this.$route.params.status,
+            status:-1,       // 状态 给维保人员用 0-4 已完成-紧急
+            manageStatus: 0,    // 给检验人员用的状态  0 编辑状态 1 评价状态
             list:[]
         }
     }

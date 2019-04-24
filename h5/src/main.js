@@ -7,12 +7,13 @@ import store from './vuex'
 import qs from 'qs';
 import Vconsole from 'vconsole'
 // 引入element ui组件
-import { Select,Option,DatePicker,TimePicker,Input } from 'element-ui';
+import { Select,Option,DatePicker,TimePicker,Input,Button } from 'element-ui';
 Vue.use(Select)
 Vue.use(Option)
 Vue.use(DatePicker)
 Vue.use(TimePicker)
 Vue.use(Input)
+Vue.use(Button)
 let vcosnole = new Vconsole()
 Vue.prototype.$qs = qs;
 

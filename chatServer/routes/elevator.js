@@ -47,7 +47,6 @@ router.post('/receive',function(req,res,next){
     var code = req.body.code;
     var sql = `update elevator set status='2' where code='${code}'`;
     connection.query(sql,function(err,result){
-        console.log(result);
         if(err){
             res.send({
                 code: 1,
@@ -62,6 +61,33 @@ router.post('/receive',function(req,res,next){
         return;
     })
 })
-
+// 下达任务
+router.post('/assign',function(req,res,next){
+    var token = req.body.token;
+    var username = req.body.username;
+    var sql = `select token from user where username='${username}'`;
+    // 验证登录
+    connection.query(sql,function(err,result){
+        if(err) {
+            return;
+        }
+        var statement = req.body.statement;
+        var status = req.body.emergency == 0 ? 1:4;
+        var wanchengtime = req.body.wanchengtime;
+        var code = req.body.code;
+        var location = req.body.location;
+        var xiafatime = req.body.xiafatime;
+        sql = `insert into elevator(status,code,location,statement,xiafatime) values`+
+        ` ('${status}','${code}','${location}','${statement}','${xiafatime}')`;
+        connection.query(sql,function(err,result){
+            if(err) {return;}
+            res.send({
+                code: 0,
+                msg: 'success'
+            })
+        })
+    })
+    var statement = req.body.statement
+})
 
 module.exports = router;

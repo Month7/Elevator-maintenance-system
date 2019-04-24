@@ -37,11 +37,26 @@
                 必备工具
             </div>
             <div class="contenr-main">
-                <div class="content-each" @click="GoTask">
+                <!--下达任务-->
+                <div class="content-each-m" @click="GoTask">
                     <img src="../../static/任务下达.png" />
                     <div class="content-txt">下达任务</div>
                 </div>
-                
+                <!--电梯管理-->
+                <div class="content-each-m" @click="GoManage">
+                    <img src="../../static/电梯管理.png" />
+                    <div class="content-txt">电梯管理</div>
+                </div>
+                <!--电梯管理-->
+                <div class="content-each-m" @click="GoTask">
+                    <img src="../../static/电梯管理.png" />
+                    <div class="content-txt">电梯管理</div>
+                </div>
+                <!--电梯管理-->
+                <div class="content-each-m" @click="GoTask">
+                    <img src="../../static/电梯管理.png" />
+                    <div class="content-txt">电梯管理</div>
+                </div>
             </div>
         </div>
         <div class="content">
@@ -91,6 +106,9 @@ export default {
             //     return false;
             // }
             this.$router.push({ name: 'Task'})
+        },
+        GoManage(){
+            this.$router.push({ name: 'Finished', params: { status: 5 }})
         }
     }    
 }
@@ -122,6 +140,14 @@ export default {
     text-decoration: none;
     padding: 0.2rem;
     width: 20%;
+    margin-top:0.5rem;
+}
+.content-each-m{
+    text-align: center;
+    color: black;
+    text-decoration: none;
+    padding: 0.2rem;
+    width: 25%;
     margin-top:0.5rem;
 }
 .content-txt{
