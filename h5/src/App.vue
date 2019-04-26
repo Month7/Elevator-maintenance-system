@@ -6,10 +6,17 @@
 
 <script>
 import Warning from './common/Warning'
+import io from 'socket.io-client';
+import getUrl from './config';
 export default {
   name: 'App',
   components:{
     Warning
+  },
+  created(){
+    var url = getUrl();
+    this.socket = io(`${url}`);
+    var socket = this.socket;
   },
   data(){
     return {

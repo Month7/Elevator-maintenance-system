@@ -47,10 +47,10 @@
                     <img src="../../static/电梯管理.png" />
                     <div class="content-txt">电梯管理</div>
                 </div>
-                <!--电梯管理-->
-                <div class="content-each-m" @click="GoTask">
-                    <img src="../../static/电梯管理.png" />
-                    <div class="content-txt">电梯管理</div>
+                <!--待评价-->
+                <div class="content-each-m" @click="GoPingjia">
+                    <img src="../../static/评价.png" />
+                    <div class="content-txt">待评价</div>
                 </div>
                 <!--电梯管理-->
                 <div class="content-each-m" @click="GoTask">
@@ -100,6 +100,7 @@ export default {
             }
             this.$router.push({ name: 'Finished', params: { status: status }})
         },
+        // 下达任务
         GoTask(){
             // if(sessionStorage.getItem('type') != 1){
             //     this.$alert('您不是检验人员，无法查看此内容!')
@@ -107,8 +108,13 @@ export default {
             // }
             this.$router.push({ name: 'Task'})
         },
+        // 管理电梯
         GoManage(){
             this.$router.push({ name: 'Finished', params: { status: 5 }})
+        },
+        // 评价
+        GoPingjia(){
+            this.$router.push({ name: 'Finished', params: { status: 6 }})
         }
     }    
 }

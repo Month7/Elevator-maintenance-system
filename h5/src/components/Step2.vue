@@ -62,6 +62,7 @@
 </template>
 <script>
 import axios from 'axios'
+import getUrl from '../config'
 export default {
     name: 'Step2',
     data:function(){
@@ -87,12 +88,13 @@ export default {
                         password: this.password,
                         type:this.type
                     });
+                    var url = getUrl();
                     axios({
-                        url: 'http://localhost:3000/user/register',
+                        url: `${url}/user/register`,
                         data: postData,
                         method: 'post',
                     }).then((res)=>{
-                        if(res.data.retData == 0) {
+                        if(res.data.code == 0) {
                             this.$store.dispatch('nextStep');
                             this.$store.dispatch('resetRegisterInfo')
                         } else {

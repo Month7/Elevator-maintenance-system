@@ -23,6 +23,7 @@
 </template>
 <script>
 import axios from 'axios';
+import getUrl from '../config'
 // import { mapState} from 'vuex'
 import Footer from './Footer';
 export default {
@@ -30,8 +31,9 @@ export default {
     created(){
         var token = sessionStorage.getItem('token');
         var username = sessionStorage.getItem('username');
+        var url = getUrl();
         axios({
-            url: `http://localhost:3000/user/search?token=${token}&username=${username}`,
+            url: `${url}/user/search?token=${token}&username=${username}`,
             method: 'get'
         }).then((res)=>{
             this.nickname = res.data.nickname;

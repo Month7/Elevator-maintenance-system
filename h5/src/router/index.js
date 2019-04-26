@@ -12,6 +12,7 @@ import Signup from '../components/Signup'
 import Forget from '../components/Forget'
 import Index from '../components/Index'
 import Task from '../components/Task'
+import Pingjia from '../components/Pingjia'
 
 Vue.use(Router)
 
@@ -83,6 +84,10 @@ export default new Router({
       path: '/task',
       name: 'Task',
       component: Task
+    },{
+      path: '/pingjia',
+      name: 'Pingjia',
+      component: Pingjia
     }
   ]
 })

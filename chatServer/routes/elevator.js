@@ -3,7 +3,7 @@ var router = express.Router();
 var mysql = require('mysql');
 //数据库连接
 var connection = mysql.createConnection({
-    host: 'localhost',
+    host: '127.0.0.1',
     user: 'root',
     password: 'root',
     database: 'graduction'
@@ -23,7 +23,11 @@ router.get('/getInfo',function(req,res,next){
             })
             return;
         }
-        sql = `select * from elevator where status='${status}'`;
+        if(status ==5 || status == 6) {
+            sql = `select * from elevator`;
+        } else {
+            sql = `select * from elevator where status='${status}'`;
+        }
         connection.query(sql,function(err,result){
             if(err) return;
             var data = [];
@@ -34,7 +38,8 @@ router.get('/getInfo',function(req,res,next){
                     xiafatime: result[i].xiafatime,
                     baoyangtime: result[i].baoyangtime,
                     pingjiatime: result[i].pingjiatime,
-                    location: result[i].location
+                    location: result[i].location,
+                    status: result[i].status
                 }
                 data.push(obj);
             }
@@ -87,7 +92,10 @@ router.post('/assign',function(req,res,next){
             })
         })
     })
-    var statement = req.body.statement
+})
+// 提交评价结果
+router.post('/evaluate',function(req,res,next){
+
 })
 
 module.exports = router;

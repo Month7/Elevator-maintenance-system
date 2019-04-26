@@ -6,14 +6,19 @@ import router from './router'
 import store from './vuex'
 import qs from 'qs';
 import Vconsole from 'vconsole'
+import 'element-ui/lib/theme-chalk/index.css';
 // 引入element ui组件
-import { Select,Option,DatePicker,TimePicker,Input,Button } from 'element-ui';
+import { Select,Option,DatePicker,TimePicker,Input,Button,Rate,Icon,Dialog,Form } from 'element-ui';
 Vue.use(Select)
 Vue.use(Option)
 Vue.use(DatePicker)
 Vue.use(TimePicker)
 Vue.use(Input)
 Vue.use(Button)
+Vue.use(Rate)
+Vue.use(Icon)
+Vue.use(Dialog)
+Vue.use(Form)
 let vcosnole = new Vconsole()
 Vue.prototype.$qs = qs;
 

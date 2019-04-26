@@ -26,11 +26,12 @@
 </template>
 <script>
 import io from 'socket.io-client';
-
+import getUrl from '../config';
 export default {
     name: 'Test',
     created(){
-        this.socket = io('http://140.143.34.162:3000');
+        var url = getUrl();
+        this.socket = io(`${url}`);
         var socket = this.socket;
         var self = this;
         socket.on('recMsg',function(msg){

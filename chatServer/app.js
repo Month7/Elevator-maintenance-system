@@ -1,6 +1,7 @@
 var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
+var mysql = require('mysql');
 
 var bodyParser = require('body-parser');
 var path = require('path');
@@ -11,6 +12,20 @@ var elevatorRouter = require('./routes/elevator');
 app.use(bodyParser.urlencoded({
     extended:true
 }));
+
+// 数据库连接
+var connection = mysql.createConnection({
+  host: '127.0.0.1',
+  user: 'root',
+  password: 'root',
+  database: 'graduction'
+})
+connection.connect();
+// 将聊天信息到数据库
+function saveMsg(){
+
+}
+
 // 主页面
 app.get('/', function(req, res){
   res.send('如果你看到这行字，说明尹铮的聊天室服务器正常运行中');
@@ -26,9 +41,10 @@ app.all('*', function (req, res, next) {
   next();
 });
 
-// sockt.io
+// sockt.io聊天室
 io.on('connection', function(socket){
   console.log('a user connected');
+  // console.log(socket.id)
   socket.on('sendMsg',function(msg){
     io.emit('recMsg',msg)
     console.log(msg+'发送成功!');

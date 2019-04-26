@@ -38,11 +38,24 @@
                     <div class="description">维保负责人:  </div>
                     <div class="text">{{item.people}}</div>
                 </div>
+                <!--电梯状态-->
+                <div class="content-each" v-if="status ==5 || status ==6">
+                    <div class="description">电梯状态  </div>
+                    <div class="text" v-if="item.status ==0">已完成</div>
+                    <div class="text" v-if="item.status ==1">待保养</div>
+                    <div class="text" v-if="item.status ==2">保养中</div>
+                    <div class="text" v-if="item.status ==3">超期</div>
+                    <div class="text" v-if="item.status ==4">急修</div>
+                </div>
                 <!--管理员操作button-->
-                <div v-if="manageStatus == 0">
+                <div v-if="status == 5" class="manageBtn">
                     <div class="">
                         <button class="button toReceive" @click="deleteTask">撤销</button>
                     </div>
+                </div>
+                <!--管理员评价-->
+                <div class="manageBtn" v-if="status ==6">
+                    <button class="button toReceive" @click="deleteTask">去评价</button>
                 </div>
                 <!--维保得到的评价-->
                 <div v-if="status == 0" class="content-each" style="justify-content:space-between;">
@@ -83,10 +96,10 @@
 <script>
 import axios from 'axios'
 import Warning from '../common/Warning'
+import getUrl from '../config'
 export default {
     name: 'Finished',
     created(){
-        
         if(this.$route.params.status) { this.status = this.$route.params.status }
         this.getData();
     },
@@ -97,9 +110,11 @@ export default {
         getData(){
             var username = sessionStorage.getItem('username');
             var token = sessionStorage.getItem('token');
-            var url = `http://localhost:3000/elevator/getInfo?username=${username}&token=${token}&status=${this.status}`;
+            var url = getUrl();
+            // var url = `http://localhost:3000/elevator/getInfo?username=${username}&token=${token}&status=${this.status}`;
+            // var url = `http://140.143.34.162:3000/elevator/getInfo?username=${username}&token=${token}&status=${this.status}`;
             axios({
-                url: url,
+                url: `${url}/elevator/getInfo?username=${username}&token=${token}&status=${this.status}`,
                 method: 'get',
             }).then((res)=>{
                 console.log(res.data);
@@ -137,7 +152,7 @@ export default {
         },
         // 检验人员删除任务
         deleteTask(){
-            
+
         }
     },
     filters:{
@@ -150,9 +165,11 @@ export default {
             showWarning: false,
             msg: '',
             loading: false,
-            status:-1,       // 状态 给维保人员用 0-4 已完成-紧急
-            manageStatus: 0,    // 给检验人员用的状态  0 编辑状态 1 评价状态
-            list:[]
+            status: -1,       // 状态 给维保人员用 0-4 已完成-紧急 5 管理电梯 6 评价电梯 
+            colors: ['#99A9BF', '#F7BA2A', '#FF9900'],
+            list:[],
+            score1: 3,
+            score2: 3,
         }
     }
 }
@@ -174,6 +191,7 @@ export default {
     background: rgb(242,242,242);
     padding-bottom: 0!important;
     padding-top: 2.5rem!important;
+    overflow-x: hidden;
 }
 .content{
     width: 95%;
@@ -217,6 +235,10 @@ export default {
     border-radius: 0.3rem;
 }
 .daibaoyang{
+    text-align: right;
+    padding-right: 0.8rem;
+}
+.manageBtn{
     text-align: right;
     padding-right: 0.8rem;
 }

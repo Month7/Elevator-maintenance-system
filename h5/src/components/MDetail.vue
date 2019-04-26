@@ -9,7 +9,7 @@
         <!--聊天内容区-->
         <div class="content">
             <div class="content-each" v-for="item in messages" :key="item.index">
-                <div v-if="item.name == localName" class="content-right">
+                <div v-if="item.receiveName == localName" class="content-right">
                     {{item.content}}
                 </div>
                 <div v-else class="content-left">
@@ -27,15 +27,25 @@
 </template>
 <script>
 import io from 'socket.io-client';
+import getUrl from '../config'
 
 export default {
     name: 'MDetail',
     created(){
-        this.socket = io('http://localhost:3000');
+        var url = getUrl();
+        this.socket = io(`${url}`);
         var socket = this.socket;
+        // socket.emit('group1')
         var self = this;
         socket.on('recMsg',function(msg){
+            console.log(msg);
+            // 过滤 只接受发送给自己的消息
+            // if(msg.sendName == sessionStorage.getItem('username')){
+            //     self.$store.dispatch('addMsg',msg);
+            //     self.duifangName = msg.receiveName;
+            // }
             self.$store.dispatch('addMsg',msg);
+            self.duifangName = msg.receiveName;
         })
     },
     destroyed(){
@@ -45,10 +55,12 @@ export default {
         goBack:function(){
             this.$router.back(-1);
         },
+        // 发送消息
         send:function () {
             var localName = this.$route.params.localName || 'Month';
             var sendData = {
-                name: localName,
+                sendName: this.duifangName,
+                receiveName: localName,
                 content: this.sendTxt
             }
             this.socket.emit('sendMsg',sendData)
@@ -67,7 +79,8 @@ export default {
             localName:this.$route.params.localName || 'Month',
             name:this.$route.params.name,
             sendTxt: '',
-            messages: this.$store.state.msgs
+            messages: this.$store.state.msgs,
+            duifangName: null
         }
     }
 }

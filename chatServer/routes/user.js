@@ -9,7 +9,7 @@ router.get('/login', function(req, res, next) {
 
 //数据库连接
 var connection = mysql.createConnection({
-    host: 'localhost',
+    host: '127.0.0.1',
     user: 'root',
     password: 'root',
     database: 'graduction'
@@ -61,7 +61,7 @@ router.post('/login',function(req,res,next){
               }
               res.send(JSON.stringify(resData));
               return;
-            }
+            }        
           })
         } else {  // 密码错误
           res.send({
@@ -121,7 +121,6 @@ router.get('/search',function(req,res,next){
           avat_url: result[0].avat_url
         }
         res.send(JSON.stringify(data));
-        console.log(result[0]);
       })
     }
   })

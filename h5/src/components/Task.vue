@@ -68,6 +68,7 @@
 </template>
 <script>
 import axios from 'axios'
+import getUrl from '../config'
 export default {
     name: 'Task',
     data(){
@@ -94,9 +95,9 @@ export default {
                 wanchengtime: Date.parse(this.wanchengtime),
                 xiafatime: Date.parse(new Date())
             });
-
+            var url = getUrl();
             axios({
-                url: 'http://localhost:3000/elevator/assign',
+                url: `${url}/elevator/assign`,
                 method: 'post',
                 data: postData
             }).then((res) => {

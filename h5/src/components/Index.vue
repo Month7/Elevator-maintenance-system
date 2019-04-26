@@ -43,6 +43,7 @@
 <script>
 import axios from 'axios'
 import Warning from '../common/Warning'
+import getUrl from '../config.js';
 export default {
     name: 'Index',
     data(){
@@ -81,8 +82,11 @@ export default {
                 password: this.password,
                 type:this.picked
             });
+            var url = getUrl();
             axios({
-                url: 'http://localhost:3000/user/login',
+                // url: 'http://localhost:3000/user/login',
+                // url: 'http://140.143.34.162:3000/user/login',
+                url: `${url}/user/login`,
                 method: 'post',
                 data:postData
             }).then((res)=>{

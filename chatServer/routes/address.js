@@ -4,7 +4,7 @@ var mysql = require('mysql');
 
 //数据库连接
 var connection = mysql.createConnection({
-    host: 'localhost',
+    host: '127.0.0.1',
     user: 'root',
     password: 'root',
     database: 'graduction'
@@ -35,7 +35,7 @@ var transfromData = (oldData) => {
   }
   return JSON.stringify(res);
 }
-
+// 查询联系人信息
 router.get('/info',function(req,res,next){
   var token = req.query.token;
   var username = req.query.username;
@@ -51,10 +51,49 @@ router.get('/info',function(req,res,next){
       if(err){
         console.log('查询出错')
       }
-      res.send(transfromData(result[0]))
+      var data = result[0];
+      if(data.name && data.phone && data.firstletter && data.username) {
+        res.send(transfromData(data))
+      }
     })
   })
-  
 })
 
+// 添加联系人
+router.post('/add',function(req,res,next){
+  var token = req.body.token,
+      username = req.body.username,
+      name2 = req.body.name,
+      phone2 = req.body.phone,
+      firstLetter2 = req.body.firstLetter;
+  var sql = `select token from user where username='${username}'`;
+  connection.query(sql,function(err,result){
+    if(token != result[0].token) {
+      return;
+    }
+    sql = `select * from address where username='${username}'`;
+    connection.query(sql,function(err,result){
+      if(err){
+        console.log('查询出错')
+      }
+      var data = result[0];
+      var nameArr = data.name.split(',');
+      var phoneArr = data.phone.split(',');;
+      var letterArr = data.firstletter.split(',');
+      nameArr.push(name2);
+      phoneArr.push(phone2)
+      letterArr.push(firstLetter2);
+      var name = nameArr.join(','),
+          phone = phoneArr.join(','),
+          letter = letterArr.join(',');
+      sql = `update address set name='${name}',phone='${phone}',firstletter='${letter}' where username='${username}'`;
+      connection.query(sql,function(err,result){
+        res.send({
+          code: 0,
+          msg: '成功添加联系人'
+        })
+      })
+    })
+  })
+})
 module.exports = router;
