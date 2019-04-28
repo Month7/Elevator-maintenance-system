@@ -85,7 +85,7 @@ export default new Router({
       name: 'Task',
       component: Task
     },{
-      path: '/pingjia',
+      path: '/pingjia/:id',
       name: 'Pingjia',
       component: Pingjia
     }

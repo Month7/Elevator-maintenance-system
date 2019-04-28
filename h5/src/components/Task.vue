@@ -19,15 +19,15 @@
                 <label>
                     任务类型
                 </label>
-                <el-select size="mini" v-model="emergency" placeholder="请选择" class="type-select">
+                <el-select size="mini" v-model="status" placeholder="请选择" class="type-select">
                         <el-option class="type-select"
                         label="一般"
-                        value="0"
+                        value="2"
                         >
                         </el-option>
                         <el-option class="type-select"
                         label="紧急"
-                        value="1"
+                        value="5"
                         >
                         </el-option>
                 </el-select>
@@ -64,23 +64,34 @@
                 <button class="button" @click="xiada">确认下达</button>
             </div>
         </div>
+        <Warning :show="this.showWarning" :msg="this.msg"></Warning>
     </div>    
 </template>
 <script>
 import axios from 'axios'
 import getUrl from '../config'
+import Warnging from '../common/Warning'
 export default {
     name: 'Task',
     data(){
         return {
             statement:'',        // 任务叙述
-            emergency: '',       // 任务类型 (紧急1/一般0)
+            status: null,       // 任务类型 (紧急1/一般2)
             wanchengtime: '',    // 计划完成时间
             code: '',            // 电梯编号
-            location: ''         // 电梯位置
+            location: '',         // 电梯位置
+            showWarning: null,
+            msg: null
         }
     },
     methods: {
+        $alert(msg){
+            this.showWarning = true;
+            this.msg = msg;
+            setTimeout(()=>{
+                this.showWarning = false;
+            },1500)
+        },
         goBack:function(){
             this.$router.back(-1);
         },
@@ -89,7 +100,7 @@ export default {
                 token: sessionStorage.getItem('token'),
                 username: sessionStorage.getItem('username'),
                 statement: this.statement,
-                emergency: this.emergency,                 
+                status: this.status,                 
                 code: this.code,
                 location: this.location,
                 wanchengtime: Date.parse(this.wanchengtime),
@@ -101,9 +112,7 @@ export default {
                 method: 'post',
                 data: postData
             }).then((res) => {
-                if(res.data.code == 0){
-                    alert('success');
-                }
+                this.$alert(res.data.msg);
             })
         }
     }

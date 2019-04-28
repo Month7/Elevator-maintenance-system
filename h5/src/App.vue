@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <router-view names="lists" class="lists"/>
+    <img src="../static/loading.gif" style="display:none"/>
   </div>
 </template>
 
@@ -52,5 +53,12 @@ export default {
   body,div,span,a,p,ul,li {
     margin: 0;
     /* padding: 0; */
+  }
+  .loading{
+    height: 100%;
+    background: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 </style>

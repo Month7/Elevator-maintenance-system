@@ -1,17 +1,23 @@
 <template>
     <div class="container">
         <!--header-->
-        <div class="header">
+        <div v-if="loading" class="header">
             <span class="header-goBack" @click="goBack">
                 <img src="../../static/左箭头.png" />
             </span>
-            保养记录
+            loading...
         </div>
-        <div v-if="loading">
+        <div class="header" v-else>
+            <span class="header-goBack" @click="goBack">
+                <img src="../../static/左箭头.png" />
+            </span>
+            {{ status|titleTxt }}
+        </div>
+        <div v-if="loading" class="loading">
             <img src="../../static/loading.gif">
         </div>
         <div v-else>
-        <!---->
+        <!--content-->
             <div class="content" v-for="item in list" :key="item.index">
                 <!--保养时间-->
                 <div class="content-each" v-if="item.baoyangtime">
@@ -41,87 +47,122 @@
                 <!--电梯状态-->
                 <div class="content-each" v-if="status ==5 || status ==6">
                     <div class="description">电梯状态  </div>
-                    <div class="text" v-if="item.status ==0">已完成</div>
-                    <div class="text" v-if="item.status ==1">待保养</div>
-                    <div class="text" v-if="item.status ==2">保养中</div>
-                    <div class="text" v-if="item.status ==3">超期</div>
-                    <div class="text" v-if="item.status ==4">急修</div>
+                    <div class="text" v-if="item.status == 0 || item.status ==1">已完成</div>
+                    <div class="text" v-if="item.status == 2">待保养</div>
+                    <div class="text" v-if="item.status == 3">保养中</div>
+                    <div class="text" v-if="item.status == 4">超期</div>
+                    <div class="text" v-if="item.status == 5">急修</div>
                 </div>
                 <!--管理员操作button-->
-                <div v-if="status == 5" class="manageBtn">
+                <div v-if="status == 6" class="manageBtn">
                     <div class="">
-                        <button class="button toReceive" @click="deleteTask">撤销</button>
+                        <button class="button toReceive" @click="deleteTask(item.code)">撤销</button>
                     </div>
                 </div>
                 <!--管理员评价-->
-                <div class="manageBtn" v-if="status ==6">
-                    <button class="button toReceive" @click="deleteTask">去评价</button>
+                <div class="manageBtn" v-if="status == 7">
+                    <router-link :to="{ name: 'Pingjia', params: { id: item.code }}" class="button toReceive" >去评价</router-link>
                 </div>
                 <!--维保得到的评价-->
-                <div v-if="status == 0" class="content-each" style="justify-content:space-between;">
+                <div v-if="item.status == 1 && status == 0" class="content-each" style="display:block">
                     <!--服务态度-->
                     <div style="display:flex;">
                         <div class="description">服务态度:</div>
-                        <div class="pingjia" style="display:flex">
-                            <div v-for="index in item.service" :key="index.index">
-                                <div v-if="index ==1">
-                                    <img src="../../static/星星黄.png" />
-                                </div>
-                            </div>
-                        </div>
+                        <Pingfenshow :score="item.score1" ></Pingfenshow>
                     </div>
                     <!--保养满意度-->
                     <div style="display:flex;">
                         <div class="description">保养满意度:</div>
-                            <div class="pingjia" style="display:flex">
-                                <div v-for="index in item.satisfaction" :key="index.index">
-                                <div v-if="index ==1">
-                                    <img src="../../static/点赞黄.png" />
-                                </div>
-                            </div>
-                        </div>
+                        <Pingfenshow :score="item.score2" ></Pingfenshow>
                     </div>
                 </div>
                 <!--待保养-->
-                <div v-if="status == 1" class="daibaoyang">
-                    <button class="button">撤销</button>
-                    <button class="button toReceive" @click="toReceive(item.code)">领取</button>
+                <div v-if="status == 2 && item.status == 2" class="daibaoyang">
+                    <button class="button toReceive" @click="showDialog('receive',item.code)">领取</button>
                 </div>
+                <el-dialog
+                        :visible.sync="toReceiveDialogShow"
+                        width="90%"
+                        :before-close="()=>toReceiveDialogShow=false">
+                        确定要领取这个维修任务吗？
+                        <span slot="footer" class="dialog-footer">
+                            <el-button size="mini" @click="toReceiveDialogShow=false">取 消</el-button>
+                            <el-button size="mini" type="primary" @click="toReceive">确 定</el-button>
+                        </span>
+                </el-dialog>
+                <!--保养中-->
+                <div v-if="status == 3 && item.status == 3" class="daibaoyang">
+                    <button class="button toReceive" @click="showDialog('complete',item.code)">完成</button>
+                </div>
+                <el-dialog
+                        :visible.sync="toCompleteDialog"
+                        width="90%"
+                        :before-close="()=>toCompleteDialog=false">
+                        确定要完成这个维修任务吗？
+                        <span slot="footer" class="dialog-footer">
+                            <el-button size="mini" @click="toCompleteDialog=false">取 消</el-button>
+                            <el-button size="mini" type="primary" @click="toComplete">确 定</el-button>
+                        </span>
+                </el-dialog>
+                <!--删除确认dialog-->
+                <el-dialog
+                        :visible.sync="toDeleteDialog"
+                        width="90%"
+                        :before-close="()=>toDeleteDialog=false">
+                        确定要完成这个维修任务吗？
+                        <span slot="footer" class="dialog-footer">
+                            <el-button size="mini" @click="toDeleteDialog=false">取 消</el-button>
+                            <el-button size="mini" type="primary" @click="toDelete">确 定</el-button>
+                        </span>
+                </el-dialog>
         </div>
         </div>
         <Warning :show="this.showWarning" :msg="this.msg"></Warning>
     </div>
-  
 </template>
 <script>
 import axios from 'axios'
 import Warning from '../common/Warning'
 import getUrl from '../config'
+import Pingfenshow from './Pingfenshow'
+import Dialog from '../common/Dialog'
 export default {
     name: 'Finished',
     created(){
-        if(this.$route.params.status) { this.status = this.$route.params.status }
+        this.url = getUrl();
         this.getData();
     },
     components:{
-        Warning
+        Warning,
+        Pingfenshow,
+        Dialog
     },
     methods:{
         getData(){
             var username = sessionStorage.getItem('username');
             var token = sessionStorage.getItem('token');
             var url = getUrl();
-            // var url = `http://localhost:3000/elevator/getInfo?username=${username}&token=${token}&status=${this.status}`;
-            // var url = `http://140.143.34.162:3000/elevator/getInfo?username=${username}&token=${token}&status=${this.status}`;
             axios({
                 url: `${url}/elevator/getInfo?username=${username}&token=${token}&status=${this.status}`,
                 method: 'get',
             }).then((res)=>{
-                console.log(res.data);
-                this.list = res.data;
+                if(res.data.code == 0) {
+                    this.list = res.data.data;
+                    this.loading = false;
+                } else {
+                    this.$alert(res.data.msg);
+                } 
             }).catch((e)=>{
-                console.log(e);
             })
+        },
+        // 显示对话框
+        showDialog(status,code){
+            if(status == 'receive') {
+                this.toReceiveDialogShow = true;
+            } else {
+                this.toCompleteDialog = true;
+            }
+            this.selectedCode = code;
         },
         $alert(msg){
             this.showWarning = true;
@@ -131,14 +172,34 @@ export default {
             },1500)
         },
         // 领取任务
-        toReceive:function(code){
+        toReceive(code){
+            this.toReceiveDialogShow = false;
             let postData = this.$qs.stringify({
-                code: code
+                code: this.selectedCode,
+                username: sessionStorage.getItem('username'),
+                token: sessionStorage.getItem('token')
             });
             axios({
-                url: `http://localhost:3000/elevator/receive`,
+                url: `${this.url}/elevator/receive`,
                 method: 'post',
-                data:postData
+                data: postData
+            }).then((res) => {
+                if(res.data.code == 0){
+                    this.$alert(res.data.msg);
+                    this.getData();
+                } 
+            })
+        },
+        // 完成领取的任务
+        toComplete(){
+            this.toCompleteDialog = false;
+            let postData = this.$qs.stringify({
+                code: this.selectedCode
+            });
+            axios({
+                url: `${this.url}/elevator/complete`,
+                method: 'post',
+                data: postData
             }).then((res) => {
                 if(res.data.code == 0){
                     this.$alert(res.data.msg);
@@ -147,29 +208,70 @@ export default {
             })
         },
         // 返回上一页
-        goBack:function(){
+        goBack(){
             this.$router.back(-1);
         },
         // 检验人员删除任务
-        deleteTask(){
-
+        toDelete(){
+            this.toDeleteDialog = false;
+            let postData = this.$qs.stringify({
+                code: this.selectedCode,
+                username: sessionStorage.getItem('username'),
+                token: sessionStorage.getItem('token'),
+            });
+            axios({
+                url:`${this.url}/elevator/delete`,
+                method: 'post',
+                data: postData
+            }).then((res) => {
+                if(res.data.code == 0) {
+                    this.$alert(res.data.msg);
+                    this.getData();
+                } else {
+                    this.$alert(res.data.msg);
+                    this.getData();
+                }
+            })
+        },
+        deleteTask(code){
+            this.toDeleteDialog = true;
+            this.selectedCode = code;
         }
     },
     filters:{
         time:function(time){
             return new Date(parseInt(time) * 1000).toLocaleString().replace(/:\d{1,2}$/,' ');   
+        },
+        titleTxt:function(status){
+            var status = parseInt(status);
+            switch(status) {
+                case -1: return 'loading...';
+                case 0: return '保养记录';
+                case 1: return '保养记录';
+                case 2: return '待保养电梯';
+                case 3: return '保养中';
+                case 4: return '急修';
+                case 6: return '电梯管理';
+                case 7: return '待评价';
+                case 8: return '评价记录'
+                default: return status
+            }
         }
     },
-    data:function(){
+    data(){
         return {
             showWarning: false,
             msg: '',
             loading: false,
-            status: -1,       // 状态 给维保人员用 0-4 已完成-紧急 5 管理电梯 6 评价电梯 
+            status: this.$route.params.status,       // 状态 给维保人员用 0-4 已完成-紧急 5 管理电梯 6 评价电梯 
             colors: ['#99A9BF', '#F7BA2A', '#FF9900'],
-            list:[],
-            score1: 3,
-            score2: 3,
+            list: [],
+            loading: true,
+            toReceiveDialogShow: false,
+            toCompleteDialog: false,
+            toDeleteDialog: false,
+            selectedCode: null,
+            url: null,
         }
     }
 }
@@ -206,7 +308,6 @@ export default {
 .content-each{
     display: flex;
     padding: 0.1rem;
-   
 }
 .text{
     margin-left: 0.3rem;

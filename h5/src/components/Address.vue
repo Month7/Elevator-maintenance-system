@@ -1,18 +1,32 @@
 <template>
     <div class="container">
         <!--header-->
-        <div class="header">
+        <div v-if="loading" class="header">
+            loading...
+        </div>
+        <div class="header" v-else>
             通讯录
             <div class="add" @click="formDialogShow">
                 <img src="../../static/添加联系人.png" />
             </div>
         </div>
+        <div v-if="loading" class="loading">
+            <img src="../../static/loading.gif" />
+        </div>
         <!--content-->
         <div class="content">
-            <div  v-for="(item,key) in list" :key="item.index" class="content-each" >
+            <div  v-for="(item,key) in list" :key="item.index" class="content-each">
                 <div class="title">{{key}}</div>
                 <div class="">
-                    <div class="name" v-for="innerItem of item" :key="innerItem.index" @click="txtDialogShow(innerItem.name)">{{innerItem.name}}</div>
+                    <div class="name" v-for="innerItem of item" :key="innerItem.index" @click="txtDialogShow(innerItem.name)">
+                        <div class="">
+                            {{innerItem.name}}
+                        </div>
+                        <div class="">
+                            {{innerItem.phone}}
+                            <button class="deleteBtn" @click.stop="deleteDialogShow(innerItem.name,innerItem.phone)">删除</button>    
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -32,6 +46,18 @@
                 <el-button size="mini" type="primary" @click="sendMsg">确 定</el-button>
             </span>
         </el-dialog>
+        <!--删除联系人dialog-->
+        <el-dialog
+            
+            :visible.sync="deleteDialogVisible"
+            width="90%"
+            :before-close="handleClose2">
+            确定删除  {{deleteName}} ?
+            <span slot="footer" class="dialog-footer">
+                <el-button size="mini" @click="deleteDialogVisible = false">取 消</el-button>
+                <el-button size="mini" type="primary" @click="deleteAddress">确 定</el-button>
+            </span>
+        </el-dialog>
         <!--添加好友dialog-->
         <el-dialog
             title="添加联系人"
@@ -46,7 +72,6 @@
                 <label>手机号 </label>
                 <input type="text" v-model="formPeople.phone" class="input-txt"/>
             </div>
-            
             <span slot="footer" class="dialog-footer">
                 <el-button size="mini" @click="formDialogVisible = false">取 消</el-button>
                 <el-button size="mini" type="primary" @click="add">确 定</el-button>
@@ -65,17 +90,10 @@ import io from 'socket.io-client';
 export default {
     name: 'Address',
     created(){
-        var url = getUrl();
-        var token = sessionStorage.getItem('token');
-        var username = sessionStorage.getItem('username');
-        axios({
-            url: `${url}/address/info?token=${token}&username=${username}`,
-            method: 'get'
-        }).then((res)=>{
-            this.list = res.data
-        })
-        this.socket = io(`${url}`);
-        var socket = this.socket;
+        // var url = getUrl();
+        this.getData();
+        // this.socket = io(`${url}`);
+        // var socket = this.socket;
     },
     components:{
         Footer
@@ -85,15 +103,56 @@ export default {
             list: {},
             txtDialogVisible: false,   // 发送消息dialog
             formDialogVisible: false,  // 添加新联系人dialog
+            deleteDialogVisible: false, // 删除联系人dialog
+            deleteName: null,          // 要删除的联系人姓名
+            deletePhone: null,         // 要删除的联系人手机
             selectedName: null,
             sendTxt: null,
             formPeople: {
                 name: null,
                 phone: null
             },
+            loading: true
         }    
     },
     methods:{
+        getData(){
+            var url = getUrl();
+            var token = sessionStorage.getItem('token');
+            var username = sessionStorage.getItem('username');
+            axios({
+                url: `${url}/address/info?token=${token}&username=${username}`,
+                method: 'get'
+            }).then((res)=>{
+                this.list = res.data;
+                this.loading = false;
+            })
+        },
+        // 删除联系人
+        deleteAddress(){
+            var url = getUrl();
+            this.deleteDialogVisible = false;
+            var firstLetter = makePy(this.deleteName)
+            var t = firstLetter[0];
+            var firstLetter2 = t[0];
+            let postData = this.$qs.stringify({
+                username: sessionStorage.getItem('username'),
+                token: sessionStorage.getItem('token'),
+                name2: this.deleteName,
+                phone2: this.deletePhone,
+                firstLetter2: firstLetter2
+            });
+            axios({
+                url: `${url}/address/delete`,
+                method:'post',
+                data: postData
+            }).then((res)=>{
+                if(res.data.code == 0) {
+                    this.getData();
+                }
+            
+            })
+        },
         // 添加联系人
         add(){
             var url = getUrl();
@@ -112,7 +171,7 @@ export default {
                 method: 'post',
                 data: postData
             }).then((res)=>{
-
+                this.getData();
             })
         },
         formDialogShow(){
@@ -132,6 +191,11 @@ export default {
             }
             this.socket.emit('sendMsg',sendData)
         },
+        deleteDialogShow(name,phone){
+            this.deleteDialogVisible = true;
+            this.deleteName = name;
+            this.deletePhone = phone;
+        },
         txtDialogShow(sendName){
             this.selectedName = sendName;
             this.txtDialogVisible = true;
@@ -141,6 +205,10 @@ export default {
             this.txtDialogVisible = false;
         },
         // x dialog2
+        handleClose2(done) {
+            this.formDialogVisible = false;
+        },
+        // x dialog3
         handleClose2(done) {
             this.formDialogVisible = false;
         }
@@ -175,6 +243,8 @@ export default {
     height: 1.8rem;
     line-height: 1.8rem;
     border-bottom: 1px solid rgb(232,232,232);
+    display: flex;
+    justify-content: space-between;
 }
 .name:last-child{
     border: none;
@@ -199,5 +269,11 @@ export default {
 .dialog-label{
     display: flex;
     font-size: 1.2rem;
+}
+.deleteBtn{
+    background: #fff;
+    color: rgb(30,129,210);
+    border: 1px solid rgb(30,129,210);
+    border-radius: 0.3rem;
 }
 </style>

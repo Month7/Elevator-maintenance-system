@@ -10,7 +10,7 @@ var connection = mysql.createConnection({
     database: 'graduction'
   })
 connection.connect();
-
+// utils
 var transfromData = (oldData) => {
   var nameArr = oldData.name.split(',');
   var phoneArr = oldData.phone.split(',');;
@@ -34,7 +34,12 @@ var transfromData = (oldData) => {
       }
   }
   return JSON.stringify(res);
-}
+} 
+var deleteName = (name,arr) => {
+  var index = arr.indexOf(name);
+  arr.splice(index,1);
+  return arr.join(',');
+} 
 // 查询联系人信息
 router.get('/info',function(req,res,next){
   var token = req.query.token;
@@ -91,6 +96,40 @@ router.post('/add',function(req,res,next){
         res.send({
           code: 0,
           msg: '成功添加联系人'
+        })
+      })
+    })
+  })
+})
+// 删除联系人
+router.post('/delete',function(req,res,next){
+  var {token,username,name2,phone2,firstLetter2 } = req.body
+  var sql = `select token from user where username='${username}'`;
+  connection.query(sql,function(err,result){
+    // 验证token失败
+    if(token != result[0].token) {
+      return;
+    }
+    sql = `select * from address where username='${username}'`;
+    connection.query(sql,function(err,result){
+      if(err){
+        console.log('查询出错')
+      }
+      var data = result[0];
+      var nameArr = data.name.split(',');
+      var phoneArr = data.phone.split(',');
+      var letterArr = data.firstletter.split(',');
+      var newNameStr = deleteName(name2,nameArr);
+      var newPhoneStr = deleteName(phone2,phoneArr);
+      var newLetterStr = deleteName(firstLetter2,letterArr);
+      sql = `update address set name='${newNameStr}',phone='${newPhoneStr}',firstletter='${newLetterStr}' where username='${username}'`
+      connection.query(sql,function(err,result){
+        if(err){
+          
+        }
+        res.send({
+          code: 0,
+          msg: 'success'
         })
       })
     })

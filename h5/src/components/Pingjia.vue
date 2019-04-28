@@ -1,36 +1,36 @@
 <template>
     <div class="container">
-			  <!--header-->
+		<!--header-->
         <div class="header">
             <span class="header-goBack" @click="goBack">
                 <img src="../../static/左箭头.png" />
             </span>
-						发表评价
-						<span class="header-submit" @click="submit">
-							发布
-						</span>
+			发表评价
+			<span class="header-submit" @click="submit">
+				发布
+			</span>
         </div>
-				<!--content-->
-				<div class="content">
-					<textarea placeholder="对这次电梯维修满意吗？" class="content-txt">
-					</textarea>
-					<!--评价rate-->
-					<div class="rate">
-						<div class="rate-header">
-							<img src="../../static/评价d.png" />
-						  &nbsp&nbsp维保评分
-						</div>
-						<!--rate-content-->
-						<div class="rate-content">
-							<!--维修满意度-->
-							<div class="rate-main">
-								维修水平&nbsp&nbsp&nbsp&nbsp
-								<el-rate
-								v-model="score1"
-								:colors="colors"
-								show-text>
-								</el-rate>
-							</div>
+		<!--content-->
+		<div class="content">
+			<textarea placeholder="对这次电梯维修满意吗？" v-model="content" class="content-txt">
+			</textarea>
+			<!--评价rate-->
+			<div class="rate">
+				<div class="rate-header">
+					<img src="../../static/评价d.png" />
+					&nbsp&nbsp维保评分
+				</div>
+			<!--rate-content-->
+			<div class="rate-content">
+				<!--维修满意度-->
+				<div class="rate-main">
+				维修水平&nbsp&nbsp&nbsp&nbsp
+					<el-rate
+					v-model="score1"
+					:colors="colors"
+					show-text>
+					</el-rate>
+				</div>
 							<!--态度满意度-->
 							<div class="rate-main">
 								服务态度&nbsp&nbsp&nbsp&nbsp
@@ -56,13 +56,14 @@ export default {
 			colors: ['#99A9BF', '#F7BA2A', '#FF9900'],
 			score1: 3,
 			score2: 2,
+			content: null,
 			iconClasses: ['icon-rate-face-1', 'icon-rate-face-2', 'icon-rate-face-3'] 
 		}
 	},
   methods:{
 		// 返回上一页
 		goBack(){
-      this.$router.back(-1);
+      		this.$router.back(-1);
 		},
 		// 提交评价
 		submit(){
@@ -70,14 +71,20 @@ export default {
 				score1: this.score1,
 				score2: this.score2,
 				token: sessionStorage.getItem('token'),
-				username: sessionStorage.getItem('username')
+				username: sessionStorage.getItem('username'),
+				code: this.$route.params.id,
+				content: this.content
 			});
 			var url = getUrl();
 			axios({
 				url: `${url}/elevator/evaluate`,
-				data: postData
+				data: postData,
+				method: 'post'
 			}).then((res)=>{
-
+				if(res.data.code == 0) {
+					this.$router.back(-1);
+				}
+				
 			})
 		}
   }

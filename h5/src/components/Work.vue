@@ -14,19 +14,19 @@
                     <img src="../../static/点赞.png" />
                     <div class="content-txt">保养完成</div>
                 </div>
-                <div @click="goDetail(1)" class="content-each">
+                <div @click="goDetail(2)" class="content-each">
                     <img src="../../static/修理装修.png" />
                     <div class="content-txt">待保养</div>
                 </div>
-                <div @click="goDetail(2)" class="content-each">
+                <div @click="goDetail(3)" class="content-each">
                     <img src="../../static/沙漏.png" />
                     <div class="content-txt">保养中</div>
                 </div>
-               <div @click="goDetail(3)" class="content-each">
+               <div @click="goDetail(4)" class="content-each">
                     <img src="../../static/闹钟.png" />
                     <div class="content-txt">超期</div>
                 </div>
-                <div @click="goDetail(4)" class="content-each">
+                <div @click="goDetail(5)" class="content-each">
                     <img src="../../static/报警.png" />
                     <div class="content-txt">急修</div>
                 </div>
@@ -34,7 +34,7 @@
         </div>
         <div class="content">
             <div class="content-header">
-                必备工具
+                检验人员
             </div>
             <div class="contenr-main">
                 <!--下达任务-->
@@ -53,18 +53,37 @@
                     <div class="content-txt">待评价</div>
                 </div>
                 <!--电梯管理-->
-                <div class="content-each-m" @click="GoTask">
-                    <img src="../../static/电梯管理.png" />
-                    <div class="content-txt">电梯管理</div>
+                <div class="content-each-m" @click="GoPingjiaMemory">
+                    <img src="../../static/记录.png" />
+                    <div class="content-txt">评价记录</div>
                 </div>
             </div>
         </div>
         <div class="content">
             <div class="content-header">
-                辅助工具
+                维保人员
             </div>
             <div class="contenr-main">
-
+                <!--下达任务-->
+                <div class="content-each-m" @click="GoTask">
+                    <img src="../../static/帮助.png" />
+                    <div class="content-txt">新手帮助</div>
+                </div>
+                <!--电梯管理-->
+                <div class="content-each-m" @click="GoManage">
+                    <img src="../../static/电梯管理.png" />
+                    <div class="content-txt">当前任务</div>
+                </div>
+                <!--待评价-->
+                <div class="content-each-m" @click="GoPingjia">
+                    <img src="../../static/评价.png" />
+                    <div class="content-txt">工作记录</div>
+                </div>
+                <!--电梯管理-->
+                <div class="content-each-m" @click="GoTask">
+                    <img src="../../static/记录.png" />
+                    <div class="content-txt">评价记录</div>
+                </div>
             </div>
         </div>
         <Warning :show="this.showWarning" :msg="this.msg"></Warning>
@@ -110,11 +129,15 @@ export default {
         },
         // 管理电梯
         GoManage(){
-            this.$router.push({ name: 'Finished', params: { status: 5 }})
+            this.$router.push({ name: 'Finished', params: { status: 6 }})
         },
         // 评价
         GoPingjia(){
-            this.$router.push({ name: 'Finished', params: { status: 6 }})
+            this.$router.push({ name: 'Finished', params: { status: 7 }})
+        },
+        // 评价记录
+        GoPingjiaMemory(){
+            this.$router.push({ name: 'Finished', params: { status: 8 }})
         }
     }    
 }
