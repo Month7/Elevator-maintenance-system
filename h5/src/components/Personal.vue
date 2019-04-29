@@ -24,25 +24,24 @@
 <script>
 import axios from 'axios';
 import getUrl from '../config'
-// import { mapState} from 'vuex'
 import Footer from './Footer';
 export default {
     name: 'Personal',
     created(){
         var token = sessionStorage.getItem('token');
         var username = sessionStorage.getItem('username');
+        var type = sessionStorage.getItem('type')
         var url = getUrl();
         axios({
-            url: `${url}/user/search?token=${token}&username=${username}`,
+            url: `${url}/user/search?token=${token}&username=${username}&type=${type}`,
             method: 'get'
         }).then((res)=>{
             this.nickname = res.data.nickname;
             this.username = res.data.username;
             this.type = res.data.type == 0 ? '维保人员':'检验人员'
         })
-        console.log('???')
     },
-    data:function(){
+    data(){
         return {
            username: '',
            nickname: '',
@@ -52,11 +51,6 @@ export default {
     components:{
         Footer
     },
-    // computed:{
-    //      ...mapState([ 
-    //         'username',
-    //     ]),
-    // },
     methods:{
         exit:function(){
             // this.$store.dispatch('addNote','haha')

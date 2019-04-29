@@ -73,7 +73,8 @@ export default {
 				token: sessionStorage.getItem('token'),
 				username: sessionStorage.getItem('username'),
 				code: this.$route.params.id,
-				content: this.content
+				content: this.content,
+				pingjiatime: Date.parse(new Date())
 			});
 			var url = getUrl();
 			axios({

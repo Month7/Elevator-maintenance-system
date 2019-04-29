@@ -63,20 +63,21 @@
             <div class="content-header">
                 维保人员
             </div>
+            <!--维保人员-->
             <div class="contenr-main">
                 <!--下达任务-->
                 <div class="content-each-m" @click="GoTask">
                     <img src="../../static/帮助.png" />
                     <div class="content-txt">新手帮助</div>
                 </div>
-                <!--电梯管理-->
-                <div class="content-each-m" @click="GoManage">
-                    <img src="../../static/电梯管理.png" />
+                <!--当前任务-->
+                <div class="content-each-m" @click="goDetail(3)">
+                    <img src="../../static/当前任务.png" />
                     <div class="content-txt">当前任务</div>
                 </div>
                 <!--待评价-->
-                <div class="content-each-m" @click="GoPingjia">
-                    <img src="../../static/评价.png" />
+                <div class="content-each-m" @click="goDetail(0)">
+                    <img src="../../static/工作记录.png" />
                     <div class="content-txt">工作记录</div>
                 </div>
                 <!--电梯管理-->
@@ -158,10 +159,12 @@ export default {
     height: 1.5rem;
     line-height: 1.5rem;
     font-size: 1rem;
+    padding: .1rem .3rem;
 }
 .contenr-main{
     display: flex;
     justify-content: space-between;
+    margin-bottom: 1rem;
 }
 .content-each{
     text-align: center;

@@ -169,14 +169,14 @@ router.post('/delete',function(req,res,next){
 
 // 提交评价结果
 router.post('/evaluate',function(req,res,next){
-    var { username,token,score1,score2,code,content } = req.body;
+    var { username,token,score1,score2,code,content,pingjiatime } = req.body;
     var sql = `select token from user where username='${username}'`;
     // 验证登录
     connection.query(sql,function(err,result){
         if(err) {
             return;
         }
-        sql = `update elevator set score1='${score1}',score2='${score2}',pingjia='${content}', status='1' where code='${code}'`;
+        sql = `update elevator set score1='${score1}',score2='${score2}',pingjia='${content}',status='1',pingjiatime='${pingjiatime}' where code='${code}'`;
         connection.query(sql,function(err,result){
             if(err) {
                 return;

@@ -84,8 +84,6 @@ export default {
             });
             var url = getUrl();
             axios({
-                // url: 'http://localhost:3000/user/login',
-                // url: 'http://140.143.34.162:3000/user/login',
                 url: `${url}/user/login`,
                 method: 'post',
                 data:postData

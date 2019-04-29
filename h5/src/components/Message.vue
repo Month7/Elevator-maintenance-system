@@ -7,7 +7,7 @@
         <!--content-->
         <router-link :to="{name:'MDetail',params:{name:item.author.username,localname:'Month7'}}" class="content" v-for="item in messages" :key="item.index">
             <div class="left">
-                <img :src="item.author.avatar_url" />
+                <img src="../../static/头像.jpg" />
             </div>
             <div class="right">
                 <div class="txtContent gray">{{item.author.username}}</div>
@@ -21,56 +21,65 @@
 <script>
 import Footer from './Footer'
 import axios from 'axios'
+import getUrl from '../config'
 export default {
     name: 'Message',
     components:{
         Footer
     },
     created(){
-        // var url = 'http://localhost:3000/message';
-        // var self = this;
-        // axios({
-        //     url: url,
-        //     method: 'get',
-        // }).then((res)=>{
-        //     self.messages = res.data.messages;
-        // }).catch((e)=>{
-        //     console.log(e);
-        // })
+        this.getData();
     },
-    data:function(){
+    data(){
         return {
-            messages:[{
-                has_read: false,
-                author: {
-                    username: "Pony马",
-                    avatar_url: "../../static/头像.jpg",
-                },
-                content: "你太菜了你太菜了你太菜了你太菜了你太菜了你太菜了你太菜了你太菜了你太菜了你太菜了你太菜了..."
-            },{
-                has_read: false,
-                author: {
-                    username: "Pony马",
-                    avatar_url: "../../static/头像.jpg",
-                },
-                content: "你太菜了你太菜了你太菜了你太菜了你太菜了你太菜了你太菜了你太菜了你太菜了你太菜了你太菜了..."
-            },{
-                has_read: false,
-                author: {
-                    username: "Pony马",
-                    avatar_url: "../../static/头像.jpg",
-                },
-                content: "你太菜了你太菜了你太菜了你太菜了你太菜了你太菜了你太菜了你太菜了你太菜了你太菜了你太菜了..."
-            },{
-                has_read: false,
-                author: {
-                    username: "Pony马",
-                    avatar_url: "../../static/头像.jpg",
-                },
-                content: "你太菜了你太菜了你太菜了你太菜了你太菜了你太菜了你太菜了你太菜了你太菜了你太菜了你太菜了..."
-            }]
+            // messages:[{
+            //     has_read: false,
+            //     author: {
+            //         username: "Pony马",
+            //         avatar_url: "../../static/头像.jpg",
+            //     },
+            //     content: "你太菜了你太菜了你太菜了你太菜了你太菜了你太菜了你太菜了你太菜了你太菜了你太菜了你太菜了..."
+            // },{
+            //     has_read: false,
+            //     author: {
+            //         username: "Pony马",
+            //         avatar_url: "../../static/头像.jpg",
+            //     },
+            //     content: "你太菜了你太菜了你太菜了你太菜了你太菜了你太菜了你太菜了你太菜了你太菜了你太菜了你太菜了..."
+            // },{
+            //     has_read: false,
+            //     author: {
+            //         username: "Pony马",
+            //         avatar_url: "../../static/头像.jpg",
+            //     },
+            //     content: "你太菜了你太菜了你太菜了你太菜了你太菜了你太菜了你太菜了你太菜了你太菜了你太菜了你太菜了..."
+            // },{
+            //     has_read: false,
+            //     author: {
+            //         username: "Pony马",
+            //         avatar_url: "../../static/头像.jpg",
+            //     },
+            //     content: "你太菜了你太菜了你太菜了你太菜了你太菜了你太菜了你太菜了你太菜了你太菜了你太菜了你太菜了..."
+            // }]
+            messages: []
         }
-    }
+    },
+    methods: {
+        getData(){
+            var username = sessionStorage.getItem('username');
+            var token = sessionStorage.getItem('token');
+            var url = getUrl();
+            axios({
+                url: `${url}/message/info?username=${username}&token=${token}`,
+                method: 'get'
+            }).then((res)=>{
+                if(res.data.code == 0) {
+                    this.messages = res.data.data
+                }
+            })
+        },
+
+    },
 }
 </script>
 <style scoped>

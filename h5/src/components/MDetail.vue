@@ -2,7 +2,7 @@
     <div class="container">
         <div class="header">
             <div class="goBack" @click="goBack">
-                <img src="../../static/左箭头.png" />
+                <img src="../../static/左箭头黑.png" />
             </div>
             {{name}}
         </div>

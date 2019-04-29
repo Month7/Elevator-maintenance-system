@@ -1,11 +1,12 @@
 export default {
-    init(state,username) {
-        state.username = username;
-        alert(username)
-    },
-    changeMsg(state,msg){
-        state.msg = msg;
-    },
+    // init(state,username) {
+    //     state.username = username;
+    //     alert(username)
+    // },
+    // changeMsg(state,msg){
+    //     state.msg = msg;
+    // },
+    // 聊天msg
     addMsg(state,msg){
         state.msgs.push(msg);
     },

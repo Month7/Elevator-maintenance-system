@@ -3,9 +3,9 @@ var router = express.Router();
 var mysql = require('mysql');
 
 // /* GET home page. */
-router.get('/login', function(req, res, next) {
-  res.send('login success')
-});
+// router.get('/login', function(req, res, next) {
+//   res.send('login success')
+// });
 
 //数据库连接
 var connection = mysql.createConnection({
@@ -20,11 +20,28 @@ connection.connect();
 var createToken =  () => {
     return Math.random().toString(36).substr(2);
 }
+// 聊天记录建表
+var createTable = (username,res) => {
+  var sql = `create table message_${username}(
+    content varchar(255),
+    username varchar(255),
+    sendname varchar(255)
+  ) `;
+  connection.query(sql,function(err,result){
+    if(err){
+      console.log(err);
+      return;
+    }
+    res.send({
+      code: 0,
+      msg: '注册成功!'
+    })
+  })
+} 
+
 // 登录接口
 router.post('/login',function(req,res,next){
-    var username = req.body.username;
-    var password = req.body.password;
-    var type = req.body.type;
+    var { username,password,type } = req.body;
     if(username == undefined || password == undefined){
       return;
     }
@@ -84,14 +101,9 @@ router.post('/register',function(req,res,next){
   } else {
     let sql = `insert into user (username,password,type,avat_url,token) values ('${phone}','${password}','${type}','null','${token}')`;
     connection.query(sql,function(err,result){
-      if(err){
-        
+      if(err){ 
       } else {  // 注册成功
-        res.send({
-          code: 0,
-          msg: 'success',
-          
-        })
+        createTable(username,res);
       }
     })
   }
@@ -99,18 +111,30 @@ router.post('/register',function(req,res,next){
 
 // 查询个人信息接口
 router.get('/search',function(req,res,next){
-  var username = req.query.username;
-  var type = 0;
-  var token = req.query.token;
+  var { username,type,token } = req.query;
   var sql = `select token from user where username='${username}' and type='${type}'`;
   connection.query(sql,function(err,result){
     if(err){
-      console.log(err)
+      res.send({
+        code: -1,
+        msg: '登录信息失效!请重新登录'
+      })
       return;
     } 
-   
+    if(!token) {
+      res.send({
+        code: -1,
+        msg: '登录信息失效!请重新登录'
+      })
+    }
+    if(!result[0]){
+      return;
+    }
     if(token != result[0].token) {
-      res.send('token不正确!请重新登录!');
+      res.send({
+        code: -1,
+        msg: '登录信息失效!请重新登录'
+      })
     } else {
       sql = `select * from user where username='${username}' and type='${type}'`;
       connection.query(sql,function(err,result){

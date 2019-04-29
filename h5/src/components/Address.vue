@@ -14,22 +14,25 @@
             <img src="../../static/loading.gif" />
         </div>
         <!--content-->
-        <div class="content">
-            <div  v-for="(item,key) in list" :key="item.index" class="content-each">
-                <div class="title">{{key}}</div>
-                <div class="">
-                    <div class="name" v-for="innerItem of item" :key="innerItem.index" @click="txtDialogShow(innerItem.name)">
-                        <div class="">
+        <div class="content" v-else>
+            <div v-for="(item,key2) in list" :key="item.index" class="content-each" v-if="key2">
+                <div class="title" v-if="key2">{{key2}}</div>
+                <div class="" >
+                    <div class="name" v-for="innerItem of item" :key="innerItem.index" @click="txtDialogShow(innerItem.name,innerItem.phone)">
+                        <div>
                             {{innerItem.name}}
                         </div>
-                        <div class="">
+                        <div>
                             {{innerItem.phone}}
                             <button class="deleteBtn" @click.stop="deleteDialogShow(innerItem.name,innerItem.phone)">删除</button>    
                         </div>
                     </div>
                 </div>
             </div>
+        
+        
         </div>
+     
         <!--发送消息dialog-->
         <el-dialog
             title="发送消息"
@@ -48,7 +51,6 @@
         </el-dialog>
         <!--删除联系人dialog-->
         <el-dialog
-            
             :visible.sync="deleteDialogVisible"
             width="90%"
             :before-close="handleClose2">
@@ -78,8 +80,9 @@
             </span>
         </el-dialog>
         <!--Footer-->
-        <Footer></Footer>
+        <Footer></Footer>    
     </div>
+    
 </template>
 <script>
 import axios from 'axios';
@@ -90,7 +93,6 @@ import io from 'socket.io-client';
 export default {
     name: 'Address',
     created(){
-        // var url = getUrl();
         this.getData();
         // this.socket = io(`${url}`);
         // var socket = this.socket;
@@ -107,12 +109,13 @@ export default {
             deleteName: null,          // 要删除的联系人姓名
             deletePhone: null,         // 要删除的联系人手机
             selectedName: null,
+            selectedPhone: null,
             sendTxt: null,
             formPeople: {
                 name: null,
                 phone: null
             },
-            loading: true
+            loading: true,
         }    
     },
     methods:{
@@ -124,8 +127,14 @@ export default {
                 url: `${url}/address/info?token=${token}&username=${username}`,
                 method: 'get'
             }).then((res)=>{
-                this.list = res.data;
-                this.loading = false;
+                if(res.data.code == 0){
+                    this.dataShow = true;
+                    this.list = JSON.parse(res.data.data);
+                    this.loading = false;
+                } else if(res.data.code == 2){
+                    this.loading = false;
+                    this.list = [];
+                }
             })
         },
         // 删除联系人
@@ -185,18 +194,21 @@ export default {
         sendMsg(){
             this.txtDialogVisible = false;
             var sendData = {
-                sendName: this.selectedName,
-                content: '测试',
+                sendName: this.selectedPhone,
+                content: this.sendTxt,
                 receiveName: sessionStorage.getItem('username')
             }
-            this.socket.emit('sendMsg',sendData)
+            this.$socket.emit('sendMsg',sendData);
+            
+            this.sendTxt = '';
         },
         deleteDialogShow(name,phone){
             this.deleteDialogVisible = true;
             this.deleteName = name;
             this.deletePhone = phone;
         },
-        txtDialogShow(sendName){
+        txtDialogShow(sendName,selectedPhone){
+            this.selectedPhone = selectedPhone;
             this.selectedName = sendName;
             this.txtDialogVisible = true;
         },

@@ -24,6 +24,11 @@
                     <div class="description">保养时间:  </div>
                     <div class="text">{{item.baoyangtime|time}}</div>
                 </div>
+                <!--评价时间-->
+                <div class="content-each" v-if="item.pingjiatime">
+                    <div class="description">评价时间:  </div>
+                    <div class="text">{{item.pingjiatime|time}}</div>
+                </div>
                 <!--电梯位置-->
                 <div class="content-each" v-if="item.location">
                     <div class="description">电梯位置:  </div>
@@ -40,9 +45,9 @@
                     <div class="text">{{item.code}}</div>
                 </div>
                 <!--维保负责人-->
-                <div class="content-each" v-if="item.fuzeren">
+                <div class="content-each" v-if="item.headman">
                     <div class="description">维保负责人:  </div>
-                    <div class="text">{{item.people}}</div>
+                    <div class="text">{{item.headman}}</div>
                 </div>
                 <!--电梯状态-->
                 <div class="content-each" v-if="status ==5 || status ==6">
@@ -64,7 +69,7 @@
                     <router-link :to="{ name: 'Pingjia', params: { id: item.code }}" class="button toReceive" >去评价</router-link>
                 </div>
                 <!--维保得到的评价-->
-                <div v-if="item.status == 1 && status == 0" class="content-each" style="display:block">
+                <div v-if="(item.status == 1 && status == 0) || status == 8" class="content-each" style="display:block">
                     <!--服务态度-->
                     <div style="display:flex;">
                         <div class="description">服务态度:</div>
@@ -245,7 +250,6 @@ export default {
         titleTxt:function(status){
             var status = parseInt(status);
             switch(status) {
-                case -1: return 'loading...';
                 case 0: return '保养记录';
                 case 1: return '保养记录';
                 case 2: return '待保养电梯';

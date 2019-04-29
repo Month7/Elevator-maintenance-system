@@ -7,6 +7,8 @@ import store from './vuex'
 import qs from 'qs';
 import Vconsole from 'vconsole'
 import 'element-ui/lib/theme-chalk/index.css';
+import getUrl from './config';
+import io from 'socket.io-client';
 // 引入element ui组件
 import { Select,Option,DatePicker,TimePicker,Input,Button,Rate,Icon,Dialog,Form } from 'element-ui';
 Vue.use(Select)
@@ -19,9 +21,16 @@ Vue.use(Rate)
 Vue.use(Icon)
 Vue.use(Dialog)
 Vue.use(Form)
-let vcosnole = new Vconsole()
+// let vcosnole = new Vconsole()
+// qs插件
 Vue.prototype.$qs = qs;
 
+// socket.io
+var url = getUrl();
+var socket = io(`${url}`);
+Vue.prototype.$socket = socket;
+
+// 生产模式
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */

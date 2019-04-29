@@ -7,21 +7,41 @@
 
 <script>
 import Warning from './common/Warning'
-import io from 'socket.io-client';
 import getUrl from './config';
+import axios from 'axios';
 export default {
   name: 'App',
   components:{
     Warning
   },
-  created(){
+  created() {
+    var self = this;
     var url = getUrl();
-    this.socket = io(`${url}`);
-    var socket = this.socket;
+    var username = sessionStorage.getItem('username');
+    this.$socket.on('recMsg',function(msg){
+      // 过滤 只接受发送给自己的消息
+      if(msg.sendName == username){
+        let postData = self.$qs.stringify({
+          username: username,
+          sendName: msg.receiveName,
+          token: sessionStorage.getItem('token'),
+          content: msg.content
+        })
+        axios({
+          url: `${url}/message/add`,
+          method: 'post',
+          data: postData
+        }).then((res)=>{
+          self.$store.dispatch('addMsg',msg);
+        })
+        self.duifangName = msg.receiveName;
+      }
+    })
   },
   data(){
     return {
-      showFlag: false
+      showFlag: false,
+      duifangName: null,
     }
   }
 }
@@ -43,16 +63,13 @@ export default {
   .lists{
     overflow-x:auto;  
     overflow-y:scroll;  
-    /* padding-top:5rem; */
     background: #fff;
-    
     box-sizing: border-box;
     padding-bottom: 4rem;
     height: 100%;
   }
   body,div,span,a,p,ul,li {
     margin: 0;
-    /* padding: 0; */
   }
   .loading{
     height: 100%;

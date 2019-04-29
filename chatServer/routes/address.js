@@ -22,6 +22,9 @@ var transfromData = (oldData) => {
       obj['phone'] = phoneArr[i];
       var arr = [];
       arr.push(obj);
+      if(arr[0] == ','){
+        arr.unshift();
+      }
       if(!res[letterArr[i]]){
           res[letterArr[i]] = arr
       } else{
@@ -30,6 +33,9 @@ var transfromData = (oldData) => {
         obj2['phone'] = phoneArr[i];
         var arr2 = res[letterArr[i]]
         arr2.push(obj2);
+        if(arr2[0] == ','){
+          arr2.unshift();
+        }
         res[letterArr[i]] = arr2;
       }
   }
@@ -42,8 +48,7 @@ var deleteName = (name,arr) => {
 } 
 // 查询联系人信息
 router.get('/info',function(req,res,next){
-  var token = req.query.token;
-  var username = req.query.username;
+  var { token,username } = req.query;
   
   var sql = `select token from user where username='${username}'`;
   connection.query(sql,function(err,result){
@@ -58,7 +63,15 @@ router.get('/info',function(req,res,next){
       }
       var data = result[0];
       if(data.name && data.phone && data.firstletter && data.username) {
-        res.send(transfromData(data))
+        res.send({
+          code: 0,
+          data: transfromData(data)
+        })
+        // res.send(transfromData(data))
+      } else {
+        res.send({
+          code: 2
+        })
       }
     })
   })
@@ -125,7 +138,7 @@ router.post('/delete',function(req,res,next){
       sql = `update address set name='${newNameStr}',phone='${newPhoneStr}',firstletter='${newLetterStr}' where username='${username}'`
       connection.query(sql,function(err,result){
         if(err){
-          
+
         }
         res.send({
           code: 0,
