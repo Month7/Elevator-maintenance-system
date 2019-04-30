@@ -3,15 +3,40 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-   
+    <style>
+      html,body{
+        padding: 0;
+        height: 100%;
+        margin: 0;
+      }
+      .loading2{
+        height: 100%;
+        width: 100%;
+        background: rgb(30,129,210);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #fff;
+        position: fixed;
+        z-index: 999;
+        top:0;
+        left: 0;
+      }
+    </style>
     <title>h5</title>
   </head>
   <body>
+    <div class="loading2" id="loading">
+      <div>
+        <div><img src="./static/电梯系统.png" /></div>
+        <div style="text-align:center">电梯保</div>
+      </div>
+    </div>
     <div id="app"></div>
     <!-- built files will be auto injected -->
     <script>
 
     </script>
-    <!-- <script src="./plugin/pinyin.js"></script> -->
+    
   </body>
 </html>

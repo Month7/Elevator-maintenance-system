@@ -102,8 +102,9 @@ router.post('/register',function(req,res,next){
     let sql = `insert into user (username,password,type,avat_url,token) values ('${phone}','${password}','${type}','null','${token}')`;
     connection.query(sql,function(err,result){
       if(err){ 
+        console.log('出错!');
       } else {  // 注册成功
-        createTable(username,res);
+        createTable(phone,res);
       }
     })
   }

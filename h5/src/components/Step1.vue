@@ -49,24 +49,38 @@
                 <button class="button" @click="nextStep">下一步</button>
             </div>
         </div>
+        <Warning :show="this.showWarning" :msg="this.msg"></Warning>
     </div>    
 </template>
 <script>
+import Warning from '../common/Warning'
 export default {
     name: 'Step1',
     data:function(){
         return {
             phone: '',
-            code: ''
+            code: '',
+            showWarning: false,
+            msg: null,
         }
     },
+    component:{
+        Warning
+    },
     methods:{
+        $alert(msg){
+            this.showWarning = true;
+            this.msg = msg;
+            setTimeout(()=>{
+                this.showWarning = false;
+            },1500)
+        },
         nextStep(){
             if(this.code && this.phone){
                 this.$store.dispatch('registerPhone',this.phone);
                 this.$store.dispatch('nextStep');
             } else {
-                alert('验证码不能为空!')
+                this.$alert('验证码不能为空!')
             }
         },
         goBack(){

@@ -15,6 +15,7 @@ export default {
     Warning
   },
   created() {
+    
     var self = this;
     var url = getUrl();
     var username = sessionStorage.getItem('username');
@@ -37,6 +38,9 @@ export default {
         self.duifangName = msg.receiveName;
       }
     })
+  },
+  mounted() {
+    document.body.removeChild(document.getElementById('loading'))
   },
   data(){
     return {
