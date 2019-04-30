@@ -1,6 +1,13 @@
 var express = require('express');
 var router = express.Router();
 var mysql = require('mysql');
+var multipart = require('connect-multiparty'); // form-data 格式的中间件支持
+var multipartMiddleware = multipart();
+var fs = require('fs');
+var path = require('path');
+// var multer  = require('multer')
+
+
 
 // /* GET home page. */
 // router.get('/login', function(req, res, next) {
@@ -151,4 +158,29 @@ router.get('/search',function(req,res,next){
   })
 })
 
+router.post('/upload',multipartMiddleware,(req,res,next)=> {
+  // console.log(req)
+  // console.log(req.body);
+  // console.log(req.files);
+  var file = req.files.files.originalFilename;
+  var oldPath = req.files.files.path;
+  console.log(oldPath);
+  fs.rename(oldPath,'./uploads/' + file,(err)=>{
+    if(err){
+      console.log(err);
+      return;
+    } else {
+      res.send({
+        code: 0,
+        msg: '上传成功!',
+        url:  file
+      })
+    }
+  });
+  // res.send({
+  //   code: 0,
+  //   msg: '上传成功'
+  // })
+  
+})
 module.exports = router;

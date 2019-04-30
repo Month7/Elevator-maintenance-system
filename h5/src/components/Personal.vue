@@ -3,10 +3,19 @@
         <div class="header">
             <!--头像-->
             <div>
-                <img class="portrait" src="../../static/头像.jpg"/>
+                <vue-core-image-upload
+                @imageuploaded="imageuploaded"
+                crop="local"
+                :max-file-size="5242880"
+                url="http://140.143.34.162:3000/user/upload" >
+                <img class="portrait" :src="src"/>
+                </vue-core-image-upload>
                 <div class="username">{{nickname}}</div>
             </div>
         </div>
+        <!--预览头像-->
+        
+        <!---->
         <div class="content">
             <div>手机号</div>
             <div class="right">{{username}}</div>
@@ -25,9 +34,12 @@
 import axios from 'axios';
 import getUrl from '../config'
 import Footer from './Footer';
+import VueCoreImageUpload  from 'vue-core-image-upload';
+
 export default {
     name: 'Personal',
     created(){
+       
         var token = sessionStorage.getItem('token');
         var username = sessionStorage.getItem('username');
         var type = sessionStorage.getItem('type')
@@ -43,25 +55,43 @@ export default {
     },
     data(){
         return {
-           username: '',
+           username: sessionStorage.getItem('username'),
            nickname: '',
-           type: ''
+           type: '',
+           src: '../../static/头像.jpg',
         }
     },
     components:{
-        Footer
+        Footer,
+        'vue-core-image-upload': VueCoreImageUpload
     },
     methods:{
-        exit:function(){
+        exit(){
             // this.$store.dispatch('addNote','haha')
             // window.postMessage('exit');
             sessionStorage.clear();
             window.location.href = '#/'
+        },
+        imageuploaded(res) {
+            console.log('上传完毕!');
+            console.log(res);
+            // if (res.errcode == 0) {
+            var url = res.url;
+            if(res.code == 0){
+                console.log(url);
+                console.log('??');
+                this.src = `http://140.143.34.162:3000/${url}`;
+            }
+            //     this.src = 'http://img1.vued.vanthink.cn/vued751d13a9cb5376b89cb6719e86f591f3.png';
+            // // }
         }
     },
 }
 </script>
 <style scoped>
+.container{
+    overflow-x: hidden;
+}
 .header{
     background: rgb(30,129,210);
     width: 100%;
@@ -105,5 +135,8 @@ export default {
 }
 .username{
     text-align: center;
+}
+.portrait-preview{
+    width:100%
 }
 </style>

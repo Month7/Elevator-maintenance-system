@@ -1,7 +1,9 @@
+
 var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var mysql = require('mysql');
+var express = require('express');
 
 var bodyParser = require('body-parser');
 var path = require('path');
@@ -13,6 +15,7 @@ var messageRouter = require('./routes/message')
 app.use(bodyParser.urlencoded({
     extended:true
 }));
+app.use(express.static(path.join(__dirname, 'uploads')));
 
 // 数据库连接
 var connection = mysql.createConnection({
@@ -34,11 +37,12 @@ app.get('/', function(req, res){
 });
 // 允许跨域 上线前记得去掉
 app.all('*', function (req, res, next) {
-  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Origin', 'http://localhost:8080');
   // Access-Control-Allow-Headers ,可根据浏览器的F12查看,把对应的粘贴在这里就行
-  res.header('Access-Control-Allow-Headers', 'Content-Type');
+  res.header('Access-Control-Allow-Headers', '*');
   res.header('Access-Control-Allow-Methods', '*');
   res.header('Content-Type', 'application/json;charset=utf-8');
+  res.header('Access-Control-Allow-Credentials',true);
   next();
 });
 
