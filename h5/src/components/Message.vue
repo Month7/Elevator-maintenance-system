@@ -15,7 +15,7 @@
             </div>
         </router-link>
         <!--Footer-->
-        <Footer></Footer>
+        <Footer status='1'></Footer>
     </div>
 </template>
 <script>

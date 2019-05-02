@@ -13,9 +13,7 @@
                 <div class="username">{{nickname}}</div>
             </div>
         </div>
-        <!--预览头像-->
         
-        <!---->
         <div class="content">
             <div>手机号</div>
             <div class="right">{{username}}</div>
@@ -27,7 +25,7 @@
         <div class="exit-container">
             <button class="exit" @click="exit">退出登录</button>
         </div>
-        <Footer></Footer>
+        <Footer status='4'></Footer>
     </div>
 </template>
 <script>
@@ -73,17 +71,10 @@ export default {
             window.location.href = '#/'
         },
         imageuploaded(res) {
-            console.log('上传完毕!');
-            console.log(res);
-            // if (res.errcode == 0) {
             var url = res.url;
             if(res.code == 0){
-                console.log(url);
-                console.log('??');
                 this.src = `http://140.143.34.162:3000/${url}`;
             }
-            //     this.src = 'http://img1.vued.vanthink.cn/vued751d13a9cb5376b89cb6719e86f591f3.png';
-            // // }
         }
     },
 }

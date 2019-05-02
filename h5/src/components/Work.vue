@@ -2,7 +2,7 @@
     <div class="container">
         <div class="header"></div>
         <!--footer-->
-        <Footer></Footer>
+        <Footer status='3'></Footer>
         <div class="banner">
         </div>
         <div class="content">
@@ -147,6 +147,8 @@ export default {
 .container{
     padding: 0;
     margin: 0;
+    padding-bottom: 3rem!important;
+    overflow-x: hidden;
 }
 .header{
     height: 8rem;

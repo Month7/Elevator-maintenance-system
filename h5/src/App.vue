@@ -57,6 +57,7 @@ export default {
   }
   html,body,#app {
     height: 100%;
+    overflow-x: hidden;
   }
   .nav{
     height: 40px;

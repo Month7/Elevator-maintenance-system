@@ -1,19 +1,35 @@
 <template>
     <div class="footer">
-        <router-link to="/message" class="footer-each">
+        <router-link v-if="status == 1" to="/message" class="footer-each">
             <img src="../../static/消息.png" />
             <div>消息</div>
         </router-link>
-        <router-link to="/address" class="footer-each">
+        <router-link v-else-if="status != 1" to="/message" class="footer-each">
+            <img src="../../static/消息-未选中.png" />
+            <div>消息</div>
+        </router-link>
+        <router-link v-if="status == 2" to="/address" class="footer-each">
             <img src="../../static/通讯录.png" />
             <div>通讯录</div>
         </router-link>
-        <router-link to="/work" class="footer-each">
+        <router-link  v-else-if="status != 2" to="/address" class="footer-each">
+            <img src="../../static/通讯录-未选中.png" />
+            <div>通讯录</div>
+        </router-link>
+        <router-link v-if="status == 3" to="/work" class="footer-each">
             <img src="../../static/应用.png" />
             <div>应用</div>
         </router-link>
-        <router-link to="/personal" class="footer-each">
-            <img src="../../static/我.png" />
+        <router-link v-else-if="status != 3" to="/work" class="footer-each">
+            <img src="../../static/应用-未选中.png" />
+            <div>应用</div>
+        </router-link>
+        <router-link v-if="status == 4" to="/personal" class="footer-each">
+            <img src="../../static/个人.png" />
+            <div>个人</div>
+        </router-link>
+        <router-link v-else-if="status != 4" to="/personal" class="footer-each">
+            <img src="../../static/个人-未选中.png" />
             <div>个人</div>
         </router-link>
     </div>
@@ -21,6 +37,13 @@
 <script>
 export default {
     name: 'Footer',
+    props: ['status'],
+    // data(){
+    //     return {
+    //         status: null
+    //     }
+        
+    // }
 }
 </script>
 <style scoped>

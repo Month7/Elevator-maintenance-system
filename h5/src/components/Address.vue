@@ -80,7 +80,7 @@
             </span>
         </el-dialog>
         <!--Footer-->
-        <Footer></Footer>    
+        <Footer status='2'></Footer>    
     </div>
     
 </template>
