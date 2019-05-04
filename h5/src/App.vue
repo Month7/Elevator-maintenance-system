@@ -83,4 +83,16 @@ export default {
     justify-content: center;
     align-items: center;
   }
+  .left-banner{
+    background: red;
+    height: 1.25rem;
+    width: .25rem;
+    margin-right: 0.3rem;
+  }
+  .left-banner-green{
+    background: greenyellow;
+    height: 1.25rem;
+    width: .25rem;
+    margin-right: 0.3rem;
+  }
 </style>

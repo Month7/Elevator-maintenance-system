@@ -1,13 +1,20 @@
 <template>
     <div class="container">
-        <div class="header"></div>
+        <!--header-->
+        <div class="header">工作</div>
+        <div class="head-img">
+            <img src="../../static/主页.jpg" />
+        </div>
         <!--footer-->
         <Footer status='3'></Footer>
         <div class="banner">
         </div>
         <div class="content">
             <div class="content-header">
-                当日工作
+                <div style="display:flex"> 
+                    <div class="left-banner"></div>
+                    当日工作
+                </div>
             </div>
             <div class="contenr-main">
                 <div @click="goDetail(0)" class="content-each">
@@ -34,7 +41,10 @@
         </div>
         <div class="content">
             <div class="content-header">
-                检验人员
+                <div style="display:flex"> 
+                    <div class="left-banner-green"></div>
+                    检验人员
+                </div>
             </div>
             <div class="contenr-main">
                 <!--下达任务-->
@@ -57,16 +67,25 @@
                     <img src="../../static/记录.png" />
                     <div class="content-txt">评价记录</div>
                 </div>
+                
+            </div>
+            <!--公告信息-->
+            <div class="content-each-m" @click="GoPingjiaMemory">
+                <img src="../../static/公告信息.png" />
+                <div class="content-txt">发布公告</div>
             </div>
         </div>
         <div class="content">
             <div class="content-header">
-                维保人员
+                <div style="display:flex"> 
+                    <div class="left-banner"></div>
+                    维保人员
+                </div>
             </div>
             <!--维保人员-->
             <div class="contenr-main">
                 <!--下达任务-->
-                <div class="content-each-m" @click="GoTask">
+                <div class="content-each-m" @click="GoHelp">
                     <img src="../../static/帮助.png" />
                     <div class="content-txt">新手帮助</div>
                 </div>
@@ -82,8 +101,8 @@
                 </div>
                 <!--电梯管理-->
                 <div class="content-each-m" @click="GoTask">
-                    <img src="../../static/记录.png" />
-                    <div class="content-txt">评价记录</div>
+                    <img src="../../static/公告.png" />
+                    <div class="content-txt">公告</div>
                 </div>
             </div>
         </div>
@@ -120,6 +139,9 @@ export default {
             }
             this.$router.push({ name: 'Finished', params: { status: status }})
         },
+        GoHelp(){
+            this.$router.push({ name: 'Help'})
+        },
         // 下达任务
         GoTask(){
             // if(sessionStorage.getItem('type') != 1){
@@ -151,13 +173,21 @@ export default {
     overflow-x: hidden;
 }
 .header{
-    height: 8rem;
+    height: 2.5rem;
     background: rgb(30,129,210);
     width: 100%;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.head-img img{
+    width: 100%;
+    height: auto;
 }
 .content-header{
     width: 100%;
-    border-bottom: 1px solid black;
+    border-bottom: 1px solid rgb(238,238,238);
     height: 1.5rem;
     line-height: 1.5rem;
     font-size: 1rem;
@@ -165,8 +195,9 @@ export default {
 }
 .contenr-main{
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     margin-bottom: 1rem;
+    /* flex-wrap: wrap; */
 }
 .content-each{
     text-align: center;
@@ -175,6 +206,7 @@ export default {
     padding: 0.2rem;
     width: 20%;
     margin-top:0.5rem;
+    box-sizing: border-box;
 }
 .content-each-m{
     text-align: center;
@@ -183,6 +215,7 @@ export default {
     padding: 0.2rem;
     width: 25%;
     margin-top:0.5rem;
+    box-sizing: border-box;
 }
 .content-txt{
     margin-top:0.5rem;
@@ -202,4 +235,5 @@ export default {
     text-decoration: none;
     color: black;
 }
+
 </style>

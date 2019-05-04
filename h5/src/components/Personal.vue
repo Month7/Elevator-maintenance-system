@@ -7,7 +7,9 @@
                 @imageuploaded="imageuploaded"
                 crop="local"
                 :max-file-size="5242880"
-                url="http://140.143.34.162:3000/user/upload" >
+                :data="postData"
+                url="http://localhost:3000/user/upload" >
+                
                 <img class="portrait" :src="src"/>
                 </vue-core-image-upload>
                 <div class="username">{{nickname}}</div>
@@ -33,11 +35,11 @@ import axios from 'axios';
 import getUrl from '../config'
 import Footer from './Footer';
 import VueCoreImageUpload  from 'vue-core-image-upload';
+import Warning from '../common/Warning'
 
 export default {
     name: 'Personal',
     created(){
-       
         var token = sessionStorage.getItem('token');
         var username = sessionStorage.getItem('username');
         var type = sessionStorage.getItem('type')
@@ -48,7 +50,8 @@ export default {
         }).then((res)=>{
             this.nickname = res.data.nickname;
             this.username = res.data.username;
-            this.type = res.data.type == 0 ? '维保人员':'检验人员'
+            this.type = res.data.type == 0 ? '维保人员':'检验人员';
+            this.src = res.data.avat_url;
         })
     },
     data(){
@@ -56,12 +59,17 @@ export default {
            username: sessionStorage.getItem('username'),
            nickname: '',
            type: '',
-           src: '../../static/头像.jpg',
+           src: null,
+           postData: {
+               username: sessionStorage.getItem('username'),
+               token: sessionStorage.getItem('token')
+           }
         }
     },
     components:{
         Footer,
-        'vue-core-image-upload': VueCoreImageUpload
+        'vue-core-image-upload': VueCoreImageUpload,
+        Warning
     },
     methods:{
         exit(){
@@ -74,6 +82,8 @@ export default {
             var url = res.url;
             if(res.code == 0){
                 this.src = `http://140.143.34.162:3000/${url}`;
+            } else {
+                this.$alert(res.msg || res.data.msg);
             }
         }
     },

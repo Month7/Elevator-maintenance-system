@@ -8,6 +8,9 @@ export default {
     addMsg({commit},msg){
         commit('addMsg',msg)
     },
+    initMsg({commit},msg) {
+        commit('initMsg',msg);
+    },
     // 注册页进入下一步
     nextStep({commit}){
         commit('nextStep')

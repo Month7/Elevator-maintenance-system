@@ -159,28 +159,33 @@ router.get('/search',function(req,res,next){
 })
 
 router.post('/upload',multipartMiddleware,(req,res,next)=> {
-  // console.log(req)
-  // console.log(req.body);
-  // console.log(req.files);
+  let { username,token } = req.body;
   var file = req.files.files.originalFilename;
   var oldPath = req.files.files.path;
-  console.log(oldPath);
   fs.rename(oldPath,'./uploads/' + file,(err)=>{
     if(err){
-      console.log(err);
+      res.send({
+        code: -1,
+        msg: '上传头像失败,请重试'
+      })
       return;
     } else {
-      res.send({
-        code: 0,
-        msg: '上传成功!',
-        url:  file
+      var sql = `update user set avat_url='http://140.143.34.162:3000/${file}' where username='${username}'`;
+      connection.query(sql,function(err,result){
+        if(err){
+          res.send({
+            code: -1,
+            msg: '上传头像失败,请重试'
+          })
+          return;
+        }
+        res.send({
+          code: 0,
+          msg: '上传成功!',
+          url:  file
+        })
       })
     }
   });
-  // res.send({
-  //   code: 0,
-  //   msg: '上传成功'
-  // })
-  
 })
 module.exports = router;

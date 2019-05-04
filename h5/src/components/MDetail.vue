@@ -27,18 +27,20 @@
 </template>
 <script>
 import io from 'socket.io-client';
-import getUrl from '../config'
+import getUrl from '../config';
+import axios from 'axios';
 
 export default {
     name: 'MDetail',
     created(){
+        
+        this.url = getUrl();
         var url = getUrl();
         this.socket = io(`${url}`);
         var socket = this.socket;
         // socket.emit('group1')
         var self = this;
         socket.on('recMsg',function(msg){
-            console.log(msg);
             // 过滤 只接受发送给自己的消息
             // if(msg.sendName == sessionStorage.getItem('username')){
             //     self.$store.dispatch('addMsg',msg);
@@ -47,40 +49,55 @@ export default {
             self.$store.dispatch('addMsg',msg);
             self.duifangName = msg.receiveName;
         })
+        this.getData();
     },
     destroyed(){
         this.socket.close();
     },
     methods:{
-        goBack:function(){
+        goBack(){
             this.$router.back(-1);
         },
         // 发送消息
-        send:function () {
-            var localName = this.$route.params.localName || 'Month';
+        send() {
             var sendData = {
-                sendName: this.duifangName,
-                receiveName: localName,
+                sendName: this.name,
+                receiveName: this.localName,
                 content: this.sendTxt
             }
             this.socket.emit('sendMsg',sendData)
             this.sendTxt = '';
         },
+        //
+        getData(){
+            var username = sessionStorage.getItem('username');
+            var token = sessionStorage.getItem('token');
+            var duifangname = this.name;
+            axios({
+                url: `${this.url}/message/detail?username=${username}&token=${token}&duifangname=${duifangname}`,
+                method: 'get'
+            }).then((res) => {
+                if(res.data.code == 0) {
+                    this.$store.dispatch('initMsg',res.data.data)
+                }
+                
+            })
+        }
        
     },
     computed:{
-        test(){
-            return this.$store.state.msg;
-        }
+        messages(){
+            return this.$store.state.msgs
+        } 
     },
     data:function(){
         return {
             socket: null,
-            localName:this.$route.params.localName || 'Month',
+            localName: sessionStorage.getItem('username'),
             name:this.$route.params.name,
             sendTxt: '',
-            messages: this.$store.state.msgs,
-            duifangName: null
+            duifangName: this.$route.params.name,
+            url: null,
         }
     }
 }

@@ -10,6 +10,9 @@ export default {
     addMsg(state,msg){
         state.msgs.push(msg);
     },
+    initMsg(state,msg) {
+        state.msgs = msg;
+    },
     // 注册页进入下一步
     nextStep(state){
         state.signupState ++;

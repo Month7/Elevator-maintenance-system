@@ -16,27 +16,35 @@ var transfromData = (oldData,content) => {
 	arr.push(content);
 	return arr.join(',');
 }
-var transfromMessageData = (oldData) => {
+// 0 取最后一条聊天记录 1 取所有的聊天记录
+var transfromMessageData = (oldData,type) => {
 	var newData = [];
 	for(let i=0;i<oldData.length;i++){
 		var content = oldData[i].content.split(',');
 		var len = content.length - 1;
 		var data = {};
 		var data2 = {};
-		data2['usename'] = oldData[i].sendname
-		data['author'] = data2;
-		data['content'] = content[len];
-		newData.push(data);
-		// for(let j=0;j<content.length;j++){
-		// 	// console.log(oldData[i]);
-		// 	var arr = [];
-		// 	var data = {};
-		// 	var data2 = {};
-		// 	data2['usename'] = oldData[i].sendname
-		// 	data['author'] = data2;
-		// 	data['content'] = content[j];
-		// 	newData.push(data);
-		// }
+		
+		if(type == 0) {
+			data2['username'] = oldData[i].sendname
+			data['author'] = data2;
+			data['content'] = content[len];
+			newData.push(data);
+		} else {
+				for(let j=0;j<content.length;j++){
+				// console.log(oldData[i]);
+				var arr = [];
+				var data = {};
+				var data2 = {};
+				data2['sendName'] = oldData[i].sendname;
+				data2['receiveName'] = oldData[i].username;
+				data['author'] = data2;
+				data['content'] = content[j];
+				newData.push(data);
+			}
+		}
+		
+		
 	}
 	return newData;
 }
@@ -103,11 +111,22 @@ router.get('/info',(req,res,next) => {
 		sql = `select * from message_${username}`;
 		connection.query(sql,(err,result) => {
 			if(err) return;
-			console.log(transfromMessageData(result));
 			res.send({
 				code: 0,
-				data: transfromMessageData(result)
+				data: transfromMessageData(result,0) 
 			})
+		})
+	})
+})
+
+// 聊天记录
+router.get('/detail',(req,res) => {
+	let { username,token,duifangname } = req.query;
+	var sql = `select * from message_${username} where sendname='${duifangname}'`
+	connection.query(sql,(err,result) => {
+		res.send({
+			code: 0,
+			data: transfromMessageData(result,1)
 		})
 	})
 })
