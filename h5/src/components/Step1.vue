@@ -30,6 +30,7 @@
                     </div>
                 </div>
             </div>
+        </div>
             <!--content-->
             <div class="content">
                 <input type="text" class="phone input" v-model="phone" placeholder="请输入您的手机" />
@@ -51,13 +52,14 @@
                     <button class="code-button" @click="getCode">获取验证码</button>
                 </div>
             </div>
-            <!--button-->
+            
             <div class="buttons">
                 <button class="button" @click="nextStep">下一步</button>
             </div>
+            <Warning :show="this.showWarning" :msg="this.msg"></Warning>
         </div>
-        <Warning :show="this.showWarning" :msg="this.msg"></Warning>
-    </div>    
+        
+    
 </template>
 <script>
 import Warning from '../common/Warning'
@@ -142,4 +144,8 @@ export default {
 </script>
 <style scoped>
    @import url(./Signup.css);
+
+  .content{
+    overflow-x: hidden!important; 
+  }
 </style>
