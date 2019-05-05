@@ -70,10 +70,10 @@
                 
             </div>
             <!--公告信息-->
-            <div class="content-each-m" @click="GoPingjiaMemory">
+            <router-link to="/submitnotice" class="content-each-m" @click="GoPingjiaMemory">
                 <img src="../../static/公告信息.png" />
                 <div class="content-txt">发布公告</div>
-            </div>
+            </router-link>
         </div>
         <div class="content">
             <div class="content-header">
@@ -100,10 +100,10 @@
                     <div class="content-txt">工作记录</div>
                 </div>
                 <!--电梯管理-->
-                <div class="content-each-m" @click="GoTask">
+                <router-link to="/notice" class="content-each-m" @click="GoTask">
                     <img src="../../static/公告.png" />
                     <div class="content-txt">公告</div>
-                </div>
+                </router-link>
             </div>
         </div>
         <Warning :show="this.showWarning" :msg="this.msg"></Warning>
@@ -140,7 +140,7 @@ export default {
             this.$router.push({ name: 'Finished', params: { status: status }})
         },
         GoHelp(){
-            this.$router.push({ name: 'Help'})
+          this.$router.push({ name: 'Help'})
         },
         // 下达任务
         GoTask(){
@@ -148,19 +148,19 @@ export default {
             //     this.$alert('您不是检验人员，无法查看此内容!')
             //     return false;
             // }
-            this.$router.push({ name: 'Task'})
+          this.$router.push({ name: 'Task'})
         },
         // 管理电梯
         GoManage(){
-            this.$router.push({ name: 'Finished', params: { status: 6 }})
+          this.$router.push({ name: 'Finished', params: { status: 6 }})
         },
         // 评价
         GoPingjia(){
-            this.$router.push({ name: 'Finished', params: { status: 7 }})
+          this.$router.push({ name: 'Finished', params: { status: 7 }})
         },
         // 评价记录
         GoPingjiaMemory(){
-            this.$router.push({ name: 'Finished', params: { status: 8 }})
+          this.$router.push({ name: 'Finished', params: { status: 8 }})
         }
     }    
 }
@@ -170,20 +170,23 @@ export default {
     padding: 0;
     margin: 0;
     padding-bottom: 3rem!important;
+    padding-top: 2.5rem!important;
     overflow-x: hidden;
 }
 .header{
-    height: 2.5rem;
-    background: rgb(30,129,210);
-    width: 100%;
-    color: #fff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  position: fixed;
+  top: 0;
+  height: 2.5rem;
+  background: rgb(30,129,210);
+  width: 100%;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .head-img img{
-    width: 100%;
-    height: auto;
+  width: 100%;
+  height: auto;
 }
 .content-header{
     width: 100%;
@@ -216,6 +219,7 @@ export default {
     width: 25%;
     margin-top:0.5rem;
     box-sizing: border-box;
+    display: block;
 }
 .content-txt{
     margin-top:0.5rem;

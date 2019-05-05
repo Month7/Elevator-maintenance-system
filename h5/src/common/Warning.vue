@@ -24,21 +24,21 @@ export default {
 </script>
 <style scoped>
 .container2{
-    position: fixed;
-    bottom: 0;
+  position: fixed;
+  bottom: 0;
 }
 .warningContainer{
-    text-align: center;
-    position: fixed;
-    bottom:8rem;
-    width: 100%;
+  text-align: center;
+  position: fixed;
+  bottom:8rem;
+  width: 100%;
 }
 .warning{
-    background: rgb(87,92,86);
-    color:#fff;
-    display: inline;
-    padding: 0.7rem;
-    border-radius: 0.5rem;
-    font-size: 0.3rem;
+  background: rgb(87,92,86);
+  color:#fff;
+  display: inline;
+  padding: 0.7rem;
+  border-radius: 0.5rem;
+  font-size: 0.3em;
 }
 </style>

@@ -245,7 +245,7 @@ export default {
     },
     filters:{
         time:function(time){
-            return new Date(parseInt(time) * 1000).toLocaleString().replace(/:\d{1,2}$/,' ');   
+          return new Date(parseInt(time) * 1000).toLocaleString().replace(/:\d{1,2}$/,' ');   
         },
         titleTxt:function(status){
             var status = parseInt(status);

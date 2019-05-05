@@ -14,6 +14,9 @@ import Index from '../components/Index'
 import Task from '../components/Task'
 import Pingjia from '../components/Pingjia'
 import Help from '../components/Help'
+import HelpDetail from '../components/Help-detail'
+import Notice from '../components/Notice'
+import NoticeShow from '../components/NoticeShow'
 
 Vue.use(Router)
 
@@ -93,6 +96,18 @@ export default new Router({
       path: '/help',
       name: 'Help',
       component: Help
+    },{
+      path: '/helpdetail/:status',
+      name: 'HelpDetail',
+      component: HelpDetail
+    },{
+      path: '/submitnotice',
+      name: 'Notice',
+      component: Notice
+    },{
+      path:'/notice',
+      name: 'NoticeShow',
+      component: NoticeShow
     }
   ]
 })

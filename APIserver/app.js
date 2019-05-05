@@ -11,7 +11,8 @@ var indexRouter = require('./routes/index');
 var userRouter = require('./routes/user');
 var addressRouter = require('./routes/address');
 var elevatorRouter = require('./routes/elevator');
-var messageRouter = require('./routes/message')
+var messageRouter = require('./routes/message');
+var noticeRouter = require('./routes/notice');
 app.use(bodyParser.urlencoded({
     extended:true
 }));
@@ -63,7 +64,8 @@ app.use('/test', indexRouter);
 app.use('/user',userRouter);
 app.use('/address',addressRouter);
 app.use('/elevator',elevatorRouter);
-app.use('/message',messageRouter)
+app.use('/message',messageRouter);
+app.use('/notice',noticeRouter)
 
 
 var saveMsgData = (sendName,content,receiveName) => {

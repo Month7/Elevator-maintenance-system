@@ -63,7 +63,7 @@ export default {
   methods:{
 		// 返回上一页
 		goBack(){
-      		this.$router.back(-1);
+      this.$router.back(-1);
 		},
 		// 提交评价
 		submit(){
