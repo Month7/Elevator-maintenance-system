@@ -35,7 +35,6 @@ export default {
         }).then((res)=>{
           self.$store.dispatch('addMsg',msg);
         })
-        self.duifangName = msg.receiveName;
       }
     })
   },
@@ -45,7 +44,7 @@ export default {
   data(){
     return {
       showFlag: false,
-      duifangName: null,
+     
     }
   }
 }

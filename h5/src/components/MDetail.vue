@@ -35,8 +35,8 @@ export default {
     created(){
         
         this.url = getUrl();
-        var url = getUrl();
-        this.socket = io(`${url}`);
+       
+        this.socket = io(`${this.url}`);
         var socket = this.socket;
         // socket.emit('group1')
         var self = this;
@@ -60,13 +60,31 @@ export default {
         },
         // 发送消息
         send() {
-            var sendData = {
-                sendName: this.name,
-                receiveName: this.localName,
-                content: this.sendTxt
-            }
-            this.socket.emit('sendMsg',sendData)
-            this.sendTxt = '';
+          var sendData = {
+            sendName: this.name,
+            receiveName: this.localName,
+            content: this.sendTxt
+          }
+          let postData = this.$qs.stringify({
+            username: this.localName,
+            sendName: this.localName,
+            receiveName: this.name,
+            token: sessionStorage.getItem('token'),
+            content: this.sendTxt
+          })
+          // axios({
+          //   url: `${this.url}/message/add`,
+          //   method: 'post',
+          //   data: postData
+          // }).then((res)=>{
+          //   if(res.data.code == 0) {
+          //     this.socket.emit('sendMsg',sendData)
+          //     this.sendTxt = '';
+          //   }
+            
+          // })
+          this.socket.emit('sendMsg',sendData)
+          this.sendTxt = '';
         },
         //
         getData(){

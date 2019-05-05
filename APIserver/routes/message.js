@@ -49,8 +49,8 @@ var transfromMessageData = (oldData,type) => {
 	return newData;
 }
 // add聊天记录
-router.post('/add',function(req,res,next){
-    var { username,sendName,token,content } = req.body;
+router.post('/add',(req,res,next) => {
+    var { username,sendName,token,content,receiveName } = req.body;
     var sql = `select token from user where username='${username}'`;
     connection.query(sql,function(err,result){
         // 验证token失败
@@ -95,6 +95,7 @@ router.post('/add',function(req,res,next){
 				}
     })
 })
+
 
 // 查询未读消息
 router.get('/info',(req,res,next) => {

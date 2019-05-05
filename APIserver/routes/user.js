@@ -5,6 +5,9 @@ var multipart = require('connect-multiparty'); // form-data 格式的中间件�
 var multipartMiddleware = multipart();
 var fs = require('fs');
 var path = require('path');
+// 腾讯云短信接口
+var QcloudSms = require("qcloudsms_js");
+
 // var multer  = require('multer')
 
 
