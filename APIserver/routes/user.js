@@ -5,8 +5,20 @@ var multipart = require('connect-multiparty'); // form-data 格式的中间件�
 var multipartMiddleware = multipart();
 var fs = require('fs');
 var path = require('path');
+
+var nodemailer = require('nodemailer')
+var smtpTransport = require('nodemailer-smtp-transport');
+smtpTransport = nodemailer.createTransport(smtpTransport({
+  host: "smtp.163.com",
+  secureConnection: true,
+  prot: 465,
+  auth: {
+    user: '18000351426@163.com',
+    pass: 'ni cai ya'
+  }
+}));
 // 腾讯云短信接口
-var QcloudSms = require("qcloudsms_js");
+// var QcloudSms = require("qcloudsms_js");
 
 // var multer  = require('multer')
 
@@ -30,6 +42,14 @@ connection.connect();
 var createToken =  () => {
     return Math.random().toString(36).substr(2);
 }
+// 生成随机验证码
+var createCode = () => {
+  var res = '';
+  for(var i=0;i<6;i++){
+    res += parseInt(Math.random()*10)
+  }
+  return res;
+}
 // 聊天记录建表
 var createTable = (username,res) => {
   var sql = `create table message_${username}(
@@ -49,6 +69,47 @@ var createTable = (username,res) => {
   })
 } 
 
+var code = null;
+// 邮箱验证码接口
+router.post('/email',(req,res)=>{
+  var { email } = req.body;
+  code = createCode();
+  smtpTransport.sendMail({
+    from: '18000351426@163.com',
+    to: email,
+    subject: '感谢注册电梯保',
+    html: `<div>您的验证码为${code}</div>`
+  }, function (error, response) {
+    if (error) {
+      console.log(error);
+      return;
+    } else {
+      console.log('发送成功');
+      res.send({
+        code: 0,
+        msg: '发送邮箱验证码成功!'
+      })
+    }
+    
+  });
+})
+// 验证验证码接口
+router.post('/code',(req,res) => {
+  var { code2 } = req.body;
+  if(code2 == code) {
+    res.send({
+      code: 0,
+      msg: 'success'
+    })
+    return;
+  } else {
+    res.send({
+      code: -1,
+      msg: '验证码错误!'
+    })
+    return;
+  }
+})
 // 登录接口
 router.post('/login',function(req,res,next){
     var { username,password,type } = req.body;
@@ -109,14 +170,23 @@ router.post('/register',function(req,res,next){
   if(!phone && !password && !type) {
     return;
   } else {
-    let sql = `insert into user (username,password,type,avat_url,token) values ('${phone}','${password}','${type}','null','${token}')`;
-    connection.query(sql,function(err,result){
-      if(err){ 
-        console.log('出错!');
-      } else {  // 注册成功
-        createTable(phone,res);
-      }
-    })
+    sendmail({
+      from: 'dev.zhengyin@gmail.com',
+      to: '2587423053@qq.com',
+      subject: 'test sendmail',
+      html: 'Mail of test sendmail ',
+    }, function(err, reply) {
+      console.log(err && err.stack);
+      console.dir(reply);
+    });
+    // let sql = `insert into user (username,password,type,avat_url,token) values ('${phone}','${password}','${type}','null','${token}')`;
+    // connection.query(sql,function(err,result){
+    //   if(err){ 
+    //     console.log('出错!');
+    //   } else {  // 注册成功
+    //     createTable(phone,res);
+    //   }
+    // })
   }
 })
 

@@ -32,16 +32,23 @@
             </div>
             <!--content-->
             <div class="content">
-                <input type="text" class="phone input" v-model="phone" placeholder="请输入手机号" />
+                <input type="text" class="phone input" v-model="phone" placeholder="请输入您的手机" />
                 <div class="phone-img">
                     <img src="../../static/手机.png"/>
                 </div>
+                <div style="position:relative"> 
+                <input type="text" class="phone input" v-model="email" placeholder="请输入您的邮箱" />
+                <div class="phone-img">
+                    <img src="../../static/邮箱.png"/>
+                </div>
+                </div>
+                
                 <div class="code-container">
-                    <input type="text" class="code input" v-model="code" placeholder="请输入当前手机验证码"/>
+                    <input type="text" class="code input" v-model="code" placeholder="请输入当前邮箱验证码"/>
                     <div class="code-img">
                         <img src="../../static/验证码.png" />
                     </div>
-                    <button class="code-button">获取验证码</button>
+                    <button class="code-button" @click="getCode">获取验证码</button>
                 </div>
             </div>
             <!--button-->
@@ -54,6 +61,8 @@
 </template>
 <script>
 import Warning from '../common/Warning'
+import axios from 'axios';
+import getUrl from '../config'
 export default {
     name: 'Step1',
     data:function(){
@@ -62,10 +71,15 @@ export default {
             code: '',
             showWarning: false,
             msg: null,
+            url: null,
+            email: null,
         }
     },
-    component:{
-        Warning
+    components:{
+      Warning
+    },
+    created(){
+      this.url = getUrl();
     },
     methods:{
         $alert(msg){
@@ -75,10 +89,45 @@ export default {
                 this.showWarning = false;
             },1500)
         },
+        // 向邮箱发送验证码
+        getCode(){
+          var reg = /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/;
+          if(!reg.test(this.email) || this.email == null){
+            this.$alert('请输入正确格式的邮箱！');
+            return false;
+          }
+          var postData = this.$qs.stringify({
+            email: this.email
+          })
+          axios({
+            url: `${this.url}/user/email`,
+            method:'post',
+            data: postData
+          }).then((res)=>{
+            if(res.data.code == 0) {
+              this.$alert(res.data.msg);
+            }
+          })
+        },
+      
         nextStep(){
-            if(this.code && this.phone){
-                this.$store.dispatch('registerPhone',this.phone);
-                this.$store.dispatch('nextStep');
+            if(this.code && this.phone && this.email){
+                var postData = this.$qs.stringify({
+                  code2: this.code
+                })
+                axios({
+                  url: `${this.url}/user/code`,
+                  method: 'post',
+                  data: postData
+                }).then((res) => {
+                  if(res.data.code == 0) {
+                    this.$store.dispatch('registerPhone',this.phone);
+                    this.$store.dispatch('nextStep');
+                  } else {
+                    this.$alert(res.data.msg);
+                  }
+                })
+                
             } else {
                 this.$alert('验证码不能为空!')
             }
