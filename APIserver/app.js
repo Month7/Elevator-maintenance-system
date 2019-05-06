@@ -7,7 +7,7 @@ var express = require('express');
 
 var bodyParser = require('body-parser');
 var path = require('path');
-var indexRouter = require('./routes/index');
+// var indexRouter = require('./routes/index');
 var userRouter = require('./routes/user');
 var addressRouter = require('./routes/address');
 var elevatorRouter = require('./routes/elevator');
@@ -26,21 +26,16 @@ var connection = mysql.createConnection({
   database: 'graduction'
 })
 connection.connect();
-// 将聊天信息到数据库
-function saveMsg(){
-
-}
 
 // 主页面
 app.get('/', function(req, res){
-  res.send('如果你看到这行字，说明尹铮的聊天室服务器正常运行中');
+  res.send('如果你看到这行字，说明尹铮的服务器正常运行中');
   console.log('应该跑起来了')
 });
-// 允许跨域 上线前记得去掉
+// 改头像接口要跨域必须用线上 前端那已经写死了
 app.all('*', function (req, res, next) {
   res.header('Access-Control-Allow-Origin', 'http://localhost:8080');
   // res.header('Access-Control-Allow-Origin', 'http://120.77.181.223');
-  // Access-Control-Allow-Headers ,可根据浏览器的F12查看,把对应的粘贴在这里就行
   res.header('Access-Control-Allow-Headers', '*');
   res.header('Access-Control-Allow-Methods', '*');
   res.header('Content-Type', 'application/json;charset=utf-8');
@@ -61,18 +56,13 @@ io.on('connection', function(socket){
 
 
 
-app.use('/test', indexRouter);
+// app.use('/test', indexRouter);
 app.use('/user',userRouter);
 app.use('/address',addressRouter);
 app.use('/elevator',elevatorRouter);
 app.use('/message',messageRouter);
 app.use('/notice',noticeRouter)
 
-
-var saveMsgData = (sendName,content,receiveName) => {
-  var sql = `update (sendName,content) value('${sendName}','${content}')`;
-
-}
 
 http.listen(3000, function(){
   console.log('listening on *:3000');

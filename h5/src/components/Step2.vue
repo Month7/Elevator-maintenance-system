@@ -58,33 +58,45 @@
                 <button class="button" @click="nextStep">下一步</button>
             </div>
         </div>
+        <Warning :show="this.showWarning" :msg="this.msg"></Warning>
     </div>    
 </template>
 <script>
 import axios from 'axios'
 import getUrl from '../config'
+import Warning from '../common/Warning'
 export default {
     name: 'Step2',
     data:function(){
         return {
             password: '',
             repeatPassword: '',
-            type: 0
+            type: 0,
+            showWarning: false,
+            msg: ''
         }
     },
+    components:{
+      Warning
+    },
     methods:{
-        showWarning(msg,time){
-            
+        $alert(msg,time){
+            this.showWarning = true;
+            this.msg = msg;
+            setTimeout(()=>{
+                this.showWarning = false;
+            },1500)
         },
         nextStep(){
             if(this.password && this.repeatPassword){
                 if(this.password != this.repeatPassword) {
-                    alert('两次输入密码不一致!');
+                  console.log('???');
+                    this.$alert('两次输入密码不一致!');
                 } else {
-                    
                     this.$store.dispatch('registerPassword',this.password);
                     let postData = this.$qs.stringify({
                         phone: this.$store.state.signupData.phone,
+                        email: this.$store.state.signupData.email,
                         password: this.password,
                         type:this.type
                     });
@@ -98,12 +110,12 @@ export default {
                             this.$store.dispatch('nextStep');
                             this.$store.dispatch('resetRegisterInfo')
                         } else {
-                            console.log(res.data);
+                          this.$alert(res.data.msg);
                         }  
                     })
                 }
             } else {
-                alert('不能为空!');
+                this.$alert('不能为空!');
             }
             
         },
@@ -111,9 +123,6 @@ export default {
             this.$store.dispatch('resetRegisterInfo')
             this.$store.dispatch('initStep');
             this.$router.back(-1);
-            
-            
-            
         }
     }
 }

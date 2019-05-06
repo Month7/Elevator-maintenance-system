@@ -14,7 +14,8 @@ const state = {
     signupData: {          // 注册的数据
         phone: '',
         password: '',
-        type: ''
+        type: '',
+        email: null
     }         
 }
 

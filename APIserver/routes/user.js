@@ -4,23 +4,21 @@ var mysql = require('mysql');
 var multipart = require('connect-multiparty'); // form-data 格式的中间件支持
 var multipartMiddleware = multipart();
 var fs = require('fs');
-var path = require('path');
-
 var nodemailer = require('nodemailer')
 var smtpTransport = require('nodemailer-smtp-transport');
+// import { performSql } from '../common/util';    // 重构 有空再说
+
 smtpTransport = nodemailer.createTransport(smtpTransport({
   host: "smtp.163.com",
   secureConnection: true,
   prot: 465,
   auth: {
     user: '18000351426@163.com',
-    pass: 'ni cai'
+    pass: 'your code'
   }
 }));
 // 腾讯云短信接口
 // var QcloudSms = require("qcloudsms_js");
-
-// var multer  = require('multer')
 
 //数据库连接
 var connection = mysql.createConnection({
@@ -38,7 +36,7 @@ var createToken =  () => {
 // 生成随机验证码
 var createCode = () => {
   var res = '';
-  for(var i=0;i<6;i++){
+  for(let i=0;i<6;i++){
     res += parseInt(Math.random()*10)
   }
   return res;
@@ -71,19 +69,24 @@ router.post('/email',(req,res)=>{
     from: '18000351426@163.com',
     to: email,
     subject: '感谢注册电梯保',
-    html: `<div>您的验证码为${code}</div>`
+    html: `<div>您的验证码为${code},1分钟内有效</div>`
   }, function (error, response) {
     if (error) {
       console.log(error);
       return;
     } else {
-      console.log('发送成功');
+      console.log(response);
+      if(!timer) {     // 验证码有效期 1min 
+        var timer = setTimeout(()=>{
+          code = null;
+          clearTimeout(timer);
+        },60000)      
+      }
       res.send({
         code: 0,
         msg: '发送邮箱验证码成功!'
       })
     }
-    
   });
 })
 // 验证验证码接口
@@ -156,17 +159,21 @@ router.post('/login',function(req,res,next){
 
 // 注册接口
 router.post('/register',function(req,res,next){
-  var phone = req.body.phone;
-  var password = req.body.password;
-  var type = req.body.type;
+  let { phone,password,type,email } = req.body;
   var token = createToken();
-  if(!phone && !password && !type) {
+  var defaultAvatUrl = '../../static/头像.jpg'  // 初始的默认头像
+  if(!phone || !password || !type || !email) {
     return;
   } else {
-    let sql = `insert into user (username,password,type,avat_url,token) values ('${phone}','${password}','${type}','null','${token}')`;
+    let sql = `insert into user (username,password,type,avat_url,token,email) values ('${phone}','${password}','${type}','${defaultAvatUrl}','${token}','${email}')`;
     connection.query(sql,function(err,result){
       if(err){
-        console.log('出错!');
+        console.log(err);
+        res.send({
+          code: -1,
+          msg: '注册失败!'
+        })
+        return;
       } else {  // 注册成功
         createTable(phone,res);
       }
@@ -249,7 +256,6 @@ router.post('/upload',multipartMiddleware,(req,res,next)=> {
 // 修改昵称接口
 router.post('/nick',(req,res) => {
   var { username,token,type,nickname } = req.body;
-  console.log(nickname);
   var sql = `select token from user where username='${username}' and type='${type}'`;
   connection.query(sql,(err,result) => {
     if(err){
@@ -276,6 +282,101 @@ router.post('/nick',(req,res) => {
       })
     }
   })
+})
+
+var resetCode = null;
+// 重置密码发送邮箱验证码接口
+router.post('/resetemail',(req,res) => {
+  var { username,email } = req.body;
+  var sql = `select email from user where username='${username}'`;
+  connection.query(sql,(err,result) => {
+    if(err){
+      return false;
+    }
+    if(result[0].email != email) {
+      res.send({
+        code: -1,
+        msg: '该用户不存在或验证邮箱有误!'
+      })
+      return false;
+    }
+    resetCode = createCode();
+    smtpTransport.sendMail({
+      from: '18000351426@163.com',
+      to: email,
+      subject: '电梯保重置密码',
+      html: `<div>您的验证码为${resetCode},3分钟内有效</div>`
+    }, function (error, response) {
+      if (error) {
+        console.log(error);
+        return;
+      } else {
+        console.log('发送成功');
+        if(!timer) {     // 验证码有效期 3min 
+          var timer = setTimeout(()=>{
+            resetCode = null;
+            clearTimeout(timer);
+          },180000)      
+        }
+        res.send({
+          code: 0,
+          msg: '发送邮箱验证码成功!'
+        })
+      }
+    });
+  })
+})
+
+// 重置密码接口
+router.post('/reset',(req,res) => {
+  var { username,email,password,code } = req.body;
+  if(code != resetCode) {
+    res.send({
+      code: -1,
+      msg: '验证码错误!'
+    })
+    return false;
+  }
+  var sql = `update user set password='${password}' where username='${username}' and email='${email}'`;
+  connection.query(sql,(err,result) => {
+    if(err){ // 给一个错误码假装真的有错误处理
+      res.send({
+        code: -1,
+        msg: '系统出现未知错误,请退出重试 code=7'    
+      })
+      return;
+    }
+    res.send({
+      code: 0,
+      msg: '重置密码成功!'
+    })
+  })
+  // connection.query(sql,(err,result) => {
+  //   if(err){ // 给一个错误码假装真的有错误处理
+  //     res.send({
+  //       code: -1,
+  //       msg: '系统出现未知错误,请退出重试 code=7'    
+  //     })
+  //     return;
+  //   }
+  //   if(result[0].email != email) {
+  //     res.send({
+  //       code: -1,
+  //       msg: '该用户不存在或验证邮箱有误!'
+  //     })
+  //     return;
+  //   }
+  //   sql = `update user set password='${password}' where username='${username}' and email='${email}'`;
+  //   connection.query(sql,(err,result) => {
+  //     if(err){
+  //       return;
+  //     }
+  //     res.send({
+  //       code: 0,
+  //       msg: '重置密码成功!'
+  //     })
+  //   })
+  // })
 })
 
 module.exports = router;

@@ -13,7 +13,7 @@ connection.connect();
 // utils
 var transfromData = (oldData) => {
   var nameArr = oldData.name.split(',');
-  var phoneArr = oldData.phone.split(',');;
+  var phoneArr = oldData.phone.split(',');
   var letterArr = oldData.firstletter.split(',');
   var res = {}
   for(var i=0;i<letterArr.length;i++){
@@ -41,7 +41,7 @@ var transfromData = (oldData) => {
   }
   return JSON.stringify(res);
 } 
-var deleteName = (name,arr) => {
+var deleteStr = (name,arr) => {
   var index = arr.indexOf(name);
   arr.splice(index,1);
   return arr.join(',');
@@ -49,7 +49,6 @@ var deleteName = (name,arr) => {
 // 查询联系人信息
 router.get('/info',function(req,res,next){
   var { token,username } = req.query;
-  
   var sql = `select token from user where username='${username}'`;
   connection.query(sql,function(err,result){
     // 验证token失败
@@ -59,7 +58,11 @@ router.get('/info',function(req,res,next){
     sql = `select * from address where username='${username}'`;
     connection.query(sql,function(err,result){
       if(err){
-        console.log('查询出错')
+        res.send({
+          code: -1,
+          msg: '登录信息失效，请重新登录!'
+        })
+        return;
       }
       var data = result[0];
       if(data.name && data.phone && data.firstletter && data.username) {
@@ -67,7 +70,6 @@ router.get('/info',function(req,res,next){
           code: 0,
           data: transfromData(data)
         })
-        // res.send(transfromData(data))
       } else {
         res.send({
           code: 2
@@ -93,6 +95,7 @@ router.post('/add',function(req,res,next){
     connection.query(sql,function(err,result){
       if(err){
         console.log('查询出错')
+        return
       }
       var data = result[0];
       var nameArr = data.name.split(',');
@@ -132,13 +135,17 @@ router.post('/delete',function(req,res,next){
       var nameArr = data.name.split(',');
       var phoneArr = data.phone.split(',');
       var letterArr = data.firstletter.split(',');
-      var newNameStr = deleteName(name2,nameArr);
-      var newPhoneStr = deleteName(phone2,phoneArr);
-      var newLetterStr = deleteName(firstLetter2,letterArr);
+      var newNameStr = deleteStr(name2,nameArr);
+      var newPhoneStr = deleteStr(phone2,phoneArr);
+      var newLetterStr = deleteStr(firstLetter2,letterArr);
       sql = `update address set name='${newNameStr}',phone='${newPhoneStr}',firstletter='${newLetterStr}' where username='${username}'`
       connection.query(sql,function(err,result){
         if(err){
-
+          res.send({
+            code: -1,
+            msg: '删除失败'
+          })
+          return;
         }
         res.send({
           code: 0,
@@ -148,4 +155,5 @@ router.post('/delete',function(req,res,next){
     })
   })
 })
+
 module.exports = router;

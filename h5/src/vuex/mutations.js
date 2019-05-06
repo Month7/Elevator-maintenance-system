@@ -1,11 +1,4 @@
 export default {
-    // init(state,username) {
-    //     state.username = username;
-    //     alert(username)
-    // },
-    // changeMsg(state,msg){
-    //     state.msg = msg;
-    // },
     // 聊天msg
     addMsg(state,msg){
         state.msgs.push(msg);
@@ -27,11 +20,15 @@ export default {
     },
     // 注册 密码
     registerPassword(state,password){
-        state.signupData.password = password;
+      state.signupData.password = password;
     },
     // 注册 类型
     registerType(state,type) {
-        state.signupData.type = type;
+      state.signupData.type = type;
+    },
+    // 注册 绑定的邮箱
+    registerEmail(state,email) {
+      state.signupData.email = email;
     },
     // 重置 注册信息
     resetRegisterInfo(state){
@@ -39,6 +36,7 @@ export default {
             phone: '',
             password: '',
             type: 0,
+            email: null
         }
     }
 }

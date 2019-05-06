@@ -21,7 +21,7 @@ router.get('/getInfo',function(req,res,next){
                 msg: '登录信息失效,请重新登录!'
             })
             return;
-        }
+        }  // 改switch
         if(status == 6) {           // 是管理员
             sql = `select * from elevator`;
         } else if(status == 0){           // 保养完成的电梯 包含已评价和未评价两种状态
@@ -82,14 +82,14 @@ router.post('/receive',function(req,res,next){
         connection.query(sql,function(err,result){
             if(err){
                 res.send({
-                    code: 1,
-                    msg:'领取任务失败'
+                  code: 1,
+                  msg:'领取任务失败'
                 })
                 return;
             }
             res.send({
-                code: 0,
-                msg:'领取任务成功'
+              code: 0,
+              msg:'领取任务成功'
             })
             return;
         })
@@ -174,8 +174,9 @@ router.post('/evaluate',function(req,res,next){
     // 验证登录
     connection.query(sql,function(err,result){
         if(err) {
-            return;
+          return;
         }
+        
         sql = `update elevator set score1='${score1}',score2='${score2}',pingjia='${content}',status='1',pingjiatime='${pingjiatime}' where code='${code}'`;
         connection.query(sql,function(err,result){
             if(err) {

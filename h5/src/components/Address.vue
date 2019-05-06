@@ -29,10 +29,7 @@
                     </div>
                 </div>
             </div>
-        
-        
         </div>
-     
         <!--发送消息dialog-->
         <el-dialog
             title="发送消息"
@@ -80,7 +77,8 @@
             </span>
         </el-dialog>
         <!--Footer-->
-        <Footer status='2'></Footer>    
+        <Footer status='2'></Footer>
+        <Warning :show="this.showWarning" :msg="this.msg"></Warning>    
     </div>
     
 </template>
@@ -90,6 +88,8 @@ import Footer from './Footer'
 import makePy from '../utils/pinyin.js'
 import getUrl from '../config'
 import io from 'socket.io-client';
+import Warning from '../common/Warning'
+import { testPhone } from '../utils/reg'
 export default {
     name: 'Address',
     created(){
@@ -98,7 +98,8 @@ export default {
         // var socket = this.socket;
     },
     components:{
-        Footer
+        Footer,
+        Warning
     },
     data(){
         return {
@@ -116,9 +117,18 @@ export default {
                 phone: null
             },
             loading: true,
+            showWarning: false,
+            msg: ''
         }    
     },
     methods:{
+        $alert(msg,time){
+          this.showWarning = true;
+          this.msg = msg;
+          setTimeout(()=>{
+            this.showWarning = false;
+          },1500)
+        },
         getData(){
             var url = getUrl();
             var token = sessionStorage.getItem('token');
@@ -163,6 +173,10 @@ export default {
         },
         // 添加联系人
         add(){
+            if(!testPhone(this.formPeople.phone)){
+              this.$alert('请输入正确格式的手机号码!');
+              return false;
+            }
             var url = getUrl();
             this.formDialogVisible = false;
             var firstLetter = makePy(this.formPeople.name)

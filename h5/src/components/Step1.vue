@@ -57,8 +57,6 @@
             </div>
             <Warning :show="this.showWarning" :msg="this.msg"></Warning>
         </div>
-        
-    
 </template>
 <script>
 import Warning from '../common/Warning'
@@ -132,7 +130,6 @@ export default {
             }
           })
         },
-      
         nextStep(){
             if(this.code && this.phone && this.email){
                 var postData = this.$qs.stringify({
@@ -145,6 +142,7 @@ export default {
                 }).then((res) => {
                   if(res.data.code == 0) {
                     this.$store.dispatch('registerPhone',this.phone);
+                    this.$store.dispatch('registerEmail',this.email);
                     this.$store.dispatch('nextStep');
                   } else {
                     this.$alert(res.data.msg);

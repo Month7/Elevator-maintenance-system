@@ -31,6 +31,10 @@ export default {
     registerType({commit},type){
         commit('registerType',type)
     },
+    // 注册 邮箱
+    registerEmail({commit},email) {
+      commit('registerEmail',email)
+    },
     // 重置注册信息
     resetRegisterInfo({commit}){
         commit('resetRegisterInfo')
