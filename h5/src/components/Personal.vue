@@ -4,15 +4,18 @@
             <!--头像-->
             <div>
                 <vue-core-image-upload
+                class="username"
                 @imageuploaded="imageuploaded"
                 crop="local"
                 :max-file-size="5242880"
                 :data="postData"
                 url="http://localhost:3000/user/upload" >
-                
                 <img class="portrait" :src="src"/>
                 </vue-core-image-upload>
-                <div class="username">{{nickname}}</div>
+                <div class="username">
+                  {{nickname}}<i class="el-icon-edit" @click="editName"></i>
+                  <!-- <input type="text" class="editNickname" v-model="nickname" /> -->
+                </div>
             </div>
         </div>
         
@@ -72,6 +75,9 @@ export default {
         Warning
     },
     methods:{
+        editName(){
+          this.$router.push({name: 'EditName'})
+        },
         exit(){
             // this.$store.dispatch('addNote','haha')
             // window.postMessage('exit');
@@ -139,5 +145,13 @@ export default {
 }
 .portrait-preview{
     width:100%
+}
+.editNickname{
+  width: auto!important;
+  padding: .1rem;
+  text-align: center;
+  border: none;
+  outline: none;
+  background: rgb(30,129,210);
 }
 </style>

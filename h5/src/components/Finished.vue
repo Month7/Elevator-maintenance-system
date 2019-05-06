@@ -130,7 +130,6 @@ import axios from 'axios'
 import Warning from '../common/Warning'
 import getUrl from '../config'
 import Pingfenshow from './Pingfenshow'
-import Dialog from '../common/Dialog'
 export default {
     name: 'Finished',
     created(){
@@ -140,7 +139,6 @@ export default {
     components:{
         Warning,
         Pingfenshow,
-        Dialog
     },
     methods:{
         getData(){

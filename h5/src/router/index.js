@@ -17,6 +17,7 @@ import Help from '../components/Help'
 import HelpDetail from '../components/Help-detail'
 import Notice from '../components/Notice'
 import NoticeShow from '../components/NoticeShow'
+import EditName from '../components/EditName'
 
 Vue.use(Router)
 
@@ -105,9 +106,13 @@ export default new Router({
       name: 'Notice',
       component: Notice
     },{
-      path:'/notice',
+      path:' /notice',
       name: 'NoticeShow',
       component: NoticeShow
+    },{
+      path: '/editname',
+      name: 'EditName',
+      component: EditName
     }
   ]
 })

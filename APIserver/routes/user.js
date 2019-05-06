@@ -14,7 +14,7 @@ smtpTransport = nodemailer.createTransport(smtpTransport({
   prot: 465,
   auth: {
     user: '18000351426@163.com',
-    pass: 'ni cai ya'
+    pass: 'ni cai'
   }
 }));
 // 腾讯云短信接口
@@ -214,7 +214,7 @@ router.get('/search',function(req,res,next){
     }
   })
 })
-
+// 修改头像接口
 router.post('/upload',multipartMiddleware,(req,res,next)=> {
   let { username,token } = req.body;
   var file = req.files.files.originalFilename;
@@ -245,4 +245,37 @@ router.post('/upload',multipartMiddleware,(req,res,next)=> {
     }
   });
 })
+
+// 修改昵称接口
+router.post('/nick',(req,res) => {
+  var { username,token,type,nickname } = req.body;
+  console.log(nickname);
+  var sql = `select token from user where username='${username}' and type='${type}'`;
+  connection.query(sql,(err,result) => {
+    if(err){
+      res.send({
+        code: -1,
+        msg: '登录信息失效!请重新登录'
+      })
+      return;
+    } else if(token != result[0].token) {
+      res.send({
+        code: -1,
+        msg: '登录信息失效!请重新登录'
+      })
+    } else {
+      sql = `update user set nickname = '${nickname}' where username='${username}'`;
+      connection.query(sql,(err,result) => {
+        if(err){
+          return;
+        }
+        res.send({
+          code: 0,
+          msg: 'success'
+        })
+      })
+    }
+  })
+})
+
 module.exports = router;
