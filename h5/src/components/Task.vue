@@ -16,7 +16,7 @@
             <!--电梯位置等信息-->
             <!--任务类型-->
             <div class="content-each">
-                <label>
+                <label class="desc-must">
                     任务类型
                 </label>
                 <el-select size="mini" v-model="status" placeholder="请选择" class="type-select">
@@ -34,7 +34,7 @@
             </div>
             <!--预计完成时间-->
             <div class="content-each">
-                <label>
+                <label class="desc-must">
                     计划完成时间
                 </label>
                 <el-date-picker
@@ -47,14 +47,14 @@
             </div>
             <!--电梯编号-->
             <div class="content-each">
-                <label>
+                <label class="desc-must">
                     电梯编号
                 </label>
                 <el-input size="mini" v-model="code" placeholder="请输入电梯编号" class="type-select"></el-input>
             </div>
             <!--电梯位置-->
             <div class="content-each">
-                <label>
+                <label class="desc-must">
                     电梯位置
                 </label>
                 <el-input size="mini" v-model="location" placeholder="请输入电梯位置" class="type-select"></el-input>
@@ -175,5 +175,10 @@ export default {
     border-radius: 2rem;
     margin: auto;
     text-decoration: none;
+}
+.desc-must::before{
+  content: "*";
+  color: #f56c6c;
+  margin-right: .05rem;
 }
 </style>
