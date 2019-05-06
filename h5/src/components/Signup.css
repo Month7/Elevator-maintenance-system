@@ -1,11 +1,12 @@
 .container{
-    background:rgb(238,238,238);
+    background:rgb(238,238,238); 
 }
 .header{
     height: 10rem;
     background: rgb(30,129,210);
     width: 100%;
 }
+
 .goBack{
     position: fixed;
     left: 0.5rem;

@@ -22,13 +22,6 @@ smtpTransport = nodemailer.createTransport(smtpTransport({
 
 // var multer  = require('multer')
 
-
-
-// /* GET home page. */
-// router.get('/login', function(req, res, next) {
-//   res.send('login success')
-// });
-
 //数据库连接
 var connection = mysql.createConnection({
     host: '127.0.0.1',
@@ -170,23 +163,14 @@ router.post('/register',function(req,res,next){
   if(!phone && !password && !type) {
     return;
   } else {
-    sendmail({
-      from: 'dev.zhengyin@gmail.com',
-      to: '2587423053@qq.com',
-      subject: 'test sendmail',
-      html: 'Mail of test sendmail ',
-    }, function(err, reply) {
-      console.log(err && err.stack);
-      console.dir(reply);
-    });
-    // let sql = `insert into user (username,password,type,avat_url,token) values ('${phone}','${password}','${type}','null','${token}')`;
-    // connection.query(sql,function(err,result){
-    //   if(err){ 
-    //     console.log('出错!');
-    //   } else {  // 注册成功
-    //     createTable(phone,res);
-    //   }
-    // })
+    let sql = `insert into user (username,password,type,avat_url,token) values ('${phone}','${password}','${type}','null','${token}')`;
+    connection.query(sql,function(err,result){
+      if(err){
+        console.log('出错!');
+      } else {  // 注册成功
+        createTable(phone,res);
+      }
+    })
   }
 })
 

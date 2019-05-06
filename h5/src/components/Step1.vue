@@ -20,7 +20,7 @@
             <div class="text">
                 <div class="text-in">
                     <div>
-                        手机验证
+                      邮箱验证
                     </div>
                     <div class="gray-text">
                         设置密码
@@ -43,13 +43,12 @@
                     <img src="../../static/邮箱.png"/>
                 </div>
                 </div>
-                
                 <div class="code-container">
                     <input type="text" class="code input" v-model="code" placeholder="请输入当前邮箱验证码"/>
                     <div class="code-img">
                         <img src="../../static/验证码.png" />
                     </div>
-                    <button class="code-button" @click="getCode">获取验证码</button>
+                    <button class="code-button" @click="getCode">{{btnText}}</button>
                 </div>
             </div>
             
@@ -75,6 +74,8 @@ export default {
             msg: null,
             url: null,
             email: null,
+            btnText: '获取验证码',
+            sendCodeFlag: false,
         }
     },
     components:{
@@ -93,10 +94,30 @@ export default {
         },
         // 向邮箱发送验证码
         getCode(){
-          var reg = /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/;
-          if(!reg.test(this.email) || this.email == null){
-            this.$alert('请输入正确格式的邮箱！');
+          if(this.sendCodeFlag){
             return false;
+          }
+          var reg = /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/;
+          var phoneReg = /^[1][3,4,5,7,8][0-9]{9}$/;
+          if(!phoneReg.test(this.phone)){
+            this.$alert('请输入正确格式的手机号码!')
+            return false;
+          } 
+          if(!reg.test(this.email)){
+            this.$alert('请输入正确格式的邮箱!');
+            return false;
+          }       
+          this.sendCodeFlag = true;
+          var time = 6;
+          if(!timer){
+            var timer = setInterval(()=>{
+              this.btnText = `${time--}秒后可重新发送`
+              if(time < 0) {
+                clearInterval(timer);
+                this.sendCodeFlag = false;
+                this.btnText = '获取验证码'
+              }
+            },1000)
           }
           var postData = this.$qs.stringify({
             email: this.email

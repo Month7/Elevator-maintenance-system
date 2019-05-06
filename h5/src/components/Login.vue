@@ -66,38 +66,11 @@ export default {
                 this.showWarning = false;
             },1500)
         },
-        awaitPostMessage:function(){
-            var isReactNativePostMessageReady = !!window.originalPostMessage;
-            var queue = [];
-            var currentPostMessageFn = function store(message) {
-                if (queue.length > 100) queue.shift();
-                queue.push(message);
-            };
-            var self = this;
-            if (!isReactNativePostMessageReady) {
-                var originalPostMessage = window.postMessage;
-                Object.defineProperty(window, 'postMessage', {
-                configurable: true,
-                enumerable: true,
-                get: function () {
-                    return currentPostMessageFn;
-                },
-                set: function (fn) {
-                    currentPostMessageFn = fn;
-                    isReactNativePostMessageReady = true;
-                    setTimeout(self.sendQueue(queue), 0);
-                }
-                });
-            window.postMessage.toString = function () {
-            return String(originalPostMessage);
-            };
-        }
-        },
         sendQueue:function (queue) {
             while (queue.length > 0) window.postMessage(queue.shift());
         },
         // 登录
-        login:function (){
+        login (){
             if(!this.username || !this.password){
                 this.$alert('手机号和密码不能为空!')
                 return false;
