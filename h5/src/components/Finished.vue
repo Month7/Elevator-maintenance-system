@@ -302,7 +302,7 @@ export default {
     margin: 0.7rem auto;
     padding: 0.8rem;
     background: #fff;
-    font-size: 0.8rem;
+    font-size: 0.9rem;
 }
 .description{
     color: gray;

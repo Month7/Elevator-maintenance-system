@@ -36,7 +36,7 @@ import getUrl from '../config'
 import axios from 'axios';
 import Warning from '../common/Warning'
 export default {
-  name: 'Notice',
+  name: 'NoticeShow',
   created(){
     this.url = getUrl();
     this.getData();
@@ -89,12 +89,12 @@ export default {
 .container{
   overflow-x: hidden;
   background: rgb(238,238,238);
-  padding-top: 2rem;
+  padding-top: 2.5rem;
 }
 .header{
   top: 0;
   position: fixed;
-	height: 2rem;
+	height: 2.5rem;
   background: rgb(30,129,210);
   width: 100%;
   color: #fff;

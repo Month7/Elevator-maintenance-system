@@ -39,6 +39,7 @@ app.get('/', function(req, res){
 // 允许跨域 上线前记得去掉
 app.all('*', function (req, res, next) {
   res.header('Access-Control-Allow-Origin', 'http://localhost:8080');
+  // res.header('Access-Control-Allow-Origin', 'http://120.77.181.223');
   // Access-Control-Allow-Headers ,可根据浏览器的F12查看,把对应的粘贴在这里就行
   res.header('Access-Control-Allow-Headers', '*');
   res.header('Access-Control-Allow-Methods', '*');

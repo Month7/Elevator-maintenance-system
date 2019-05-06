@@ -12,12 +12,9 @@ export default {
     name: 'Warning',
     props:['show','msg'],
     mounted(){
-    
     },
     data(){
         return {
-            
-            
         }
     }
 }
@@ -39,6 +36,6 @@ export default {
   display: inline;
   padding: 0.7rem;
   border-radius: 0.5rem;
-  font-size: 0.3em;
+  font-size: .85rem;
 }
 </style>

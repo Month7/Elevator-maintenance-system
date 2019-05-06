@@ -100,7 +100,7 @@
                     <div class="content-txt">工作记录</div>
                 </div>
                 <!--电梯管理-->
-                <router-link to="/notice" class="content-each-m" @click="GoTask">
+                <router-link to="/notice" class="content-each-m">
                     <img src="../../static/公告.png" />
                     <div class="content-txt">公告</div>
                 </router-link>

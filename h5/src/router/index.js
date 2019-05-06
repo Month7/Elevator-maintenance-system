@@ -106,7 +106,7 @@ export default new Router({
       name: 'Notice',
       component: Notice
     },{
-      path:' /notice',
+      path:'/notice',
       name: 'NoticeShow',
       component: NoticeShow
     },{
