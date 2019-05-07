@@ -133,8 +133,9 @@ export default {
             var url = getUrl();
             var token = sessionStorage.getItem('token');
             var username = sessionStorage.getItem('username');
+            var type = sessionStorage.getItem('type')
             axios({
-                url: `${url}/address/info?token=${token}&username=${username}`,
+                url: `${url}/address/info?token=${token}&username=${username}&type=${type}`,
                 method: 'get'
             }).then((res)=>{
                 if(res.data.code == 0){

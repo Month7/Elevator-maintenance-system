@@ -42,19 +42,8 @@ import Warning from '../common/Warning'
 export default {
     name: 'Personal',
     created(){
-        var token = sessionStorage.getItem('token');
-        var username = sessionStorage.getItem('username');
-        var type = sessionStorage.getItem('type')
-        var url = getUrl();
-        axios({
-            url: `${url}/user/search?token=${token}&username=${username}&type=${type}`,
-            method: 'get'
-        }).then((res)=>{
-            this.nickname = res.data.nickname;
-            this.username = res.data.username;
-            this.type = res.data.type == 0 ? '维保人员':'检验人员';
-            this.src = res.data.avat_url;
-        })
+       
+        this.getData();
     },
     data(){
         return {
@@ -74,12 +63,25 @@ export default {
         Warning
     },
     methods:{
+        getData(){
+          var url = getUrl();
+          var token = sessionStorage.getItem('token');
+          var username = sessionStorage.getItem('username');
+          var type = sessionStorage.getItem('type')
+          axios({
+              url: `${url}/user/search?token=${token}&username=${username}&type=${type}`,
+              method: 'get'
+          }).then((res)=>{
+              this.nickname = res.data.nickname;
+              this.username = res.data.username;
+              this.type = res.data.type == 0 ? '维保人员':'检验人员';
+              this.src = res.data.avat_url;
+          })
+        },
         editName(){
           this.$router.push({name: 'EditName'})
         },
         exit(){
-            // this.$store.dispatch('addNote','haha')
-            // window.postMessage('exit');
             sessionStorage.clear();
             window.location.href = '#/'
         },

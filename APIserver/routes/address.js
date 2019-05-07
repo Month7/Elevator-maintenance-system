@@ -11,7 +11,7 @@ var connection = mysql.createConnection({
   })
 connection.connect();
 // utils
-var transfromData = (oldData) => {
+const transfromData = (oldData) => {
   var nameArr = oldData.name.split(',');
   var phoneArr = oldData.phone.split(',');
   var letterArr = oldData.firstletter.split(',');

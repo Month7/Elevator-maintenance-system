@@ -70,7 +70,7 @@
 <script>
 import axios from 'axios'
 import getUrl from '../config'
-import Warnging from '../common/Warning'
+import Warning from '../common/Warning'
 export default {
     name: 'Task',
     data(){
@@ -83,6 +83,9 @@ export default {
             showWarning: null,
             msg: null
         }
+    },
+    components: {
+      Warning
     },
     methods: {
         $alert(msg){
@@ -151,7 +154,7 @@ export default {
 .content-each{
     background: #fff;
     padding: 0.3rem 0.3rem;
-    font-size: 0.5rem;
+    font-size: 0.85rem;
     margin-top: 0.1rem;
     display: flex;
     justify-content: space-between;

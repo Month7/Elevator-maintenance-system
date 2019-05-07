@@ -11,7 +11,7 @@ var connection = mysql.createConnection({
 connection.connect();
 // 获得电梯信息
 router.get('/getInfo',function(req,res,next){
-    var { token,username,status} = req.query;
+    var { token,username,status } = req.query;
     var sql = `select token from user where username='${username}'`;
     connection.query(sql,function(err,result){
         // 验证token失败
