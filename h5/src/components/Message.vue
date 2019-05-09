@@ -6,13 +6,13 @@
         </div>
         <!--content-->
         
-        <router-link :to="{name:'MDetail',params:{name:item.username,localname:'Month7'}}" class="content" v-for="item in messages" :key="item.index">
+        <router-link :to="{name:'MDetail',params:{nickname:item.nickname,name:item.username,localname:'Month7'}}" class="content" v-for="item in messages" :key="item.index">
             <div class="left">
-                <img src="../../static/头像.jpg" />
+                <img :src="item.avat_url" />
             </div>
            
             <div class="right">
-                <div class="txtContent gray">{{item.username}}</div>
+                <div class="txtContent gray">{{item.nickname}}</div>
                 <div class="txtContent">{{item.content}}</div>
             </div>
         </router-link>
@@ -30,7 +30,6 @@ export default {
         Footer
     },
     mounted(){
-      
         this.getData();
     },
     data(){

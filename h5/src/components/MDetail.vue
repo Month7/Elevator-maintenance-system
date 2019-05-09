@@ -4,7 +4,7 @@
             <div class="goBack" @click="goBack">
                 <img src="../../static/左箭头黑.png" />
             </div>
-            {{name}}
+            {{nickname}}
         </div>
         <!--聊天内容区-->
         <div class="content">
@@ -44,7 +44,7 @@ export default {
             //     self.$store.dispatch('addMsg',msg);
             //     self.duifangName = msg.receiveName;
             // }
-            console.log(msg)
+            
             self.$store.dispatch('addMsg',msg);
             self.duifangName = msg.receiveName;
         })
@@ -71,7 +71,9 @@ export default {
             receivename: this.name,
             token: sessionStorage.getItem('token'),
             content: this.sendTxt,
-            sendtime: Date.parse(new Date()) 
+            sendtime: Date.parse(new Date()),
+            nickname: this.m_nickname,
+            avat_url: this.avat_url
           })
           axios({
             url: `${this.url}/message/send`,
@@ -89,18 +91,25 @@ export default {
             var username = sessionStorage.getItem('username');
             var token = sessionStorage.getItem('token');
             var duifangname = this.name;
-            var type = '123'
-            axios({
-                url: `${this.url}/message/detail?username=${username}&token=${token}&duifangname=${duifangname}&type=${type}`,
-                method: 'get'
-            }).then((res) => {
-                if(res.data.code == 0) {
-                    this.$store.dispatch('initMsg',res.data.data)
-                } else {
-                  alert(res.data.msg);
-                }
-            }).catch((err) => {
-              alert('出现未知网络错误!请退出重试')
+            var type = sessionStorage.getItem('type');
+            axios.all([
+              axios.get(`${this.url}/message/detail?username=${username}&token=${token}&duifangname=${duifangname}&type=${type}`),
+              axios.get(`${this.url}/user/search?username=${username}&token=${token}&type=${type}`)
+            ]).then(axios.spread((res1,res2)=>{
+              if(res1.data.code == 0) {
+                this.$store.dispatch('initMsg',res1.data.data)
+              } else {
+                alert(res1.data.msg);
+              }
+              if(res2.data.code == 0) {
+                var data = JSON.parse(res2.data.data);
+                this.avat_url = data.avat_url;
+                this.m_nickname = data.nickname;
+              }
+              // this.avat_url = res2.data.avat_url;
+              // this.m_nickname = res2.data.nickname;
+            })).catch((err)=>{
+
             })
         }
        
@@ -118,6 +127,9 @@ export default {
             sendTxt: '',
             duifangName: this.$route.params.name,
             url: null,
+            nickname: this.$route.params.nickname,
+            m_nickname: null,
+            avat_url: null,
         }
     }
 }

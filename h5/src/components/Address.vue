@@ -118,7 +118,9 @@ export default {
             loading: true,
             showWarning: false,
             msg: '',
-            url: null
+            url: null,
+            nickname: null,
+            avat_url: null,
         }    
     },
     methods:{
@@ -139,8 +141,11 @@ export default {
                 method: 'get'
             }).then((res)=>{
                 if(res.data.code == 0){
+                  
                     this.dataShow = true;
                     this.list = JSON.parse(res.data.data);
+                    this.nickname = res.data.nickname;
+                    this.avat_url = res.data.avat_url;
                     this.loading = false;
                 } else if(res.data.code == 2){
                     this.loading = false;
@@ -209,17 +214,18 @@ export default {
         sendMsg(){
             this.txtDialogVisible = false;
             var sendData = {
-                sendName: this.selectedPhone,
-                content: this.sendTxt,
-                receiveName: sessionStorage.getItem('username')
+              sendName: this.selectedPhone,
+              content: this.sendTxt,
+              receiveName: sessionStorage.getItem('username')
             }
             var postData = this.$qs.stringify({
               sendname: sessionStorage.getItem('username'),
               content: this.sendTxt,
               receivename: this.selectedPhone,
-              sendtime: Date.parse(new Date())
+              sendtime: Date.parse(new Date()),
+              nickname: this.nickname,
+              avat_url: this.avat_url
             })
-            
             axios({
               url: `${this.url}/message/send`,
               method: 'post',

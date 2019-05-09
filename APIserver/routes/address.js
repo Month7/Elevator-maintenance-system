@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var mysql = require('mysql');
+var checkLogin = require('../common/util');
 
 //数据库连接
 var connection = mysql.createConnection({
@@ -48,35 +49,64 @@ var deleteStr = (name,arr) => {
 } 
 // 查询联系人信息
 router.get('/info',function(req,res,next){
-  var { token,username } = req.query;
-  var sql = `select token from user where username='${username}'`;
+  var { token,username,type } = req.query;
+  if(!checkLogin(connection,username,type,token)){
+    res.send({
+      code: -1,
+      msg: '登录信息失效'
+    })
+    return;
+  }
+  var sql = `select * from address where username='${username}'`;
   connection.query(sql,function(err,result){
-    // 验证token失败
-    if(token != result[0].token) {
+    if(err){
+      res.send({
+        code: -1,
+        msg: '登录信息失效，请重新登录!'
+      })
       return;
     }
-    sql = `select * from address where username='${username}'`;
-    connection.query(sql,function(err,result){
-      if(err){
-        res.send({
-          code: -1,
-          msg: '登录信息失效，请重新登录!'
-        })
-        return;
-      }
-      var data = result[0];
-      if(data.name && data.phone && data.firstletter && data.username) {
+    var data = result[0];
+    if(result[0] && data.name && data.phone && data.firstletter && data.username) {
+      sql = `select * from user where username='${username}'`;
+      connection.query(sql,(err,result) => {
         res.send({
           code: 0,
-          data: transfromData(data)
+          data: transfromData(data),
+          nickname: result[0].nickname,
+          avat_url: result[0].avat_url
         })
-      } else {
-        res.send({
-          code: 2
-        })
-      }
-    })
+      })
+    }
   })
+  // var sql = `select token from user where username='${username}'`;
+  // connection.query(sql,function(err,result){
+  //   // 验证token失败
+  //   if(token != result[0].token) {
+  //     return;
+  //   }
+  //   sql = `select * from address where username='${username}'`;
+  //   connection.query(sql,function(err,result){
+  //     if(err){
+  //       res.send({
+  //         code: -1,
+  //         msg: '登录信息失效，请重新登录!'
+  //       })
+  //       return;
+  //     }
+  //     var data = result[0];
+  //     if(data.name && data.phone && data.firstletter && data.username) {
+  //       res.send({
+  //         code: 0,
+  //         data: transfromData(data)
+  //       })
+  //     } else {
+  //       res.send({
+  //         code: 2
+  //       })
+  //     }
+  //   })
+  // })
 })
 
 // 添加联系人

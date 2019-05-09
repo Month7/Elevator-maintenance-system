@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50725
 File Encoding         : 65001
 
-Date: 2019-05-06 11:49:24
+Date: 2019-05-09 18:55:45
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -29,8 +29,9 @@ CREATE TABLE `address` (
 -- ----------------------------
 -- Records of address
 -- ----------------------------
-INSERT INTO `address` VALUES ('马化腾,马云,李彦宏,测试,测试3,消息测试', '18000351426,18000351425,123,123,123,13832977587', 'M,M,L,C,C,X', '18000351426');
-INSERT INTO `address` VALUES (',尹铮', ',18000351426', ',Y', '13832977587');
+INSERT INTO `address` VALUES ('马化腾,马云,雷军', '13832977679,13832977587,18000351425', 'M,M,L', '18000351426');
+INSERT INTO `address` VALUES ('系统管理员', '18000351426', 'X', '13832977679');
+INSERT INTO `address` VALUES ('系统管理员,尹铮', '18000351426,18000351426', 'X,Y', '13832977587');
 
 -- ----------------------------
 -- Table structure for elevator
@@ -48,18 +49,19 @@ CREATE TABLE `elevator` (
   `score2` smallint(11) DEFAULT NULL,
   `pingjia` varchar(255) DEFAULT NULL,
   `headman` varchar(255) DEFAULT NULL COMMENT '负责人',
+  `wanchengtime` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of elevator
 -- ----------------------------
-INSERT INTO `elevator` VALUES ('3', '123', '123', 'status = 3', '1556425917', null, null, null, null, null, '18000351426');
-INSERT INTO `elevator` VALUES ('5', '12222', '12222', '紧急任务测试', '1556452848', null, null, null, null, null, null);
-INSERT INTO `elevator` VALUES ('2', '12345', '123', 'status = 4', '1556426012', null, null, null, null, null, null);
-INSERT INTO `elevator` VALUES ('1', '12345678', '12345678', '急修测试', '1556452226', null, null, null, null, null, null);
-INSERT INTO `elevator` VALUES ('1', '1508030301', '时光澔韵4-1', 'status = 1', '1556093286', '1556093286', '1556093286', '4', '2', '', null);
-INSERT INTO `elevator` VALUES ('0', '1508030302', '时光澔韵4-1', 'status = 0', '1556093286', '1556093286', null, null, null, null, '18000351426');
+INSERT INTO `elevator` VALUES ('3', '123', '123', 'status = 3', '1556425917', null, null, null, null, null, '18000351426', null);
+INSERT INTO `elevator` VALUES ('5', '12222', '12222', '紧急任务测试', '1556452848', null, null, null, null, null, null, null);
+INSERT INTO `elevator` VALUES ('2', '12345', '123', 'status = 4', '1556426012', null, null, null, null, null, null, null);
+INSERT INTO `elevator` VALUES ('1', '12345678', '12345678', '急修测试', '1556452226', null, null, null, null, null, null, null);
+INSERT INTO `elevator` VALUES ('1', '1508030301', '时光澔韵4-1', 'status = 1', '1556093286', '1556093286', '1556093286', '4', '2', '', null, null);
+INSERT INTO `elevator` VALUES ('0', '1508030302', '时光澔韵4-1', 'status = 0', '1556093286', '1556093286', null, null, null, null, '18000351426', null);
 
 -- ----------------------------
 -- Table structure for groupmsg
@@ -80,15 +82,25 @@ CREATE TABLE `groupmsg` (
 DROP TABLE IF EXISTS `message`;
 CREATE TABLE `message` (
   `content` varchar(255) DEFAULT NULL,
-  `username` varchar(255) DEFAULT NULL,
-  `sendname` varchar(255) DEFAULT NULL
+  `receiveId` varchar(255) DEFAULT NULL,
+  `sendId` varchar(255) DEFAULT NULL,
+  `s_time` varchar(255) DEFAULT NULL,
+  `sendnickname` varchar(255) DEFAULT NULL,
+  `receivename` varchar(255) DEFAULT NULL,
+  `send_avat` varchar(255) DEFAULT NULL,
+  `receive_avat` varchar(255) DEFAULT NULL,
+  `avat_url` varchar(255) DEFAULT NULL,
+  `nickname` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of message
 -- ----------------------------
-INSERT INTO `message` VALUES (null, '18000351426', null);
-INSERT INTO `message` VALUES (null, '13832977587', null);
+INSERT INTO `message` VALUES ('马云发给尹铮的测试消息1', '18000351426', '13832977587', '1557395607000', null, null, null, null, 'http://140.143.34.162:3000/2.jpg', '马云');
+INSERT INTO `message` VALUES ('测试消息2', '18000351426', '13832977587', '1557395613000', null, null, null, null, 'http://140.143.34.162:3000/2.jpg', '马云');
+INSERT INTO `message` VALUES ('测试消息3', '18000351426', '13832977587', '1557395619000', null, null, null, null, 'http://140.143.34.162:3000/2.jpg', '马云');
+INSERT INTO `message` VALUES ('马云你好', '13832977587', '18000351426', '1557397500000', null, null, null, null, 'undefined', 'undefined');
+INSERT INTO `message` VALUES ('你好', '13832977587', '18000351426', '1557399254000', null, null, null, null, 'http://140.143.34.162:3000/2.jpg', 'Month');
 
 -- ----------------------------
 -- Table structure for message_13832977678
@@ -102,6 +114,20 @@ CREATE TABLE `message_13832977678` (
 
 -- ----------------------------
 -- Records of message_13832977678
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for message_18000351425
+-- ----------------------------
+DROP TABLE IF EXISTS `message_18000351425`;
+CREATE TABLE `message_18000351425` (
+  `content` varchar(255) DEFAULT NULL,
+  `username` varchar(255) DEFAULT NULL,
+  `sendname` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of message_18000351425
 -- ----------------------------
 
 -- ----------------------------
@@ -145,13 +171,15 @@ CREATE TABLE `user` (
   `type` varchar(255) DEFAULT NULL,
   `avat_url` varchar(255) DEFAULT NULL,
   `nickname` varchar(255) DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES ('13832977587', '123', 'ow4q9x7hf9', '1', 'null', null);
-INSERT INTO `user` VALUES ('13832977678', '123', 'toot0l0j55i', '0', 'null', null);
-INSERT INTO `user` VALUES ('18000351424', '123', 'rlzgupfhdfk', '0', 'null', null);
-INSERT INTO `user` VALUES ('18000351426', '123456', 'jl2mingt78', '0', 'http://140.143.34.162:3000/2.jpg', 'Month');
+INSERT INTO `user` VALUES ('13832977587', '123456', 'q589315lqs', '1', 'http://140.143.34.162:3000/2.jpg', '马云', '2587423053@qq.com');
+INSERT INTO `user` VALUES ('13832977679', '123456', 'toot0l0j55i', '0', 'http://140.143.34.162:3000/2.jpg', '马化腾', '2587423053@qq.com');
+INSERT INTO `user` VALUES ('18000351424', '123456', 'rlzgupfhdfk', '0', 'http://140.143.34.162:3000/2.jpg', '张一鸣', '2587423053@qq.com');
+INSERT INTO `user` VALUES ('18000351425', '123456', '8va15ivmzyu', '0', '../../static/头像.jpg', '雷军', '2587423053@qq.com');
+INSERT INTO `user` VALUES ('18000351426', '123456', 'qeozofm2db', '0', 'http://140.143.34.162:3000/2.jpg', 'Month', '2587423053@qq.com');

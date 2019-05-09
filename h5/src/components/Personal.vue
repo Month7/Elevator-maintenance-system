@@ -72,10 +72,13 @@ export default {
               url: `${url}/user/search?token=${token}&username=${username}&type=${type}`,
               method: 'get'
           }).then((res)=>{
-              this.nickname = res.data.nickname;
-              this.username = res.data.username;
-              this.type = res.data.type == 0 ? '维保人员':'检验人员';
-              this.src = res.data.avat_url;
+            if(res.data.code == 0) {
+              var data = JSON.parse(res.data.data);
+              this.nickname = data.nickname;
+              this.username = data.username;
+              this.type = data.type == 0 ? '维保人员':'检验人员';
+              this.src = data.avat_url;
+            }
           })
         },
         editName(){

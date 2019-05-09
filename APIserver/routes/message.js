@@ -18,6 +18,16 @@ var transfromData = (oldData,content) => {
 	return arr.join(',');
 }
 
+// 获取用户个人信息(主要是昵称和头像url)
+var getUserInfo = (username) => {
+  var res = null;
+  var sql = `select * from user where username='${username}'`;
+  connection.query(sql,(err,result) => {
+    if(err) return;
+    return result;
+  })
+  return res;
+}
 
 // 0 取最后一条聊天记录 1 取所有的聊天记录
 var transfromMessageData = (oldData,type) => {
@@ -35,6 +45,8 @@ var transfromMessageData = (oldData,type) => {
         var data = {};
         data['username'] = obj['sendId'];
         data['content'] = obj['content'];
+        data['avat_url'] = obj['avat_url'];
+        data['nickname'] = obj['nickname'];
         newData.push(data)
       }
     }
@@ -42,9 +54,33 @@ var transfromMessageData = (oldData,type) => {
   return newData;
 }
 // 发送消息 加到聊天记录里
+// router.post('/send',(req,res) => {
+//   var { sendname,receivename,sendtime,content,nickname,avat_url } = req.body;
+//   var sql = `select * from user where username='${receivename}'`;
+//   connection.query(sql,(err,result) => {
+//     var receivenickname  = result[0].nickname || '没有昵称';
+//     var receive_avat = result[0].avat_url || '../../static/头像.jpg';
+//     sql = `insert into message (content,receiveId,sendId,s_time,receivenickname,sendnickname,receive_avat,send_avat) values('${content}','${receivename}','${sendname}','${sendtime}','${receivenickname}','${nickname}','${receive_avat}','${avat_url}')`;
+//     connection.query(sql,(err,result) => {
+//       if(err){
+//         res.send({
+//           code: -1,
+//           msg: '发送失败'
+//         })
+//         return false;
+//       }
+//       res.send({
+//         code: 0,
+//         msg: '发送成功'
+//       })
+//       return;
+//     })
+//   })
+  
+// })
 router.post('/send',(req,res) => {
-  var { sendname,receivename,sendtime,content } = req.body;
-  var sql = `insert into message (content,receiveId,sendId,s_time) values('${content}','${receivename}','${sendname}','${sendtime}')`;
+  var { sendname,receivename,sendtime,content,nickname,avat_url } = req.body;
+  var sql = `insert into message (content,receiveId,sendId,s_time,avat_url,nickname) values('${content}','${receivename}','${sendname}','${sendtime}','${avat_url}','${nickname}')`;
   connection.query(sql,(err,result) => {
     if(err){
       res.send({

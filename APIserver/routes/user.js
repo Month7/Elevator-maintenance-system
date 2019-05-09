@@ -14,7 +14,7 @@ smtpTransport = nodemailer.createTransport(smtpTransport({
   prot: 465,
   auth: {
     user: '18000351426@163.com',
-    pass: 'your code'
+    pass: '123456'
   }
 }));
 // 腾讯云短信接口
@@ -123,7 +123,6 @@ router.post('/login',function(req,res,next){
         return;
       } else if(result == undefined || result[0] == undefined){
         res.send({
-          isSuccess: false,
           code: -1,
           msg: '用户不存在!'
         })
@@ -137,7 +136,6 @@ router.post('/login',function(req,res,next){
             } else {
               var resData = {
                 code: 0,
-                isSuccess: true,
                 token: token,
                 username: username,
                 type: type,
@@ -168,14 +166,20 @@ router.post('/register',function(req,res,next){
     let sql = `insert into user (username,password,type,avat_url,token,email) values ('${phone}','${password}','${type}','${defaultAvatUrl}','${token}','${email}')`;
     connection.query(sql,function(err,result){
       if(err){
-        console.log(err);
         res.send({
           code: -1,
           msg: '注册失败!'
         })
         return;
       } else {  // 注册成功
-        createTable(phone,res);
+        // createTable(phone,res);
+        sql = `insert into address (name,phone,firstletter,username) values ('系统管理员','18000351426','x','${phone}')`;
+        connection.query(sql,(err,result) => {
+          res.send({
+            code: 0,
+            msg: '注册成功'
+          })
+        })
       }
     })
   }
@@ -216,7 +220,11 @@ router.get('/search',function(req,res,next){
           nickname: result[0].nickname || 'default',
           avat_url: result[0].avat_url
         }
-        res.send(JSON.stringify(data));
+        res.send({
+          code: 0,
+          data: JSON.stringify(data)
+        })
+        // res.send(JSON.stringify(data));
       })
     }
   })
