@@ -116,8 +116,7 @@ router.post('/complete',function(req,res,next){
 })
 // 下达任务
 router.post('/assign',function(req,res,next){
-    var token = req.body.token;
-    var username = req.body.username;
+    var { username,token } = req.body;
     var sql = `select token from user where username='${username}'`;
     // 验证登录
     connection.query(sql,function(err,result){
@@ -125,8 +124,8 @@ router.post('/assign',function(req,res,next){
             return;
         }
         var { statement,status,wanchengtime,code,location,xiafatime} = req.body;
-        sql = `insert into elevator(status,code,location,statement,xiafatime) values`+
-        ` ('${status}','${code}','${location}','${statement}','${xiafatime}')`;
+        sql = `insert into elevator(status,code,location,statement,xiafatime,wanchengtime) values`+
+        ` ('${status}','${code}','${location}','${statement}','${xiafatime}','${wanchengtime}')`;
         connection.query(sql,function(err,result){
             if(err) {
                 res.send({
@@ -176,7 +175,6 @@ router.post('/evaluate',function(req,res,next){
         if(err) {
           return;
         }
-        
         sql = `update elevator set score1='${score1}',score2='${score2}',pingjia='${content}',status='1',pingjiatime='${pingjiatime}' where code='${code}'`;
         connection.query(sql,function(err,result){
             if(err) {

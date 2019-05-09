@@ -336,6 +336,7 @@ export default {
 }
 .button{
     border-radius: 0.3rem;
+    text-decoration: none;
 }
 .daibaoyang{
     text-align: right;

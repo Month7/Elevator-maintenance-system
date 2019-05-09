@@ -37,6 +37,7 @@
         <div class="forget-container">
             <router-link to="/forget" class="forget">忘记密码？</router-link>
         </div>
+        
         <Warning :show="this.showWarning" :msg="this.msg"></Warning>
     </div>
 </template>
@@ -59,12 +60,12 @@ export default {
         Warning
     },
     methods:{
-        $alert(msg,time){
+        $alert(msg,time = 1500){
             this.showWarning = true;
             this.msg = msg;
             setTimeout(()=>{
                 this.showWarning = false;
-            },1500)
+            },time)
         },
         // 登录
         login:function (){

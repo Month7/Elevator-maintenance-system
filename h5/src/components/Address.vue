@@ -93,9 +93,8 @@ import { testPhone } from '../utils/reg'
 export default {
     name: 'Address',
     created(){
-        this.getData();
-        // this.socket = io(`${url}`);
-        // var socket = this.socket;
+      this.url = getUrl();
+      this.getData();
     },
     components:{
         Footer,
@@ -118,7 +117,8 @@ export default {
             },
             loading: true,
             showWarning: false,
-            msg: ''
+            msg: '',
+            url: null
         }    
     },
     methods:{
@@ -185,6 +185,7 @@ export default {
             let postData = this.$qs.stringify({
                 username: sessionStorage.getItem('username'),
                 token: sessionStorage.getItem('token'),
+                type: sessionStorage.getItem('type'),
                 name: this.formPeople.name,
                 phone: this.formPeople.phone,
                 firstLetter: t[0]
@@ -212,9 +213,24 @@ export default {
                 content: this.sendTxt,
                 receiveName: sessionStorage.getItem('username')
             }
-            this.$socket.emit('sendMsg',sendData);
+            var postData = this.$qs.stringify({
+              sendname: sessionStorage.getItem('username'),
+              content: this.sendTxt,
+              receivename: this.selectedPhone,
+              sendtime: Date.parse(new Date())
+            })
             
-            this.sendTxt = '';
+            axios({
+              url: `${this.url}/message/send`,
+              method: 'post',
+              data : postData
+            }).then((res)=>{
+              if(res.data.code == 0) {
+                // this.$socket.emit('sendMsg',sendData);
+                this.sendTxt = '';
+              }
+              this.$alert(res.data.msg)
+            })
         },
         deleteDialogShow(name,phone){
             this.deleteDialogVisible = true;

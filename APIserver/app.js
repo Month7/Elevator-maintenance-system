@@ -12,7 +12,7 @@ var userRouter = require('./routes/user');
 var addressRouter = require('./routes/address');
 var elevatorRouter = require('./routes/elevator');
 var messageRouter = require('./routes/message');
-var noticeRouter = require('./routes/notice');
+const noticeRouter = require('./routes/notice');
 app.use(bodyParser.urlencoded({
     extended:true
 }));
@@ -34,8 +34,8 @@ app.get('/', function(req, res){
 });
 // 改头像接口要跨域必须用线上 前端那已经写死了
 app.all('*', function (req, res, next) {
-  res.header('Access-Control-Allow-Origin', 'http://localhost:8080');
-  // res.header('Access-Control-Allow-Origin', 'http://120.77.181.223');
+  res.header('Access-Control-Allow-Origin', 'http://localhost:8080');     // 本地
+  // res.header('Access-Control-Allow-Origin', 'http://120.77.181.223');  // 线上
   res.header('Access-Control-Allow-Headers', '*');
   res.header('Access-Control-Allow-Methods', '*');
   res.header('Content-Type', 'application/json;charset=utf-8');

@@ -5,12 +5,14 @@
             消息
         </div>
         <!--content-->
-        <router-link :to="{name:'MDetail',params:{name:item.author.username,localname:'Month7'}}" class="content" v-for="item in messages" :key="item.index">
+        
+        <router-link :to="{name:'MDetail',params:{name:item.username,localname:'Month7'}}" class="content" v-for="item in messages" :key="item.index">
             <div class="left">
                 <img src="../../static/头像.jpg" />
             </div>
+           
             <div class="right">
-                <div class="txtContent gray">{{item.author.username}}</div>
+                <div class="txtContent gray">{{item.username}}</div>
                 <div class="txtContent">{{item.content}}</div>
             </div>
         </router-link>
@@ -27,7 +29,8 @@ export default {
     components:{
         Footer
     },
-    created(){
+    mounted(){
+      
         this.getData();
     },
     data(){
@@ -66,16 +69,20 @@ export default {
     },
     methods: {
         getData(){
+          
             var username = sessionStorage.getItem('username');
             var token = sessionStorage.getItem('token');
+            var type = sessionStorage.getItem('type')
             var url = getUrl();
             axios({
-                url: `${url}/message/info?username=${username}&token=${token}`,
+                url: `${url}/message/messages?username=${username}&token=${token}&type=${type}`,
                 method: 'get'
             }).then((res)=>{
                 if(res.data.code == 0) {
                     this.messages = res.data.data
                 }
+                // console.log(this.messages)
+                
             })
         },
 
@@ -84,7 +91,7 @@ export default {
 </script>
 <style scoped>
 .container{
-    overflow-x:hidden;
+    overflow-x: hidden;
 }
 .header{
     height: 2.5rem;

@@ -38,12 +38,6 @@
 export default {
     name: 'Footer',
     props: ['status'],
-    // data(){
-    //     return {
-    //         status: null
-    //     }
-        
-    // }
 }
 </script>
 <style scoped>

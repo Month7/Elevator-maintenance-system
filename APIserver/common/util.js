@@ -9,4 +9,18 @@ var performSql = (sql,connection,success,error) => {
   })
 }
 
-export { performSql }
+var checkLogin = (connection,username,type,token) => {
+  var sql = `select token from user where username='${username}' and type='${type}'`;
+  connection.query(sql,function(err,result){
+    if(err || !result[0]) {
+      return false;
+    }
+    
+    if(token != result[0].token) {
+      return false;
+    }
+  })
+  return true;
+}
+
+module.exports = checkLogin;

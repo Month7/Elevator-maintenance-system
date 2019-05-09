@@ -9,7 +9,7 @@
         <!--聊天内容区-->
         <div class="content">
             <div class="content-each" v-for="item in messages" :key="item.index">
-                <div v-if="item.receiveName == localName" class="content-right">
+                <div v-if="item.sendId == localName" class="content-right">
                     {{item.content}}
                 </div>
                 <div v-else class="content-left">
@@ -33,9 +33,7 @@ import axios from 'axios';
 export default {
     name: 'MDetail',
     created(){
-        
         this.url = getUrl();
-       
         this.socket = io(`${this.url}`);
         var socket = this.socket;
         // socket.emit('group1')
@@ -46,6 +44,7 @@ export default {
             //     self.$store.dispatch('addMsg',msg);
             //     self.duifangName = msg.receiveName;
             // }
+            console.log(msg)
             self.$store.dispatch('addMsg',msg);
             self.duifangName = msg.receiveName;
         })
@@ -61,44 +60,47 @@ export default {
         // 发送消息
         send() {
           var sendData = {
-            sendName: this.name,
-            receiveName: this.localName,
-            content: this.sendTxt
+            sendId: this.localName,
+            receiveName: this.name,
+            content: this.sendTxt,
+            s_time: Date.parse(new Date()) 
           }
           let postData = this.$qs.stringify({
             username: this.localName,
-            sendName: this.localName,
-            receiveName: this.name,
+            sendname: this.localName,
+            receivename: this.name,
             token: sessionStorage.getItem('token'),
-            content: this.sendTxt
+            content: this.sendTxt,
+            sendtime: Date.parse(new Date()) 
           })
-          // axios({
-          //   url: `${this.url}/message/add`,
-          //   method: 'post',
-          //   data: postData
-          // }).then((res)=>{
-          //   if(res.data.code == 0) {
-          //     this.socket.emit('sendMsg',sendData)
-          //     this.sendTxt = '';
-          //   }
-            
-          // })
-          this.socket.emit('sendMsg',sendData)
-          this.sendTxt = '';
+          axios({
+            url: `${this.url}/message/send`,
+            method: 'post',
+            data: postData
+          }).then((res)=>{
+            if(res.data.code == 0) {
+              this.socket.emit('sendMsg',sendData)
+              this.sendTxt = '';
+            }
+          })
         },
         //
         getData(){
             var username = sessionStorage.getItem('username');
             var token = sessionStorage.getItem('token');
             var duifangname = this.name;
+            var type = '123'
             axios({
-                url: `${this.url}/message/detail?username=${username}&token=${token}&duifangname=${duifangname}`,
+                url: `${this.url}/message/detail?username=${username}&token=${token}&duifangname=${duifangname}&type=${type}`,
                 method: 'get'
             }).then((res) => {
                 if(res.data.code == 0) {
                     this.$store.dispatch('initMsg',res.data.data)
+                } else {
+                  alert(res.data.msg);
                 }
-                
+            }).catch((err) => {
+              alert('出现未知网络错误!请退出重试')
             })
         }
        
