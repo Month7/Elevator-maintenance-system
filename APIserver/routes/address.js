@@ -77,6 +77,10 @@ router.get('/info',function(req,res,next){
           avat_url: result[0].avat_url
         })
       })
+    } else {
+      res.send({
+        code: 2
+      })
     }
   })
   // var sql = `select token from user where username='${username}'`;

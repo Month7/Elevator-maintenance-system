@@ -2,11 +2,16 @@
     <div class="container">
         <!--header-->
         <div class="header">
-            消息
+            <span v-if="loading">loading...</span>
+            <span v-else>消息</span>
+            
         </div>
         <!--content-->
-        
-        <router-link :to="{name:'MDetail',params:{nickname:item.nickname,name:item.username,localname:'Month7'}}" class="content" v-for="item in messages" :key="item.index">
+        <div v-if="loading" class="loading">
+          <img src="../../static/loading.gif" />
+        </div>
+        <div v-else>
+          <router-link :to="{name:'MDetail',params:{nickname:item.nickname,name:item.username,localname:username}}" class="content" v-for="item in messages" :key="item.index">
             <div class="left">
                 <img :src="item.avat_url" />
             </div>
@@ -15,7 +20,9 @@
                 <div class="txtContent gray">{{item.nickname}}</div>
                 <div class="txtContent">{{item.content}}</div>
             </div>
-        </router-link>
+          </router-link>
+        </div>
+        
         <!--Footer-->
         <Footer status='1'></Footer>
     </div>
@@ -29,41 +36,18 @@ export default {
     components:{
         Footer
     },
-    mounted(){
+    created(){
+      this.username = sessionStorage.getItem('username')
+      this.getData();
+      setInterval(()=>{
         this.getData();
+      },1500)
     },
     data(){
         return {
-            // messages:[{
-            //     has_read: false,
-            //     author: {
-            //         username: "Pony马",
-            //         avatar_url: "../../static/头像.jpg",
-            //     },
-            //     content: "你太菜了你太菜了你太菜了你太菜了你太菜了你太菜了你太菜了你太菜了你太菜了你太菜了你太菜了..."
-            // },{
-            //     has_read: false,
-            //     author: {
-            //         username: "Pony马",
-            //         avatar_url: "../../static/头像.jpg",
-            //     },
-            //     content: "你太菜了你太菜了你太菜了你太菜了你太菜了你太菜了你太菜了你太菜了你太菜了你太菜了你太菜了..."
-            // },{
-            //     has_read: false,
-            //     author: {
-            //         username: "Pony马",
-            //         avatar_url: "../../static/头像.jpg",
-            //     },
-            //     content: "你太菜了你太菜了你太菜了你太菜了你太菜了你太菜了你太菜了你太菜了你太菜了你太菜了你太菜了..."
-            // },{
-            //     has_read: false,
-            //     author: {
-            //         username: "Pony马",
-            //         avatar_url: "../../static/头像.jpg",
-            //     },
-            //     content: "你太菜了你太菜了你太菜了你太菜了你太菜了你太菜了你太菜了你太菜了你太菜了你太菜了你太菜了..."
-            // }]
-            messages: []
+            loading: true,
+            messages: [],
+            username: null,
         }
     },
     methods: {
@@ -79,9 +63,8 @@ export default {
             }).then((res)=>{
                 if(res.data.code == 0) {
                     this.messages = res.data.data
+                    this.loading = false;
                 }
-                // console.log(this.messages)
-                
             })
         },
 

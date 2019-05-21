@@ -90,6 +90,9 @@ export default {
   overflow-x: hidden;
   background: rgb(238,238,238);
 }
+.content{
+  overflow-x: hidden;
+}
 .header{
 	height: 2rem;
   background: rgb(30,129,210);

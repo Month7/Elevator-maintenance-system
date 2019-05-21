@@ -141,7 +141,6 @@ export default {
                 method: 'get'
             }).then((res)=>{
                 if(res.data.code == 0){
-                  
                     this.dataShow = true;
                     this.list = JSON.parse(res.data.data);
                     this.nickname = res.data.nickname;
@@ -236,6 +235,8 @@ export default {
                 this.sendTxt = '';
               }
               this.$alert(res.data.msg)
+            }).catch((e)=>{
+              this.$alert('发生未知网络错误!');
             })
         },
         deleteDialogShow(name,phone){

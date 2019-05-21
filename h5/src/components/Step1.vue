@@ -106,7 +106,7 @@ export default {
             return false;
           }       
           this.sendCodeFlag = true;
-          var time = 6;
+          var time = 60;
           if(!timer){
             var timer = setInterval(()=>{
               this.btnText = `${time--}秒后可重新发送`

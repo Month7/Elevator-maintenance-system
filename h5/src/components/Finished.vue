@@ -82,7 +82,7 @@
                     </div>
                 </div>
                 <!--待保养-->
-                <div v-if="status == 2 && item.status == 2" class="daibaoyang">
+                <div v-if="(status == 2 && item.status == 2) || status == 5 && item.status == 5" class="daibaoyang">
                     <button class="button toReceive" @click="showDialog('receive',item.code)">领取</button>
                 </div>
                 <el-dialog
@@ -234,6 +234,8 @@ export default {
                     this.$alert(res.data.msg);
                     this.getData();
                 }
+            }).catch((e)=>{
+              this.$alert('发生未知网络错误!');
             })
         },
         deleteTask(code){
@@ -252,7 +254,8 @@ export default {
                 case 1: return '保养记录';
                 case 2: return '待保养电梯';
                 case 3: return '保养中';
-                case 4: return '急修';
+                case 4: return '超期';
+                case 5: return '急修';
                 case 6: return '电梯管理';
                 case 7: return '待评价';
                 case 8: return '评价记录'

@@ -101,7 +101,7 @@ export default {
                 }
                 
             }).catch(e=>{
-                console.log(e);
+                this.$alert('发生未知网络错误!');
             })
         },
     }

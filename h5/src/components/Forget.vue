@@ -84,6 +84,8 @@ export default {
               this.repeatPassword = null;
             }
             this.$alert(res.data.msg);
+          }).catch((e)=>{
+            this.$alert('发生未知网络错误!');
           })
         },
         goBack(){

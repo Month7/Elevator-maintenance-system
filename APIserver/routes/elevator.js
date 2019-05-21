@@ -48,7 +48,8 @@ router.get('/getInfo',function(req,res,next){
                     location: result[i].location,
                     status: result[i].status,
                     score1: result[i].score1,
-                    score2: result[i].score2
+                    score2: result[i].score2,
+                    headman: result[i].headman
                 }
                 data.push(obj);
             }
@@ -98,7 +99,7 @@ router.post('/receive',function(req,res,next){
 // 完成任务
 router.post('/complete',function(req,res,next){
     var code = req.body.code;
-    var sql = `update elevator set status='1' where code='${code}'`;
+    var sql = `update elevator set status='0' where code='${code}'`;
     connection.query(sql,function(err,result){
         if(err){
             res.send({
@@ -128,6 +129,7 @@ router.post('/assign',function(req,res,next){
         ` ('${status}','${code}','${location}','${statement}','${xiafatime}','${wanchengtime}')`;
         connection.query(sql,function(err,result){
             if(err) {
+              console.log(err);
                 res.send({
                     code: -1,
                     msg: '电梯编号重复!'

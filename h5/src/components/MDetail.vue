@@ -106,8 +106,6 @@ export default {
                 this.avat_url = data.avat_url;
                 this.m_nickname = data.nickname;
               }
-              // this.avat_url = res2.data.avat_url;
-              // this.m_nickname = res2.data.nickname;
             })).catch((err)=>{
 
             })

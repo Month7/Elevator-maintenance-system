@@ -43,7 +43,7 @@ app.all('*', function (req, res, next) {
   next();
 });
 
-// sockt.io聊天室
+// socket.io聊天室
 io.on('connection', function(socket){
   console.log('a user connected');
   // console.log(socket.id)

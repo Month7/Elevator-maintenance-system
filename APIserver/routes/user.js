@@ -6,7 +6,6 @@ var multipartMiddleware = multipart();
 var fs = require('fs');
 var nodemailer = require('nodemailer')
 var smtpTransport = require('nodemailer-smtp-transport');
-// import { performSql } from '../common/util';    // 重构 有空再说
 
 smtpTransport = nodemailer.createTransport(smtpTransport({
   host: "smtp.163.com",
@@ -14,7 +13,7 @@ smtpTransport = nodemailer.createTransport(smtpTransport({
   prot: 465,
   auth: {
     user: '18000351426@163.com',
-    pass: '123456'
+    pass: 'your code'
   }
 }));
 // 腾讯云短信接口
@@ -69,18 +68,18 @@ router.post('/email',(req,res)=>{
     from: '18000351426@163.com',
     to: email,
     subject: '感谢注册电梯保',
-    html: `<div>您的验证码为${code},1分钟内有效</div>`
+    html: `<div>您的验证码为${code},6分钟内有效</div>`
   }, function (error, response) {
     if (error) {
       console.log(error);
       return;
     } else {
       console.log(response);
-      if(!timer) {     // 验证码有效期 1min 
+      if(!timer) {     // 验证码有效期 3min 
         var timer = setTimeout(()=>{
           code = null;
           clearTimeout(timer);
-        },60000)      
+        },360000)      
       }
       res.send({
         code: 0,
@@ -165,6 +164,7 @@ router.post('/register',function(req,res,next){
   } else {
     let sql = `insert into user (username,password,type,avat_url,token,email) values ('${phone}','${password}','${type}','${defaultAvatUrl}','${token}','${email}')`;
     connection.query(sql,function(err,result){
+      console.log(err);
       if(err){
         res.send({
           code: -1,
@@ -175,9 +175,13 @@ router.post('/register',function(req,res,next){
         // createTable(phone,res);
         sql = `insert into address (name,phone,firstletter,username) values ('系统管理员','18000351426','x','${phone}')`;
         connection.query(sql,(err,result) => {
-          res.send({
-            code: 0,
-            msg: '注册成功'
+          var date = Date.parse(new Date());
+          sql = `insert into message (content,receiveId,sendId,s_time,avat_url,nickname) values('欢迎加入电梯保,发现什么bug可以和我说蛤,但我不一定会改,也不一定会回你','${phone}','18000351426','${date}','../../static/头像.jpg','系统管理员')`;
+          connection.query(sql,(err,result) => {
+            res.send({
+              code: 0,
+              msg: '注册成功'
+            })
           })
         })
       }
@@ -224,7 +228,6 @@ router.get('/search',function(req,res,next){
           code: 0,
           data: JSON.stringify(data)
         })
-        // res.send(JSON.stringify(data));
       })
     }
   })

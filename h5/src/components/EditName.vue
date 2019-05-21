@@ -23,7 +23,7 @@ export default {
   name: 'EditName',
   data(){
     return {
-      nickname: 'Month想去阿里做福娃',
+      nickname: '',
       url: null,
       username: null,
       token: null,
@@ -32,11 +32,10 @@ export default {
   },
   methods:{
     getData(){
-     
       axios({
         url: `${this.url}/user/search?username=${this.username}&token=${this.token}&type=${this.type}`
       }).then((res)=>{
-        this.nickname = res.data.nickname;
+        this.nickname = JSON.parse(res.data.data).nickname
       })
     },
     goBack(){

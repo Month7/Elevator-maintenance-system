@@ -15,12 +15,10 @@ export default {
     Warning
   },
   created() {
-    
     var self = this;
     var url = getUrl();
     var username = sessionStorage.getItem('username');
     this.$socket.on('recMsg',function(msg){
-      // 过滤 只接受发送给自己的消息
       if(msg.sendName == username){
         let postData = self.$qs.stringify({
           username: username,
@@ -28,13 +26,13 @@ export default {
           token: sessionStorage.getItem('token'),
           content: msg.content
         })
-        axios({
-          url: `${url}/message/add`,
-          method: 'post',
-          data: postData
-        }).then((res)=>{
-          self.$store.dispatch('addMsg',msg);
-        })
+        // axios({
+        //   url: `${url}/message/add`,
+        //   method: 'post',
+        //   data: postData
+        // }).then((res)=>{
+        //   self.$store.dispatch('addMsg',msg);
+        // })
       }
     })
   },
@@ -53,6 +51,9 @@ export default {
 <style>
 	html {
     background-color: #DDDDDD;
+  }
+  .content{
+    overflow-x: hidden!important;
   }
   html,body,#app {
     height: 100%;

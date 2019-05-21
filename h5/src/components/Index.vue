@@ -37,7 +37,6 @@
         <div class="forget-container">
             <router-link to="/forget" class="forget">忘记密码？</router-link>
         </div>
-        
         <Warning :show="this.showWarning" :msg="this.msg"></Warning>
     </div>
 </template>
@@ -98,7 +97,7 @@ export default {
                     this.$alert(res.data.msg)
                 }
             }).catch(e=>{
-                console.log(e);
+                this.$alert('发生未知网络错误!')
             })
             
         },

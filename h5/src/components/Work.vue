@@ -55,7 +55,7 @@
                 <!--电梯管理-->
                 <div class="content-each-m" @click="GoManage">
                     <img src="../../static/电梯管理.png" />
-                    <div class="content-txt">电梯管理</div>
+                    <div class="content-txt">任务管理</div>
                 </div>
                 <!--待评价-->
                 <div class="content-each-m" @click="GoPingjia">
@@ -70,10 +70,10 @@
                 
             </div>
             <!--公告信息-->
-            <router-link to="/submitnotice" class="content-each-m" @click="GoPingjiaMemory">
+            <div  class="content-each-m" @click="SubmitNotice">
                 <img src="../../static/公告信息.png" />
                 <div class="content-txt">发布公告</div>
-            </router-link>
+            </div>
         </div>
         <div class="content">
             <div class="content-header">
@@ -118,6 +118,7 @@ export default {
         return {
             showWarning: false,
             msg: '',
+            type: sessionStorage.getItem('type')
         }
     },
     components:{
@@ -144,23 +145,42 @@ export default {
         },
         // 下达任务
         GoTask(){
-            // if(sessionStorage.getItem('type') != 1){
-            //     this.$alert('您不是检验人员，无法查看此内容!')
-            //     return false;
-            // }
+            if(sessionStorage.getItem('type') != 1){
+                this.$alert('您不是检验人员，无法查看此内容!')
+                return false;
+            }
           this.$router.push({ name: 'Task'})
         },
         // 管理电梯
         GoManage(){
+          if(this.type != 1){
+            this.$alert('您不是检验人员，无法查看此内容!')
+            return false;
+          }
           this.$router.push({ name: 'Finished', params: { status: 6 }})
         },
         // 评价
         GoPingjia(){
+          if(this.type != 1){
+            this.$alert('您不是检验人员，无法查看此内容!')
+            return false;
+          }
           this.$router.push({ name: 'Finished', params: { status: 7 }})
         },
         // 评价记录
         GoPingjiaMemory(){
+          if(this.type != 1){
+            this.$alert('您不是检验人员，无法查看此内容!')
+            return false;
+          }
           this.$router.push({ name: 'Finished', params: { status: 8 }})
+        },
+        SubmitNotice(){
+          if(this.type != 1){
+            this.$alert('您不是检验人员，无法查看此内容!')
+            return false;
+          }
+          this.$router.push({ name: 'Notice'})
         }
     }    
 }
