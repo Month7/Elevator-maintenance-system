@@ -39,7 +39,10 @@ new Vue({
   router,
   components: { App },
   template: '<App/>',
-  store
+  store,
+  mounted(){
+    document.dispatchEvent(new Event('render-event'));
+  }
 })
 
 router.beforeEach((to, from, next) => { 

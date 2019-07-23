@@ -10,6 +10,8 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const PrerenderSPAPlugin = require('prerender-spa-plugin')
+const Renderer = PrerenderSPAPlugin.PuppeteerRenderer;
 
 const env = require('../config/prod.env')
 
@@ -31,6 +33,19 @@ const webpackConfig = merge(baseWebpackConfig, {
     // http://vuejs.github.io/vue-loader/en/workflow/production.html
     new webpack.DefinePlugin({
       'process.env': env
+    }),
+    new PrerenderSPAPlugin({
+      staticDir: path.join(__dirname,'../dist'),
+        routes: ['/','/personal'],
+        renderer: new Renderer({
+          inject: {
+            foo: 'bar'
+          },
+        headless: false,
+        renderAfterDocumentEvent: 'render-event',
+        // renderAfterTime: 5000,
+        // renderAfterElementExists: 'my-app-element'
+        }),
     }),
     new UglifyJsPlugin({
       uglifyOptions: {

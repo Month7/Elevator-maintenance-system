@@ -1,11 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Login from '../components/Login'
-import Work from '../components/Work'
-import Personal from '../components/Personal'
-import Finished from '../components/Finished'
-import Address from '../components/Address'
-import Message from '../components/Message'
 import MDetail from '../components/MDetail'
 import Test from '../components/Test'
 import Signup from '../components/Signup'
@@ -18,6 +13,12 @@ import HelpDetail from '../components/Help-detail'
 import Notice from '../components/Notice'
 import NoticeShow from '../components/NoticeShow'
 import EditName from '../components/EditName'
+
+const Work = () => import('../components/Work');
+const Personal = () => import('../components/Personal');
+const Finished = () => import('../components/Finished');
+const Address = () => import('../components/Address');
+const Message = () => import('../components/Message');
 
 Vue.use(Router)
 
