@@ -9,6 +9,8 @@ import Vconsole from 'vconsole'
 import 'element-ui/lib/theme-chalk/index.css';
 import getUrl from './config';
 import io from 'socket.io-client';
+import 'zheng-ui'
+import 'zheng-ui/dist/zheng-ui.css'
 // 引入element ui组件
 import { Select,Option,DatePicker,TimePicker,Input,Button,Rate,Icon,Dialog,Form } from 'element-ui';
 Vue.use(Select)

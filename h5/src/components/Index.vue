@@ -38,6 +38,7 @@
             <router-link to="/forget" class="forget">忘记密码？</router-link>
         </div>
         <Warning :show="this.showWarning" :msg="this.msg"></Warning>
+        <z-button type="warn">233</z-button>
     </div>
 </template>
 <script>

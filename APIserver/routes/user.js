@@ -71,10 +71,10 @@ router.post('/email',(req,res)=>{
     html: `<div>您的验证码为${code},6分钟内有效</div>`
   }, function (error, response) {
     if (error) {
-      console.log(error);
+     
       return;
     } else {
-      console.log(response);
+      
       if(!timer) {     // 验证码有效期 3min 
         var timer = setTimeout(()=>{
           code = null;
@@ -172,7 +172,6 @@ router.post('/register',function(req,res,next){
         })
         return;
       } else {  // 注册成功
-        // createTable(phone,res);
         sql = `insert into address (name,phone,firstletter,username) values ('系统管理员','18000351426','x','${phone}')`;
         connection.query(sql,(err,result) => {
           var date = Date.parse(new Date());
@@ -230,6 +229,11 @@ router.get('/search',function(req,res,next){
         })
       })
     }
+  })
+})
+router.get('/jsonp',(req,res)=>{
+  res.jsonp({
+    msg: 'success'
   })
 })
 // 修改头像接口

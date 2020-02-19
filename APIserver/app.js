@@ -33,15 +33,15 @@ app.get('/', function(req, res){
   console.log('应该跑起来了')
 });
 // 改头像接口要跨域必须用线上 前端那已经写死了
-app.all('*', function (req, res, next) {
-  res.header('Access-Control-Allow-Origin', 'http://localhost:8080');     // 本地
-  // res.header('Access-Control-Allow-Origin', 'http://120.77.181.223');  // 线上
-  res.header('Access-Control-Allow-Headers', '*');
-  res.header('Access-Control-Allow-Methods', '*');
-  res.header('Content-Type', 'application/json;charset=utf-8');
-  res.header('Access-Control-Allow-Credentials',true);
-  next();
-});
+// app.all('*', function (req, res, next) {
+//   res.header('Access-Control-Allow-Origin', '*');     // 本地
+//   // res.header('Access-Control-Allow-Origin', 'http://120.77.181.223');  // 线上
+//   res.header('Access-Control-Allow-Headers', '*');
+//   res.header('Access-Control-Allow-Methods', '*');
+//   res.header('Content-Type', 'application/json;charset=utf-8');
+//   res.header('Access-Control-Allow-Credentials',true);
+//   next();
+// });
 
 // socket.io聊天室
 io.on('connection', function(socket){
