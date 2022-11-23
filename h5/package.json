@@ -12,7 +12,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "element-ui": "^2.7.2",
-    "socket.io": "^2.2.0",
+    "socket.io": "^2.5.0",
     "vconsole": "^3.3.0",
     "vue": "^2.5.2",
     "vue-core-image-upload": "^2.4.11",
